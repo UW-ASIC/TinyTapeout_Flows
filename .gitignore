@@ -1,0 +1,32 @@
+# Simulation results
+*.raw
+*.log
+*.out
+*.err
+
+# Magic extraction files
+*.ext
+*.sim
+*.nodes
+
+# Backup files
+*~
+*.bak
+
+# Build artifacts
+*.o
+*.so
+build/
+dist/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Tools
+.tools/
+.venv/
