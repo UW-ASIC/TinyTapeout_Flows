@@ -1,0 +1,154 @@
+v {xschem version=3.0.0 file_version=1.2}
+K {type=symbol
+template="graphical=1 "
+tedax_format="footprint @name @footprint
+value @name @value
+device @name @device
+@comptag"
+format="@name @pinlist @value "
+
+}
+G {}
+V {}
+S {}
+E {}
+T {FILE:} 2540 -60 2 1 0.266667 0.266667 {}
+T {REVISION:} 2890 -60 2 1 0.266667 0.266667 {}
+T {DRAWN BY: } 2890 -30 2 1 0.266667 0.266667 {}
+T {PAGE} 2540 -30 2 1 0.266667 0.266667 {}
+T {OF} 2710 -30 2 1 0.266667 0.266667 {}
+T {TITLE} 2540 -90 2 1 0.266667 0.266667 {}
+T {A} 10 -98.4 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {B} 10 -295.3 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {C} 10 -492.1 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {D} 10 -689 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {E} 10 -885.8 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {F} 10 -1082.7 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {G} 10 -1279.5 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {H} 10 -1476.4 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {I} 10 -1673.2 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {J} 10 -1870.1 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {K} 10 -2066.9 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {L} 10 -2263.8 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {1} 98.4 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {2} 295.3 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {3} 492.1 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {4} 689 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {5} 885.8 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {6} 1082.7 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {7} 1279.5 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {8} 1476.4 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {9} 1673.2 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {10} 1870.1 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {11} 2066.9 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {12} 2263.8 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {13} 2460.6 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {14} 2657.5 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {15} 2854.3 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {16} 3051.2 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {17} 3248 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {A} 3300 -98.4 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {B} 3300 -295.3 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {C} 3300 -492.1 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {D} 3300 -689 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {E} 3300 -885.8 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {F} 3300 -1082.7 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {G} 3300 -1279.5 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {H} 3300 -1476.4 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {I} 3300 -1673.2 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {J} 3300 -1870.1 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {K} 3300 -2066.9 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {L} 3300 -2263.8 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {1} 98.4 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {2} 295.3 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {3} 492.1 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {4} 689 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {5} 885.8 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {6} 1082.7 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {7} 1279.5 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {8} 1476.4 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {9} 1673.2 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {10} 1870.1 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {11} 2066.9 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {12} 2263.8 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {13} 2460.6 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {14} 2657.5 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {15} 2854.3 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {16} 3051.2 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {17} 3248 -2320 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+
+L 4 0 0 3310 0 {}
+L 4 3310 -2330 3310 0 {}
+L 4 0 -2330 3310 -2330 {}
+L 4 0 -2330 0 0 {}
+L 4 2530 -20 3290 -20 {}
+L 4 3290 -160 3290 -20 {}
+L 4 2530 -160 3290 -160 {}
+L 4 2530 -160 2530 -20 {}
+L 4 20 -20 3290 -20 {}
+L 4 3290 -2310 3290 -20 {}
+L 4 20 -2310 3290 -2310 {}
+L 4 20 -2310 20 -20 {}
+
+L 4 2880 -80 2880 -20 {}
+L 4 2530 -80 3290 -80 {}
+L 4 0 -196.9 20 -196.9 {}
+L 4 0 -393.7 20 -393.7 {}
+L 4 0 -590.6 20 -590.6 {}
+L 4 0 -787.4 20 -787.4 {}
+L 4 0 -984.3 20 -984.3 {}
+L 4 0 -1181.1 20 -1181.1 {}
+L 4 0 -1378 20 -1378 {}
+L 4 0 -1574.8 20 -1574.8 {}
+L 4 0 -1771.7 20 -1771.7 {}
+L 4 0 -1968.5 20 -1968.5 {}
+L 4 0 -2165.4 20 -2165.4 {}
+L 4 196.9 -20 196.9 0 {}
+L 4 393.7 -20 393.7 0 {}
+L 4 590.6 -20 590.6 0 {}
+L 4 787.4 -20 787.4 0 {}
+L 4 984.3 -20 984.3 0 {}
+L 4 1181.1 -20 1181.1 0 {}
+L 4 1378 -20 1378 0 {}
+L 4 1574.8 -20 1574.8 0 {}
+L 4 1771.7 -20 1771.7 0 {}
+L 4 1968.5 -20 1968.5 0 {}
+L 4 2165.4 -20 2165.4 0 {}
+L 4 2362.2 -20 2362.2 0 {}
+L 4 2559.1 -20 2559.1 0 {}
+L 4 2755.9 -20 2755.9 0 {}
+L 4 2952.8 -20 2952.8 0 {}
+L 4 3149.6 -20 3149.6 0 {}
+L 4 3290 -196.9 3310 -196.9 {}
+L 4 3290 -393.7 3310 -393.7 {}
+L 4 3290 -590.6 3310 -590.6 {}
+L 4 3290 -787.4 3310 -787.4 {}
+L 4 3290 -984.3 3310 -984.3 {}
+L 4 3290 -1181.1 3310 -1181.1 {}
+L 4 3290 -1378 3310 -1378 {}
+L 4 3290 -1574.8 3310 -1574.8 {}
+L 4 3290 -1771.7 3310 -1771.7 {}
+L 4 3290 -1968.5 3310 -1968.5 {}
+L 4 3290 -2165.4 3310 -2165.4 {}
+L 4 196.9 -2330 196.9 -2310 {}
+L 4 393.7 -2330 393.7 -2310 {}
+L 4 590.6 -2330 590.6 -2310 {}
+L 4 787.4 -2330 787.4 -2310 {}
+L 4 984.3 -2330 984.3 -2310 {}
+L 4 1181.1 -2330 1181.1 -2310 {}
+L 4 1378 -2330 1378 -2310 {}
+L 4 1574.8 -2330 1574.8 -2310 {}
+L 4 1771.7 -2330 1771.7 -2310 {}
+L 4 1968.5 -2330 1968.5 -2310 {}
+L 4 2165.4 -2330 2165.4 -2310 {}
+L 4 2362.2 -2330 2362.2 -2310 {}
+L 4 2559.1 -2330 2559.1 -2310 {}
+L 4 2755.9 -2330 2755.9 -2310 {}
+L 4 2952.8 -2330 2952.8 -2310 {}
+L 4 3149.6 -2330 3149.6 -2310 {}
+
+
+
+
+
+

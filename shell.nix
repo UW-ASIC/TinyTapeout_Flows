@@ -1,5 +1,20 @@
 { pkgs ? import <nixpkgs> {} }:
+# Tools Needed:
+# Digital
+# - OpenLane2
+# - Python (Cocoatb & Pytest & Pip)
+# - Makefile
+# - Icarus Verilog
+# - Slang
+# Analog
+# - xschem
+# - ngspice
+# - GAW
+# - Klayout (better sim)
+# - Netgen
+# - CACE (verification)
 let
+# xschem
   xschem = pkgs.stdenv.mkDerivation rec {
     pname = "xschem";
     version = "3.4.6";

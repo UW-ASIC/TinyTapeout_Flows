@@ -1,0 +1,62 @@
+v {xschem version=3.4.4 file_version=1.2
+*
+* This file is part of XSCHEM,
+* a schematic capture and Spice/Vhdl/Verilog netlisting tool for circuit
+* simulation.
+* Copyright (C) 1998-2024 Stefan Frederik Schippers
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+}
+G {type=subcircuit
+format="@name @pinlist @symname WP=@WP LP=@LP WN=@WN LLN=@LLN"
+template="name=x1 WP=8u LP=1u WN=5u LLN=1u"
+}
+V {}
+S {}
+E {}
+L 4 -50 -20 -35 -20 {}
+L 4 25 -2.5 25 2.5 {}
+L 4 25 -2.5 27.5 -5 {}
+L 4 27.5 -5 32.5 -5 {}
+L 4 32.5 -5 35 -2.5 {}
+L 4 35 -2.5 35 2.5 {}
+L 4 32.5 5 35 2.5 {}
+L 4 27.5 5 32.5 5 {}
+L 4 25 2.5 27.5 5 {}
+L 4 35 0 50 0 {}
+L 4 -35 -30 -35 30 {}
+L 4 -35 -30 -10 -30 {}
+L 4 -35 30 -10 30 {}
+L 4 -50 20 -35 20 {}
+L 4 2.5 -27.5 12.5 -22.5 {}
+L 4 -10 -30 2.5 -27.5 {}
+L 4 2.5 27.5 12.5 22.5 {}
+L 4 -10 30 2.5 27.5 {}
+L 4 12.5 22.5 20 15 {}
+L 4 20 15 23.75 7.5 {}
+L 4 23.75 7.5 25 0 {}
+L 4 12.5 -22.5 20 -15 {}
+L 4 20 -15 23.75 -7.5 {}
+L 4 23.75 -7.5 25 0 {}
+B 5 47.5 -2.5 52.5 2.5 {name=Z dir=out }
+B 5 -52.5 -22.5 -47.5 -17.5 {name=A dir=in }
+B 5 -52.5 17.5 -47.5 22.5 {name=B dir=in }
+T {@symname} 17.5 19 0 0 0.3 0.3 {}
+T {@name} 10 -37 0 0 0.2 0.2 {}
+T {Z} 20 -4 0 1 0.2 0.2 {}
+T {A} -30 -26.5 0 0 0.2 0.2 {}
+T {B} -30 13.5 0 0 0.2 0.2 {}
+T {P: @WP\\/@LP} -40 -65 0 0 0.4 0.4 {}
+T {N: @WN\\/@LLN} -40 40 0 0 0.4 0.4 {}

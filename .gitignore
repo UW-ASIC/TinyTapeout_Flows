@@ -30,3 +30,6 @@ Thumbs.db
 # Tools
 .tools/
 .venv/
+
+# Simulations
+digital/simulations/

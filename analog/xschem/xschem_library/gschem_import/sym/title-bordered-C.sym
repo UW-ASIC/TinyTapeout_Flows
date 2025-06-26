@@ -1,0 +1,118 @@
+v {xschem version=3.0.0 file_version=1.2}
+K {type=symbol
+template="graphical=1 "
+tedax_format="footprint @name @footprint
+value @name @value
+device @name @device
+@comptag"
+format="@name @pinlist @value "
+
+}
+G {}
+V {}
+S {}
+E {}
+T {FILE:} 1430 -60 2 1 0.266667 0.266667 {}
+T {REVISION:} 1780 -60 2 1 0.266667 0.266667 {}
+T {DRAWN BY: } 1780 -30 2 1 0.266667 0.266667 {}
+T {PAGE} 1430 -30 2 1 0.266667 0.266667 {}
+T {OF} 1600 -30 2 1 0.266667 0.266667 {}
+T {TITLE} 1430 -90 2 1 0.266667 0.266667 {}
+T {E} 10 -900 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {D} 10 -700 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {C} 10 -500 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {B} 10 -300 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {A} 10 -100 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {1} 100 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {2} 300 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {3} 500 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {4} 700 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {5} 900 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {6} 1100 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {7} 1300 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {8} 1500 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {F} 10 -1100 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {G} 10 -1300 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {H} 10 -1500 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {I} 10 -1650 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {I} 2190 -1650 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {H} 2190 -1500 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {G} 2190 -1300 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {F} 2190 -1100 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {E} 2190 -900 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {D} 2190 -700 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {C} 2190 -500 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {B} 2190 -300 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {A} 2190 -100 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {11} 2100 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {10} 1900 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {9} 1700 -10 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {1} 100 -1690 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {2} 300 -1690 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {3} 500 -1690 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {4} 700 -1690 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {5} 900 -1690 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {6} 1100 -1690 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {7} 1300 -1690 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {8} 1500 -1690 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {9} 1700 -1690 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {10} 1900 -1690 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+T {11} 2100 -1690 0 1 0.266667 0.266667 { hcenter=true vcenter=true}
+
+L 4 0 0 2200 0 {}
+L 4 2200 -1700 2200 0 {}
+L 4 0 -1700 2200 -1700 {}
+L 4 0 -1700 0 0 {}
+L 4 1420 -20 2180 -20 {}
+L 4 2180 -160 2180 -20 {}
+L 4 1420 -160 2180 -160 {}
+L 4 1420 -160 1420 -20 {}
+L 4 20 -20 2180 -20 {}
+L 4 2180 -1680 2180 -20 {}
+L 4 20 -1680 2180 -1680 {}
+L 4 20 -1680 20 -20 {}
+
+L 4 1770 -80 1770 -20 {}
+L 4 1420 -80 2180 -80 {}
+L 4 0 -1000 20 -1000 {}
+L 4 0 -800 20 -800 {}
+L 4 0 -600 20 -600 {}
+L 4 0 -400 20 -400 {}
+L 4 0 -200 20 -200 {}
+L 4 200 -20 200 0 {}
+L 4 400 -20 400 0 {}
+L 4 600 -20 600 0 {}
+L 4 800 -20 800 0 {}
+L 4 1000 -20 1000 0 {}
+L 4 1200 -20 1200 0 {}
+L 4 1400 -20 1400 0 {}
+L 4 1600 -20 1600 0 {}
+L 4 0 -1200 20 -1200 {}
+L 4 0 -1400 20 -1400 {}
+L 4 0 -1600 20 -1600 {}
+L 4 2180 -1600 2200 -1600 {}
+L 4 2180 -1400 2200 -1400 {}
+L 4 2180 -1200 2200 -1200 {}
+L 4 2180 -1000 2200 -1000 {}
+L 4 2180 -800 2200 -800 {}
+L 4 2180 -600 2200 -600 {}
+L 4 2180 -400 2200 -400 {}
+L 4 2180 -200 2200 -200 {}
+L 4 2000 -20 2000 0 {}
+L 4 1800 -20 1800 0 {}
+L 4 200 -1700 200 -1680 {}
+L 4 400 -1700 400 -1680 {}
+L 4 600 -1700 600 -1680 {}
+L 4 800 -1700 800 -1680 {}
+L 4 1000 -1700 1000 -1680 {}
+L 4 1200 -1700 1200 -1680 {}
+L 4 1400 -1700 1400 -1680 {}
+L 4 1600 -1700 1600 -1680 {}
+L 4 1800 -1700 1800 -1680 {}
+L 4 2000 -1700 2000 -1680 {}
+
+
+
+
+
+

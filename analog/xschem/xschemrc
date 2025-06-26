@@ -1,0 +1,12 @@
+set XSCHEM_LIBRARY_PATH {}
+append XSCHEM_LIBRARY_PATH :[file dirname [info script]]
+append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/xschem_library
+
+# Set PDK and standard cell library
+set PDK_DIR $env(HOME)/.volare/sky130A
+set STD_CELL_LIBRARY sky130_fd_sc_hd
+
+set netlist_dir [file normalize "[file dirname [info script]]/../netlist"]
+
+set PROJECT_ROOT [file normalize "[file dirname [info script]]/.."]
+set PROJECT_NAME "mixed_signal_inverter"

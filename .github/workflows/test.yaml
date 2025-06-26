@@ -21,11 +21,11 @@ jobs:
 
       - name: Install Python packages
         shell: bash
-        run: pip install -r test/requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Run tests
         run: |
-          cd rtl/test
+          cd digital/test
           make clean
           make
           # make will return success even if the test fails, so check for failure in the results.xml

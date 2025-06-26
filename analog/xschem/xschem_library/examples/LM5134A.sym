@@ -1,0 +1,56 @@
+v {xschem version=3.4.4 file_version=1.2
+*
+* This file is part of XSCHEM,
+* a schematic capture and Spice/Vhdl/Verilog netlisting tool for circuit
+* simulation.
+* Copyright (C) 1998-2024 Stefan Frederik Schippers
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+}
+G {type=primitive
+format="@name @pinlist @symname"
+template="name=x1"
+}
+V {}
+S {}
+E {}
+L 4 -60 130 60 130 {}
+L 4 -60 -130 -60 130 {}
+L 4 60 -130 60 130 {}
+L 4 -80 -120 -60 -120 {}
+L 4 60 -120 80 -120 {}
+L 4 -80 0 -60 0 {}
+L 4 60 0 80 0 {}
+L 4 60 120 80 120 {}
+L 4 -80 120 -60 120 {}
+L 4 -60 -130 -20 -130 {}
+L 4 -20 -130 -10 -120 {}
+L 4 -10 -120 10 -120 {}
+L 4 10 -120 20 -130 {}
+L 4 20 -130 60 -130 {}
+B 5 -82.5 -122.5 -77.5 -117.5 {name=VDD dir=inout }
+B 5 -82.5 -2.5 -77.5 2.5 {name=PILOT dir=inout }
+B 5 -82.5 117.5 -77.5 122.5 {name=OUT dir=inout }
+B 5 77.5 -122.5 82.5 -117.5 {name=IN dir=inout }
+B 5 77.5 -2.5 82.5 2.5 {name=INB dir=inout }
+B 5 77.5 117.5 82.5 122.5 {name=VSS dir=inout }
+T {@symname} -27 14 0 0 0.3 0.3 {}
+T {@name} 65 -142 0 0 0.2 0.2 {}
+T {VDD} -55 -124 0 0 0.2 0.2 {}
+T {IN} 55 -124 0 1 0.2 0.2 {}
+T {PILOT} -55 -4 0 0 0.2 0.2 {}
+T {INB} 55 -4 0 1 0.2 0.2 {}
+T {VSS} 55 116 0 1 0.2 0.2 {}
+T {OUT} -55 116 0 0 0.2 0.2 {}

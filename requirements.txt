@@ -6,7 +6,7 @@ klayout>=0.28.0
 cocotb>=1.8.0
 
 # Additional dependencies that might be needed
-click>=8.0.0
-rich>=10.0.0
-deprecated>=1.2.0
-pyyaml>=6.0.0
+#click>=8.0.0
+#rich>=10.0.0
+#deprecated>=1.2.0
+#pyyaml>=6.0.0

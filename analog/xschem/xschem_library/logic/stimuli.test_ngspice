@@ -1,0 +1,31 @@
+
+unit n
+voltage 1.2
+slope 1000
+format hspice
+
+beginfile stimuli_test_ngspice.cir
+
+set A_A 0
+set B_A 0
+s 3000
+set A_A 1
+set B_A 0
+s 3000
+set A_A 1
+set B_A 1
+s 3000
+set A_A 0
+set B_A 1
+s 3000
+set A_A 0
+set B_A 0
+s 3000
+set A_A 0
+set B_A 1
+s 3000
+set A_A 0
+set B_A 0
+endfile
+
+
