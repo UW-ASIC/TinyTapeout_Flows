@@ -1,0 +1,53 @@
+{
+   "creator": "Yosys 0.51 (git sha1 c4b5190229616f7ebf8197f43990b4429de3e420, g++ 14.2.1 -fPIC -O3)",
+   "invocation": "stat -json -liberty /home/omare/Documents/UWASIC/Template/digital/runs/counter_full/tmp/d09846df524d421c95b4103516140d53.lib ",
+   "modules": {
+      "\\counter": {
+         "num_wires":         26,
+         "num_wire_bits":     47,
+         "num_pub_wires":     5,
+         "num_pub_wire_bits": 12,
+         "num_ports":         5,
+         "num_port_bits":     12,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         36,
+         "area":              210.201600,
+         "num_cells_by_type": {
+            "$_ANDNOT_": 4,
+            "$_MUX_": 8,
+            "$_NAND_": 4,
+            "$_NOT_": 1,
+            "$_OR_": 4,
+            "$_XNOR_": 3,
+            "$_XOR_": 4,
+            "sky130_fd_sc_hd__dfrtp_2": 8
+         }
+      }
+   },
+      "design": {
+         "num_wires":         26,
+         "num_wire_bits":     47,
+         "num_pub_wires":     5,
+         "num_pub_wire_bits": 12,
+         "num_ports":         5,
+         "num_port_bits":     12,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         36,
+         "area":              210.201600,
+         "num_cells_by_type": {
+            "$_ANDNOT_": 4,
+            "$_MUX_": 8,
+            "$_NAND_": 4,
+            "$_NOT_": 1,
+            "$_OR_": 4,
+            "$_XNOR_": 3,
+            "$_XOR_": 4,
+            "sky130_fd_sc_hd__dfrtp_2": 8
+         }
+      }
+}
+

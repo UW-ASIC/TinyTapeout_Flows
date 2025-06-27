@@ -33,4 +33,4 @@ Thumbs.db
 
 # Simulations
 digital/simulations/
-digital/runs/
+digital/openlane/

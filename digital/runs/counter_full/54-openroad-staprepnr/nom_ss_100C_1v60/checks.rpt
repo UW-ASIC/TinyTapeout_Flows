@@ -1,0 +1,131 @@
+
+===========================================================================
+report_checks -unconstrained
+===========================================================================
+======================= nom_ss_100C_1v60 Corner ===================================
+
+Warning: corner.tcl line 77, unknown field nets.
+Startpoint: rst_n (input port clocked by clk)
+Endpoint: _37_ (recovery check against rising-edge clock clk)
+Path Group: asynchronous
+Path Type: max
+
+Fanout         Cap        Slew       Delay        Time   Description
+---------------------------------------------------------------------------------------------
+                      0.150000    0.000000    0.000000   clock clk (rise edge)
+                                  0.000000    0.000000   clock network delay (ideal)
+                                  2.000000    2.000000 ^ input external delay
+     8    0.026104    0.195172    0.132060    2.132060 ^ rst_n (in)
+                      0.195172    0.000000    2.132060 ^ _37_/RESET_B (sky130_fd_sc_hd__dfrtp_2)
+                                              2.132060   data arrival time
+
+                      0.150000   10.000000   10.000000   clock clk (rise edge)
+                                  0.000000   10.000000   clock network delay (ideal)
+                                 -0.250000    9.750000   clock uncertainty
+                                  0.000000    9.750000   clock reconvergence pessimism
+                                              9.750000 ^ _37_/CLK (sky130_fd_sc_hd__dfrtp_2)
+                                  0.418085   10.168085   library recovery time
+                                             10.168085   data required time
+---------------------------------------------------------------------------------------------
+                                             10.168085   data required time
+                                             -2.132060   data arrival time
+---------------------------------------------------------------------------------------------
+                                              8.036025   slack (MET)
+
+
+Startpoint: enable (input port clocked by clk)
+Endpoint: overflow (output port clocked by clk)
+Path Group: clk
+Path Type: max
+
+Fanout         Cap        Slew       Delay        Time   Description
+---------------------------------------------------------------------------------------------
+                      0.150000    0.000000    0.000000   clock clk (rise edge)
+                                  0.000000    0.000000   clock network delay (ideal)
+                                  2.000000    2.000000 ^ input external delay
+     4    0.016629    0.129056    0.085210    2.085210 ^ enable (in)
+                      0.129056    0.000000    2.085210 ^ _19_/D (sky130_fd_sc_hd__and4_2)
+     6    0.016078    0.205498    0.605775    2.690985 ^ _19_/X (sky130_fd_sc_hd__and4_2)
+                      0.205498    0.000000    2.690985 ^ _23_/C (sky130_fd_sc_hd__and4_2)
+     2    0.010002    0.159116    0.567165    3.258150 ^ _23_/X (sky130_fd_sc_hd__and4_2)
+                      0.159116    0.000000    3.258150 ^ _24_/B (sky130_fd_sc_hd__and2_2)
+     1    0.033442    0.295938    0.485051    3.743201 ^ _24_/X (sky130_fd_sc_hd__and2_2)
+                      0.295938    0.000000    3.743201 ^ overflow (out)
+                                              3.743201   data arrival time
+
+                      0.150000   10.000000   10.000000   clock clk (rise edge)
+                                  0.000000   10.000000   clock network delay (ideal)
+                                 -0.250000    9.750000   clock uncertainty
+                                  0.000000    9.750000   clock reconvergence pessimism
+                                 -2.000000    7.750000   output external delay
+                                              7.750000   data required time
+---------------------------------------------------------------------------------------------
+                                              7.750000   data required time
+                                             -3.743201   data arrival time
+---------------------------------------------------------------------------------------------
+                                              4.006799   slack (MET)
+
+
+
+
+===========================================================================
+report_checks --slack_max -0.01
+============================================================================
+======================= nom_ss_100C_1v60 Corner ===================================
+
+Warning: corner.tcl line 85, unknown field nets.
+No paths found.
+
+
+===========================================================================
+ report_check_types -max_slew -max_cap -max_fanout -violators
+============================================================================
+======================= nom_ss_100C_1v60 Corner ===================================
+
+
+
+===========================================================================
+report_parasitic_annotation -report_unannotated
+============================================================================
+Found 30 unannotated drivers.
+ clk
+ enable
+ rst_n
+ _18_/X
+ _19_/X
+ _20_/Y
+ _21_/X
+ _22_/X
+ _23_/X
+ _24_/X
+ _25_/X
+ _26_/Y
+ _27_/Y
+ _28_/Y
+ _29_/Y
+ _30_/X
+ _31_/X
+ _32_/Y
+ _33_/X
+ _34_/X
+ _35_/X
+ _36_/X
+ _37_/Q
+ _38_/Q
+ _39_/Q
+ _40_/Q
+ _41_/Q
+ _42_/Q
+ _43_/Q
+ _44_/Q
+Found 0 partially unannotated drivers.
+
+===========================================================================
+max slew violation count 0
+max fanout violation count 0
+max cap violation count 0
+============================================================================
+
+===========================================================================
+check_setup -verbose -unconstrained_endpoints -multiple_clock -no_clock -no_input_delay -loops -generated_clocks
+===========================================================================
