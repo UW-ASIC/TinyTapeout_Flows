@@ -1,20 +1,5 @@
 { pkgs ? import <nixpkgs> {} }:
-# Tools Needed:
-# Digital
-# - OpenLane2
-# - Python (Cocoatb & Pytest & Pip)
-# - Makefile
-# - Icarus Verilog
-# - Slang
-# Analog
-# - xschem
-# - ngspice
-# - GAW
-# - Klayout (better sim)
-# - Netgen
-# - CACE (verification)
 let
-# xschem
   xschem = pkgs.stdenv.mkDerivation rec {
     pname = "xschem";
     version = "3.4.6";
@@ -34,6 +19,13 @@ let
     configureFlags = [
       "--prefix=${placeholder "out"}"
     ];
+    buildPhase = ''
+      make
+    '';
+      
+    installPhase = ''
+      make install
+    '';
     meta = {
       description = "Schematic capture and netlisting EDA tool";
       homepage = "https://xschem.sourceforge.io/";
@@ -41,83 +33,77 @@ let
     };
   };
 in pkgs.mkShell {
-  name = "mixed-signal-asic";
+  name = "template";
   buildInputs = with pkgs; [
-    cachix
-    # Core tools
-    git bash coreutils gnumake gcc cmake pkg-config
+    # Builds
+    gnumake git
+
     # Digital design
-    verilog gtkwave slang
-    # Analog/Mixed-signal tools
-    ngspice magic-vlsi netgen
+    verilog
+    slang
+    gtkwave
+    verilator
+    yosys
+    openroad
+    ruby # below are openroad dep
+    stdenv.cc.cc.lib
+    glibc
+    expat
+    zlib
+
+    # Analog Design
     xschem
-    # Python with essential packages - include PyYAML from nixpkgs
+    gaw
+    ngspice
+    netgen
+    klayout
+    magic-vlsi
+    xterm
+
+    # Python
     python3
-    python3Packages.pip
-    python3Packages.virtualenv
-    python3Packages.pyyaml
+    python3Packages.rich
+    python3Packages.click
+    python3Packages.tkinter
+    python3Packages.pip # requirements.txt
     python3Packages.numpy
     python3Packages.matplotlib
     python3Packages.scipy
-    python3Packages.pandas
-    python3Packages.cython
-    python3Packages.setuptools
-    python3Packages.wheel
-    python3Packages.cffi
-    libyaml
-    verilator
-    yosys
-    # System libraries needed for OpenLane2 and EDA tools
-    stdenv.cc.cc.lib
-    glibc
-    zlib
-    libffi
-    openssl
-    # C++ standard library for libparse and other native extensions
-    gcc-unwrapped.lib
-    libcxx
-    # SWIG for libparse compilation
-    swig
+    python3Packages.pyyaml
+
     # Graphics/GUI support
     xorg.libX11 xorg.libXpm xorg.libXt cairo
-    tcl tk readline zlib ncurses
-    # Utilities
-    wget curl unzip tree nix
   ];
   shellHook = ''
-    # Setup cachix
-    cachix use mixed-signal-asic || echo "Creating new cachix cache"
     export PROJECT_ROOT="$(pwd)"
     export TOOLS_DIR="$PROJECT_ROOT/.tools"
     mkdir -p "$TOOLS_DIR/bin"
     export PATH="$TOOLS_DIR/bin:$PATH"
+    export LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.glibc}/lib:${pkgs.expat}/lib:${pkgs.zlib}/lib:$LD_LIBRARY_PATH"
+  
+
+    # PDK setup
+    export PDK_ROOT="''${PDK_ROOT:-$HOME/.volare}"
+    export PDK="''${PDK:-sky130A}"
+    export KLAYOUT_PATH="$PDK_ROOT/$PDK/libs.tech/klayout"
+
+    # xschem setup for sky130A
+    export XSCHEM_USER_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem"
+    export XSCHEM_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem:${xschem}/share/xschem/xschem_library"
 
     # Setup Python virtual environment
     export VENV_DIR="$PROJECT_ROOT/.venv"
     if [ ! -d "$VENV_DIR" ]; then
-      echo "Creating Python virtual environment..."
-      python -m venv "$VENV_DIR"
+        echo "Creating Python virtual environment..."
+        python -m venv "$VENV_DIR"
     fi
 
     # Activate virtual environment
     source "$VENV_DIR/bin/activate"
-
-    # Set up library paths for native extensions
-    export LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.glibc}/lib:${pkgs.gcc-unwrapped.lib}/lib:${pkgs.libcxx}/lib:$LD_LIBRARY_PATH"
-
-    # Upgrade pip and install requirements if they exist
-    pip install --upgrade pip
-    if [ -f requirements.txt ]; then
-      echo "Installing requirements from requirements.txt..."
-      pip install -r requirements.txt
-    else
-      echo "No requirements.txt found, skipping pip install"
-    fi
-
-    # PDK setup (inherited from OpenLane2 shell)
-    export PDK_ROOT="''${PDK_ROOT:-$HOME/.volare}"
-    export PDK="''${PDK:-sky130A}"
-    export MAGICRC="$PDK_ROOT/$PDK/libs.tech/magic/$PDK.magicrc"
+    pip install --upgrade \
+        volare==0.20.6 \
+        openlane==2.3.10 \
+        cace==2.6.0
 
     # Install PDK if not present
     if [ ! -d "$PDK_ROOT/$PDK" ]; then
@@ -125,24 +111,29 @@ in pkgs.mkShell {
       volare enable --pdk $PDK
     fi
 
-    echo ""
-    echo "Mixed-Signal ASIC Environment Ready"
-    echo "PDK: $PDK at $PDK_ROOT"
-    echo "Virtual Environment: $VENV_DIR (activated)"
-    echo "Python: $(which python)"
-    echo "PyYAML Version: $(python -c 'import yaml; print(yaml.__version__)' 2>/dev/null || echo 'Not installed')"
-    echo "Tools: $(command -v ngspice >/dev/null && echo "✓ NGSpice") $(command -v magic >/dev/null && echo "✓ Magic") $(command -v xschem >/dev/null && echo "✓ XSchem") $(command -v klayout >/dev/null && echo "✓ KLayout")"
+    # Download xschem_sky130 library if not present
+    if [ ! -d "$PDK_ROOT/$PDK/libs.tech/xschem_sky130" ]; then
+      echo "Installing xschem_sky130 library..."
+      cd "$PDK_ROOT/$PDK/libs.tech/"
+      git clone https://github.com/StefanSchippers/xschem_sky130.git
+      cd "$PROJECT_ROOT"
+    fi
 
-    # Test OpenLane2 and libparse imports
-    if python -c "import openlane" 2>/dev/null; then
-      echo "✓ OpenLane2 import successful"
-    else
-      echo "✗ OpenLane2 import failed - check dependencies"
+    # Create ngspice init file for faster sky130 simulation
+    mkdir -p "$HOME/.xschem/simulations"
+    if [ ! -f "$HOME/.xschem/simulations/.spiceinit" ]; then
+      cat > "$HOME/.xschem/simulations/.spiceinit" << 'EOF'
+set ngbehavior=hsa
+set ng_nomodcheck
+set num_threads=4
+EOF
     fi
-    if python -c "import libparse" 2>/dev/null; then
-      echo "✓ libparse import successful"
-    else
-      echo "✗ libparse import failed - check dependencies"
-    fi
+
+    echo "System tools available:"
+    echo "  - xschem: $(xschem --version 2>/dev/null || echo 'custom build')"
+    echo "  - yosys: $(yosys -V 2>/dev/null | head -1 || echo 'unknown version')"
+    echo "  - ngspice: $(ngspice --version 2>/dev/null | head -1 || echo 'unknown version')"
+    echo "  - verilator: $(verilator --version 2>/dev/null | head -1 || echo 'unknown version')"
+    echo "  - PDK: $PDK in $PDK_ROOT"
   '';
 }

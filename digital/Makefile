@@ -24,9 +24,8 @@ synthesis: lint
 	@printf "$(BLUE)[DIGITAL]$(NC) Using PDK: $(PDK)\n"
 	@printf "$(BLUE)[DIGITAL]$(NC) Output directory: $(NETLIST_DIR)\n"
 	openlane --pdk $(PDK) --pdk-root $(PDK_ROOT) \
-		--run-tag $(DESIGN)_synthesis \
-		--to Yosys.Synthesis \
-		openlane/config.json
+		--run-tag $(DESIGN)_full \
+		config.json
 
 SYNTHESIZED_NETLIST := $(shell find $(SYNTHESIS_RESULTS_DIR) -name "$(DESIGN).v" -path "*/synthesis/*" 2>/dev/null | head -1)
 

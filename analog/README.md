@@ -29,8 +29,7 @@ Digital Netlist Merged Here:
 - What tool?
 
 Layout:
-- Magic (Layouts, LVS, Post-Layout Parasitics, Schematic -> GDS)
-- klayout (Better Magic, for Post-Layout Sims)
+- KLayout (Layouts, LVS, Post-Layout Parasitics, Schematic -> GDS)
 
 Integration/verification:
 - Netgen (perform LVS on SPICE, and verilog) (Also used in integration)

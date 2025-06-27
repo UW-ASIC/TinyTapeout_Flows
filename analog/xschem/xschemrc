@@ -1,12 +1,21 @@
 set XSCHEM_LIBRARY_PATH {}
-append XSCHEM_LIBRARY_PATH :[file dirname [info script]]
+append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/schematics
+append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/symbols
 append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/xschem_library
-
-# Set PDK and standard cell library
 set PDK_DIR $env(HOME)/.volare/sky130A
+append XSCHEM_LIBRARY_PATH :$PDK_DIR/libs.tech/xschem_sky130
+append XSCHEM_LIBRARY_PATH :$PDK_DIR/libs.tech/xschem_sky130/sky130_fd_pr
+append XSCHEM_LIBRARY_PATH :$PDK_DIR/libs.tech/xschem_sky130/sky130_tests
+append XSCHEM_LIBRARY_PATH :$PDK_DIR/libs.tech/xschem_sky130/sky130_stdcells
+
 set STD_CELL_LIBRARY sky130_fd_sc_hd
-
 set netlist_dir [file normalize "[file dirname [info script]]/../netlist"]
-
 set PROJECT_ROOT [file normalize "[file dirname [info script]]/.."]
 set PROJECT_NAME "mixed_signal_inverter"
+
+file mkdir $netlist_dir
+set XSCHEM_NETLIST_DIR $netlist_dir
+
+set gaw_viewer "gaw"
+
+set dark_colorscheme 0

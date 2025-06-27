@@ -1,0 +1,14 @@
+** sch_path: /home/omare/Documents/UWASIC/Template/analog/xschem/schematics/InverterTB.sch
+**.subckt InverterTB
+V1 Vin GND PULSE (0 1.2 0 1n 1n 1u 2u)
+V2 VDD GND 1.8
+**** begin user architecture code
+
+.tran .01n 1u
+.save all
+
+?
+**** end user architecture code
+**.ends
+.GLOBAL GND
+.end

@@ -1,8 +1,8 @@
 ## Digital Workflow
 digital/                   # Digital design domain
 ├── src/                   # RTL source files
-├── simulations/           # Output from testing testbenches
-├── openlane/              # OpenLane2 configuration
+├── runs/           # Output from testing testbenches
+├── openlane/              # output from OpenLane2
 └── test/                  # Digital testbenches & verification
 
 ### How to use:

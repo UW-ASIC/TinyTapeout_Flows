@@ -1,33 +1,21 @@
-VERILOG_ROOT := $(shell pwd)
-
-# OpenLane2 Config
-OPENLANE2_ROOT ?= $(shell pwd)/openlane2
-PDK ?= sky130A
-PDK_ROOT ?= $(HOME)/.volare
-SYNTHESIS_RESULTS_DIR := openlane
-
-# Colors for output
-BLUE := \033[0;34m
-GREEN := \033[0;32m
-RED := \033[0;31m
-YELLOW := \033[0;33m
-NC := \033[0m
+.PHONY: d-lint d-synthesis d-test-rtl d-verification d-test d-clean d-harden
+d-all: d-lint d-synthesis d-test-rtl d-verification d-test d-clean d-harden
 
 # Pure Digital Tasks
 d-lint:
-	cd test && make lint
+	cd digital && make lint
 d-synthesis:
-	cd test && make synthesis
+	cd digital && make synthesis
 d-test-rtl:
-	cd test && make -b test-rtl
+	cd digital && make -b test-rtl
 d-verification:
-	cd test && make verification
+	cd digital && make verification
 d-test:
-	cd test && make -b test
+	cd digital && make -b test
 d-clean:
-	cd test && make clean
+	cd digital && make clean
 d-harden:
-	cd test && make harden
+	cd digital && make harden
 
 # Pure Analog Tools
 
@@ -39,4 +27,6 @@ d-CreateNetlist:
 a-CreateNetlist:
 	..
 
-
+delete_apps:
+	rm -rf .tools
+	rm -rf .venv
