@@ -1,0 +1,2148 @@
+.
+├── analog
+│   ├── build
+│   │   ├── cace
+│   │   │   ├── cace.yaml
+│   │   │   └── Makefile
+│   │   ├── config.mk
+│   │   ├── layout
+│   │   │   └── Makefile
+│   │   └── schematic
+│   │       ├── Makefile
+│   │       └── xschemrc
+│   ├── layout
+│   ├── library
+│   │   └── xschem_library
+│   │       ├── binto7seg
+│   │       │   ├── bcd.sch
+│   │       │   ├── bcd.sym
+│   │       │   ├── sevenseg012.sch
+│   │       │   ├── sevenseg012.sym
+│   │       │   ├── sevenseg.sch
+│   │       │   ├── sevenseg.sym
+│   │       │   └── top.sch
+│   │       ├── devices
+│   │       │   ├── adc_bridge.sym
+│   │       │   ├── ammeter.sym
+│   │       │   ├── arch_declarations.sym
+│   │       │   ├── architecture.sym
+│   │       │   ├── asrc.sym
+│   │       │   ├── assign.sym
+│   │       │   ├── attributes.sym
+│   │       │   ├── bindkeys_cheatsheet.sym
+│   │       │   ├── bsource.sym
+│   │       │   ├── bus_connect_nolab.sym
+│   │       │   ├── bus_connect.sym
+│   │       │   ├── bus_tap.sym
+│   │       │   ├── capa-2.sym
+│   │       │   ├── capa.sym
+│   │       │   ├── cccs.sym
+│   │       │   ├── ccvs.sym
+│   │       │   ├── code_shown.sym
+│   │       │   ├── code.sym
+│   │       │   ├── conn_10x2.sym
+│   │       │   ├── conn_14x1.sym
+│   │       │   ├── conn_3x1.sym
+│   │       │   ├── conn_4x1.sym
+│   │       │   ├── conn_6x1.sym
+│   │       │   ├── conn_8x1.sym
+│   │       │   ├── connector.sym
+│   │       │   ├── connect.sym
+│   │       │   ├── crystal-2.sym
+│   │       │   ├── crystal.sym
+│   │       │   ├── dac_bridge.sym
+│   │       │   ├── delay_line.sym
+│   │       │   ├── delay.sym
+│   │       │   ├── device_param_probe.sym
+│   │       │   ├── diode.sym
+│   │       │   ├── flash_cell.sym
+│   │       │   ├── generic_pin.sym
+│   │       │   ├── gnd.sym
+│   │       │   ├── ic.sym
+│   │       │   ├── ind.sym
+│   │       │   ├── intuitive_interface_cheatsheet.sch
+│   │       │   ├── intuitive_interface_cheatsheet.sym
+│   │       │   ├── iopin.sym
+│   │       │   ├── ipin.sym
+│   │       │   ├── isource_arith.sym
+│   │       │   ├── isource_pwl.sym
+│   │       │   ├── isource.sym
+│   │       │   ├── isource_table.sym
+│   │       │   ├── jumper.sym
+│   │       │   ├── k.sym
+│   │       │   ├── lab_generic.sym
+│   │       │   ├── lab_pin.sym
+│   │       │   ├── lab_show.sym
+│   │       │   ├── lab_wire.sym
+│   │       │   ├── launcher.sym
+│   │       │   ├── led.sym
+│   │       │   ├── netlist_at_end.sym
+│   │       │   ├── netlist_not_shown_at_end.sym
+│   │       │   ├── netlist_not_shown.sym
+│   │       │   ├── netlist_options.sym
+│   │       │   ├── netlist.sym
+│   │       │   ├── ngspice_analog_delay.sym
+│   │       │   ├── ngspice_get_expr.sym
+│   │       │   ├── ngspice_get_value.sym
+│   │       │   ├── ngspice_probe.sym
+│   │       │   ├── njfet.sym
+│   │       │   ├── nmos3.sym
+│   │       │   ├── nmos4_depl.sym
+│   │       │   ├── nmos4.sym
+│   │       │   ├── nmos-sub.sym
+│   │       │   ├── nmos.sym
+│   │       │   ├── noconn.sym
+│   │       │   ├── npn.sym
+│   │       │   ├── opin.sym
+│   │       │   ├── package_not_shown.sym
+│   │       │   ├── package.sym
+│   │       │   ├── param_agauss.sym
+│   │       │   ├── param.sym
+│   │       │   ├── parax_cap.sym
+│   │       │   ├── pjfet.sym
+│   │       │   ├── pmos3.sym
+│   │       │   ├── pmos4.sym
+│   │       │   ├── pmoshv4.sym
+│   │       │   ├── pmosnat.sym
+│   │       │   ├── pmos-sub.sym
+│   │       │   ├── pmos.sym
+│   │       │   ├── pnp.sym
+│   │       │   ├── port_attributes.sym
+│   │       │   ├── res3.sym
+│   │       │   ├── res_ac.sym
+│   │       │   ├── res_noisy.sym
+│   │       │   ├── res.sym
+│   │       │   ├── rgb_led.sym
+│   │       │   ├── rnmos4.sym
+│   │       │   ├── scope2.sym
+│   │       │   ├── scope_ammeter.sym
+│   │       │   ├── scope.sym
+│   │       │   ├── short.sym
+│   │       │   ├── simulator_commands_shown.sym
+│   │       │   ├── simulator_commands.sym
+│   │       │   ├── spice_probe.sym
+│   │       │   ├── spice_probe_vdiff.sym
+│   │       │   ├── sqwsource.sym
+│   │       │   ├── stop.sym
+│   │       │   ├── switch_ngspice.sym
+│   │       │   ├── switch.sym
+│   │       │   ├── switch_v_xyce.sym
+│   │       │   ├── title-2.sym
+│   │       │   ├── title-3.sym
+│   │       │   ├── title.sym
+│   │       │   ├── use.sym
+│   │       │   ├── var_res.sym
+│   │       │   ├── vccs.sym
+│   │       │   ├── vcr.sym
+│   │       │   ├── vcvs.sym
+│   │       │   ├── vdd.sym
+│   │       │   ├── verilog_delay.sch
+│   │       │   ├── verilog_delay.sym
+│   │       │   ├── verilog_preprocessor.sym
+│   │       │   ├── verilog_timescale.sym
+│   │       │   ├── vsource_arith.sym
+│   │       │   ├── vsource_pwl.sym
+│   │       │   ├── vsource.sym
+│   │       │   └── zener.sym
+│   │       ├── examples
+│   │       │   ├── 0_examples_top.sch
+│   │       │   ├── an2.sym
+│   │       │   ├── and.sym
+│   │       │   ├── ao21.sym
+│   │       │   ├── buf.sym
+│   │       │   ├── bus_keeper.sch
+│   │       │   ├── classD_amp.sch
+│   │       │   ├── classD_amp.sym
+│   │       │   ├── cmos_example.sch
+│   │       │   ├── cmos_example.sym
+│   │       │   ├── cmos_inv.sch
+│   │       │   ├── cmos_inv.sym
+│   │       │   ├── diode_1.sch
+│   │       │   ├── diode_1.sym
+│   │       │   ├── dlatch.sch
+│   │       │   ├── dlatch.sym
+│   │       │   ├── doublepin.sch
+│   │       │   ├── doublepin.sym
+│   │       │   ├── flop.sch
+│   │       │   ├── flop.sym
+│   │       │   ├── greycnt.sch
+│   │       │   ├── greycnt.sym
+│   │       │   ├── inv_bsource.sym
+│   │       │   ├── LCC_instances.sch
+│   │       │   ├── LCC_instances.sym
+│   │       │   ├── lightning.sch
+│   │       │   ├── lm317.sch
+│   │       │   ├── lm317.sym
+│   │       │   ├── lm324.sym
+│   │       │   ├── lm337.sch
+│   │       │   ├── lm337.sym
+│   │       │   ├── LM5134A.sch
+│   │       │   ├── LM5134A.sym
+│   │       │   ├── loading.sch
+│   │       │   ├── loading.sym
+│   │       │   ├── loading.vhdl
+│   │       │   ├── mos_power_ampli_extracted.sch
+│   │       │   ├── mos_power_ampli_extracted.sym
+│   │       │   ├── mos_power_ampli.sch
+│   │       │   ├── mos_power_ampli.sym
+│   │       │   ├── MSA-2643.sch
+│   │       │   ├── nand2.sch
+│   │       │   ├── nand2.sym
+│   │       │   ├── nand3.sym
+│   │       │   ├── nand.sym
+│   │       │   ├── nd2-1.sym
+│   │       │   ├── ne555.sym
+│   │       │   ├── not.sym
+│   │       │   ├── nr2-1.sym
+│   │       │   ├── or2.sym
+│   │       │   ├── osc.sch
+│   │       │   ├── osc.sym
+│   │       │   ├── plot_manipulation.sch
+│   │       │   ├── plot_manipulation.sym
+│   │       │   ├── poweramp_lcc.sch
+│   │       │   ├── poweramp_lcc.sym
+│   │       │   ├── poweramp.sch
+│   │       │   ├── poweramp.sym
+│   │       │   ├── poweramp_xyce.sch
+│   │       │   ├── poweramp_xyce.sym
+│   │       │   ├── pump.sch
+│   │       │   ├── pump.sym
+│   │       │   ├── Q1.sch
+│   │       │   ├── Q1.sym
+│   │       │   ├── Q2.sch
+│   │       │   ├── Q2.sym
+│   │       │   ├── rcline.sch
+│   │       │   ├── rcline.sym
+│   │       │   ├── real_capa.sch
+│   │       │   ├── real_capa.sym
+│   │       │   ├── rlc.sch
+│   │       │   ├── rlc.sym
+│   │       │   ├── sr_flop.sch
+│   │       │   ├── sr_flop.sym
+│   │       │   ├── stimuli.greycnt
+│   │       │   ├── switch_rreal.sch
+│   │       │   ├── switch_rreal.sym
+│   │       │   ├── symbol_include2.cir
+│   │       │   ├── symbol_include2.sch
+│   │       │   ├── symbol_include.cir
+│   │       │   ├── SYMBOL_include.sch
+│   │       │   ├── SYMBOL_include.sym
+│   │       │   ├── tb_symbol_include.sch
+│   │       │   ├── tb_symbol_include.sym
+│   │       │   ├── tesla.sch
+│   │       │   ├── tesla.sym
+│   │       │   ├── test2.sch
+│   │       │   ├── test_ac.sch
+│   │       │   ├── test_ac.sym
+│   │       │   ├── test_ac_xyce.sch
+│   │       │   ├── test_ac_xyce.sym
+│   │       │   ├── test_backannotated_subckt.sch
+│   │       │   ├── test_backannotated_subckt.sym
+│   │       │   ├── test_bus_tap.sch
+│   │       │   ├── test_bus_tap.sym
+│   │       │   ├── test_doublepin.sch
+│   │       │   ├── test_doublepin.sym
+│   │       │   ├── test_extracted_netlist.sch
+│   │       │   ├── test_extracted_netlist.sym
+│   │       │   ├── test_jfet.sch
+│   │       │   ├── test_jfet.sym
+│   │       │   ├── test_lm324.sch
+│   │       │   ├── test_lm324.sym
+│   │       │   ├── test_lvs_ignore.sch
+│   │       │   ├── test_lvs_ignore.sym
+│   │       │   ├── test_ne555.sch
+│   │       │   ├── test_ne555.sym
+│   │       │   ├── test_nyquist.sch
+│   │       │   ├── test_nyquist.sym
+│   │       │   ├── test.sch
+│   │       │   ├── test_short_option.sch
+│   │       │   ├── test_short_option.sym
+│   │       │   ├── TwoStageAmp.sch
+│   │       │   ├── xcross.sch
+│   │       │   ├── xcross.sym
+│   │       │   ├── xnor.sch
+│   │       │   └── xnor.sym
+│   │       ├── generators
+│   │       │   ├── mosgen.tcl
+│   │       │   ├── my_inv.sch
+│   │       │   ├── my_inv.sym
+│   │       │   ├── res.tcl
+│   │       │   ├── schematicgen.tcl
+│   │       │   ├── symbolgen.tcl
+│   │       │   ├── test_generators.sch
+│   │       │   ├── test_generators.sym
+│   │       │   ├── test_mosgen.sch
+│   │       │   ├── test_symbolgen.sch
+│   │       │   ├── test_symbolgen.sym
+│   │       │   └── tier.tcl
+│   │       ├── gschem_import
+│   │       │   ├── 24Cxx-1.sym
+│   │       │   ├── 2N4401.sym
+│   │       │   ├── 2N4403.sym
+│   │       │   ├── 3.3V-plus-1.sym
+│   │       │   ├── 5V-plus-1.sym
+│   │       │   ├── 7414-1.sym
+│   │       │   ├── BJT_Model.sym
+│   │       │   ├── capacitor-1.sym
+│   │       │   ├── capacitor-2.sym
+│   │       │   ├── connector4-1.sym
+│   │       │   ├── connector8-1.sym
+│   │       │   ├── convert_script
+│   │       │   ├── copyleft.sym
+│   │       │   ├── crystal-1.sym
+│   │       │   ├── cy7c64603-52nc.sym
+│   │       │   ├── diode-1.sym
+│   │       │   ├── gnd-1.sym
+│   │       │   ├── gTAG-consio.sch
+│   │       │   ├── gTAG-consio.sym
+│   │       │   ├── gTAG-jtagio.sch
+│   │       │   ├── gTAG-jtagio.sym
+│   │       │   ├── gTAG-psu.sch
+│   │       │   ├── gTAG-psu.sym
+│   │       │   ├── gTAG.sch
+│   │       │   ├── gTAG-ucont.sch
+│   │       │   ├── gTAG-ucont.sym
+│   │       │   ├── header20-1.sym
+│   │       │   ├── in-1.sym
+│   │       │   ├── inductor-1.sym
+│   │       │   ├── jumper-1.sym
+│   │       │   ├── lightning.sch
+│   │       │   ├── max882.sym
+│   │       │   ├── MSA-2643.sch
+│   │       │   ├── out-1.sym
+│   │       │   ├── place.awk
+│   │       │   ├── Q1.sch
+│   │       │   ├── Q2.sch
+│   │       │   ├── Q_Model.sym
+│   │       │   ├── resistor-1.sym
+│   │       │   ├── resistor-2.sym
+│   │       │   ├── resistor-variable-1.sym
+│   │       │   ├── show_all_syms.sch
+│   │       │   ├── sn75240pw.sym
+│   │       │   ├── spice-directive-1.sym
+│   │       │   ├── spice-include-1.sym
+│   │       │   ├── spice-model-1.sym
+│   │       │   ├── spice-subcircuit-IO-1.sym
+│   │       │   ├── spice-subcircuit-LL-1.sym
+│   │       │   ├── sym
+│   │       │   │   ├── 10K10LC84-1.sym
+│   │       │   │   ├── 12SA7-1.sym
+│   │       │   │   ├── 12SK7-1.sym
+│   │       │   │   ├── 12SQ7-1.sym
+│   │       │   │   ├── 12V-minus-1.sym
+│   │       │   │   ├── 12V-plus-1.sym
+│   │       │   │   ├── 22V10-DIP-1.sym
+│   │       │   │   ├── 22V10-PLCC.sym
+│   │       │   │   ├── 24Cxx-1.sym
+│   │       │   │   ├── 25Cxx-1.sym
+│   │       │   │   ├── 27256-1.sym
+│   │       │   │   ├── 2732-1.sym
+│   │       │   │   ├── 27512-1.sym
+│   │       │   │   ├── 27C2001-1.sym
+│   │       │   │   ├── 27C256-1.sym
+│   │       │   │   ├── 2N2222-1.sym
+│   │       │   │   ├── 2N3055-1.sym
+│   │       │   │   ├── 2N3904-1.sym
+│   │       │   │   ├── 2N3904-2.sym
+│   │       │   │   ├── 2N3906-1.sym
+│   │       │   │   ├── 2N5245-1.sym
+│   │       │   │   ├── 2N5911-1.sym
+│   │       │   │   ├── 2phase-stepper-1.sym
+│   │       │   │   ├── 2S2K3-1.sym
+│   │       │   │   ├── 2tri-1.sym
+│   │       │   │   ├── 31-71043-1.sym
+│   │       │   │   ├── 3.3V-plus-1.sym
+│   │       │   │   ├── 35Z5GT-1.sym
+│   │       │   │   ├── 3967-1.sym
+│   │       │   │   ├── 3967-2.sym
+│   │       │   │   ├── 3tri-1.sym
+│   │       │   │   ├── 4000-1.sym
+│   │       │   │   ├── 4000-2.sym
+│   │       │   │   ├── 4001-1.sym
+│   │       │   │   ├── 4002-1.sym
+│   │       │   │   ├── 4002-2.sym
+│   │       │   │   ├── 4006-1.sym
+│   │       │   │   ├── 4006-2.sym
+│   │       │   │   ├── 4007-1.sym
+│   │       │   │   ├── 4008-1.sym
+│   │       │   │   ├── 4008-2.sym
+│   │       │   │   ├── 4009-1.sym
+│   │       │   │   ├── 40100-1.sym
+│   │       │   │   ├── 40101-1.sym
+│   │       │   │   ├── 4010-1.sym
+│   │       │   │   ├── 40102-1.sym
+│   │       │   │   ├── 40103-1.sym
+│   │       │   │   ├── 40104-1.sym
+│   │       │   │   ├── 40105-1.sym
+│   │       │   │   ├── 40106-1.sym
+│   │       │   │   ├── 40107-1.sym
+│   │       │   │   ├── 40108-1.sym
+│   │       │   │   ├── 40109-1.sym
+│   │       │   │   ├── 40110-1.sym
+│   │       │   │   ├── 4011-1.sym
+│   │       │   │   ├── 4011-2.sym
+│   │       │   │   ├── 40117-1.sym
+│   │       │   │   ├── 4012-1.sym
+│   │       │   │   ├── 4013-1.sym
+│   │       │   │   ├── 4014-1.sym
+│   │       │   │   ├── 4014-2.sym
+│   │       │   │   ├── 40147-1.sym
+│   │       │   │   ├── 4015-1.sym
+│   │       │   │   ├── 40160-1.sym
+│   │       │   │   ├── 40161-1.sym
+│   │       │   │   ├── 4016-1.sym
+│   │       │   │   ├── 40162-1.sym
+│   │       │   │   ├── 4016-2.sym
+│   │       │   │   ├── 40163-1.sym
+│   │       │   │   ├── 4017-1.sym
+│   │       │   │   ├── 4017-2.sym
+│   │       │   │   ├── 40174-1.sym
+│   │       │   │   ├── 40175-1.sym
+│   │       │   │   ├── 40181-1.sym
+│   │       │   │   ├── 4018-1.sym
+│   │       │   │   ├── 40182-1.sym
+│   │       │   │   ├── 4018-2.sym
+│   │       │   │   ├── 4019-1.sym
+│   │       │   │   ├── 40192-1.sym
+│   │       │   │   ├── 4019-2.sym
+│   │       │   │   ├── 40193-1.sym
+│   │       │   │   ├── 40194-1.sym
+│   │       │   │   ├── 40195-1.sym
+│   │       │   │   ├── 4020-1.sym
+│   │       │   │   ├── 40208-1.sym
+│   │       │   │   ├── 4021-1.sym
+│   │       │   │   ├── 4021-2.sym
+│   │       │   │   ├── 4021-3.sym
+│   │       │   │   ├── 4022-1.sym
+│   │       │   │   ├── 4022-2.sym
+│   │       │   │   ├── 4023-1.sym
+│   │       │   │   ├── 40240-1.sym
+│   │       │   │   ├── 4024-1.sym
+│   │       │   │   ├── 40244-1.sym
+│   │       │   │   ├── 40245-1.sym
+│   │       │   │   ├── 4025-1.sym
+│   │       │   │   ├── 40257-1.sym
+│   │       │   │   ├── 4026-1.sym
+│   │       │   │   ├── 4027-1.sym
+│   │       │   │   ├── 4028-1.sym
+│   │       │   │   ├── 4028-2.sym
+│   │       │   │   ├── 4029-1.sym
+│   │       │   │   ├── 4030-1.sym
+│   │       │   │   ├── 4031-1.sym
+│   │       │   │   ├── 4032-1.sym
+│   │       │   │   ├── 4032-2.sym
+│   │       │   │   ├── 4033-1.sym
+│   │       │   │   ├── 4033-2.sym
+│   │       │   │   ├── 4034-1.sym
+│   │       │   │   ├── 4035-1.sym
+│   │       │   │   ├── 4035-2.sym
+│   │       │   │   ├── 40373-1.sym
+│   │       │   │   ├── 40374-1.sym
+│   │       │   │   ├── 4038-1.sym
+│   │       │   │   ├── 4038-2.sym
+│   │       │   │   ├── 4040-1.sym
+│   │       │   │   ├── 4041-1.sym
+│   │       │   │   ├── 4042-1.sym
+│   │       │   │   ├── 4042-2.sym
+│   │       │   │   ├── 4043-1.sym
+│   │       │   │   ├── 4043-2.sym
+│   │       │   │   ├── 4044-1.sym
+│   │       │   │   ├── 4044-2.sym
+│   │       │   │   ├── 4045-1.sym
+│   │       │   │   ├── 4046-1.sym
+│   │       │   │   ├── 4047-1.sym
+│   │       │   │   ├── 4048-1.sym
+│   │       │   │   ├── 4049-1.sym
+│   │       │   │   ├── 4050-1.sym
+│   │       │   │   ├── 4051-1.sym
+│   │       │   │   ├── 4052-1.sym
+│   │       │   │   ├── 4053-1.sym
+│   │       │   │   ├── 4053-2.sym
+│   │       │   │   ├── 4054-1.sym
+│   │       │   │   ├── 4055-1.sym
+│   │       │   │   ├── 4056-1.sym
+│   │       │   │   ├── 4059-1.sym
+│   │       │   │   ├── 4060-1.sym
+│   │       │   │   ├── 4060-2.sym
+│   │       │   │   ├── 4061-1.sym
+│   │       │   │   ├── 4062-1.sym
+│   │       │   │   ├── 4063-1.sym
+│   │       │   │   ├── 4066-1.sym
+│   │       │   │   ├── 4066-2.sym
+│   │       │   │   ├── 4067-1.sym
+│   │       │   │   ├── 4067-2.sym
+│   │       │   │   ├── 4068-1.sym
+│   │       │   │   ├── 4068-2.sym
+│   │       │   │   ├── 4069-1.sym
+│   │       │   │   ├── 4069-2.sym
+│   │       │   │   ├── 4069-3.sym
+│   │       │   │   ├── 4070-1.sym
+│   │       │   │   ├── 4071-1.sym
+│   │       │   │   ├── 4072-1.sym
+│   │       │   │   ├── 4072-2.sym
+│   │       │   │   ├── 4073-1.sym
+│   │       │   │   ├── 4073-2.sym
+│   │       │   │   ├── 4075-1.sym
+│   │       │   │   ├── 4075-2.sym
+│   │       │   │   ├── 4076-1.sym
+│   │       │   │   ├── 4077-1.sym
+│   │       │   │   ├── 4078-1.sym
+│   │       │   │   ├── 4078-2.sym
+│   │       │   │   ├── 4081-1.sym
+│   │       │   │   ├── 4082-1.sym
+│   │       │   │   ├── 4082-2.sym
+│   │       │   │   ├── 4085-1.sym
+│   │       │   │   ├── 4086-1.sym
+│   │       │   │   ├── 4089-1.sym
+│   │       │   │   ├── 4093-1.sym
+│   │       │   │   ├── 4094-1.sym
+│   │       │   │   ├── 4094-2.sym
+│   │       │   │   ├── 4095-1.sym
+│   │       │   │   ├── 4096-1.sym
+│   │       │   │   ├── 4097-1.sym
+│   │       │   │   ├── 4098-1.sym
+│   │       │   │   ├── 4099-1.sym
+│   │       │   │   ├── 4164-1.sym
+│   │       │   │   ├── 4316-1.sym
+│   │       │   │   ├── 4352-1.sym
+│   │       │   │   ├── 4353-1.sym
+│   │       │   │   ├── 4501-1.sym
+│   │       │   │   ├── 4502-1.sym
+│   │       │   │   ├── 4503-1.sym
+│   │       │   │   ├── 4504-1.sym
+│   │       │   │   ├── 4508-1.sym
+│   │       │   │   ├── 4510-1.sym
+│   │       │   │   ├── 4511-1.sym
+│   │       │   │   ├── 4512-1.sym
+│   │       │   │   ├── 4513-1.sym
+│   │       │   │   ├── 4514-1.sym
+│   │       │   │   ├── 4515-1.sym
+│   │       │   │   ├── 4516-1.sym
+│   │       │   │   ├── 4517-1.sym
+│   │       │   │   ├── 4518-1.sym
+│   │       │   │   ├── 4520-1.sym
+│   │       │   │   ├── 4521-1.sym
+│   │       │   │   ├── 4522-1.sym
+│   │       │   │   ├── 4527-1.sym
+│   │       │   │   ├── 4528-1.sym
+│   │       │   │   ├── 4531-1.sym
+│   │       │   │   ├── 4532-1.sym
+│   │       │   │   ├── 4534-1.sym
+│   │       │   │   ├── 4536-1.sym
+│   │       │   │   ├── 4538-1.sym
+│   │       │   │   ├── 4541-1.sym
+│   │       │   │   ├── 4543-1.sym
+│   │       │   │   ├── 4555-1.sym
+│   │       │   │   ├── 4556-1.sym
+│   │       │   │   ├── 4572-1.sym
+│   │       │   │   ├── 4580-1.sym
+│   │       │   │   ├── 4582-1.sym
+│   │       │   │   ├── 4585-1.sym
+│   │       │   │   ├── 4723-1.sym
+│   │       │   │   ├── 4724-1.sym
+│   │       │   │   ├── 4737-1.sym
+│   │       │   │   ├── 4N25-1.sym
+│   │       │   │   ├── 4N29-1.sym
+│   │       │   │   ├── 4phase-stepper6-1.sym
+│   │       │   │   ├── 4phase-stepper8-1.sym
+│   │       │   │   ├── 50L6GT-1.sym
+│   │       │   │   ├── 581000-1.sym
+│   │       │   │   ├── 5V-minus-1.sym
+│   │       │   │   ├── 5V-plus-1.sym
+│   │       │   │   ├── 62256-1.sym
+│   │       │   │   ├── 62256-2.sym
+│   │       │   │   ├── 628512-1.sym
+│   │       │   │   ├── 6821-1.sym
+│   │       │   │   ├── 6821-2.sym
+│   │       │   │   ├── 6A259-1.sym
+│   │       │   │   ├── 6N135-1.sym
+│   │       │   │   ├── 6N136-1.sym
+│   │       │   │   ├── 6n137-1.sym
+│   │       │   │   ├── 7400-1.sym
+│   │       │   │   ├── 7400-2.sym
+│   │       │   │   ├── 7401-1.sym
+│   │       │   │   ├── 7401-2.sym
+│   │       │   │   ├── 7402-1.sym
+│   │       │   │   ├── 7402-2.sym
+│   │       │   │   ├── 7403-1.sym
+│   │       │   │   ├── 7403-2.sym
+│   │       │   │   ├── 7404-1.sym
+│   │       │   │   ├── 7404-2.sym
+│   │       │   │   ├── 7404-3.sym
+│   │       │   │   ├── 7404-4.sym
+│   │       │   │   ├── 7405-1.sym
+│   │       │   │   ├── 7405-2.sym
+│   │       │   │   ├── 7407-1.sym
+│   │       │   │   ├── 7408-1.sym
+│   │       │   │   ├── 7408-2.sym
+│   │       │   │   ├── 7409-1.sym
+│   │       │   │   ├── 7409-2.sym
+│   │       │   │   ├── 7410-1.sym
+│   │       │   │   ├── 7410-2.sym
+│   │       │   │   ├── 74107-1.sym
+│   │       │   │   ├── 74107-2.sym
+│   │       │   │   ├── 74109-1.sym
+│   │       │   │   ├── 74109-2.sym
+│   │       │   │   ├── 7411-1.sym
+│   │       │   │   ├── 74112-1.sym
+│   │       │   │   ├── 7411-2.sym
+│   │       │   │   ├── 74113-1.sym
+│   │       │   │   ├── 74114-1.sym
+│   │       │   │   ├── 74121-1.sym
+│   │       │   │   ├── 7412-1.sym
+│   │       │   │   ├── 74122-1.sym
+│   │       │   │   ├── 7412-2.sym
+│   │       │   │   ├── 74123-1.sym
+│   │       │   │   ├── 74123-2.sym
+│   │       │   │   ├── 74123-3.sym
+│   │       │   │   ├── 74124-1.sym
+│   │       │   │   ├── 74124-2.sym
+│   │       │   │   ├── 74125-1.sym
+│   │       │   │   ├── 74126-1.sym
+│   │       │   │   ├── 74131-1.sym
+│   │       │   │   ├── 74132-1.sym
+│   │       │   │   ├── 74133-1.sym
+│   │       │   │   ├── 74133-2.sym
+│   │       │   │   ├── 74137-1.sym
+│   │       │   │   ├── 74138-1.sym
+│   │       │   │   ├── 74138-2.sym
+│   │       │   │   ├── 74139-1.sym
+│   │       │   │   ├── 74139-2.sym
+│   │       │   │   ├── 74139-3.sym
+│   │       │   │   ├── 74141-1.sym
+│   │       │   │   ├── 7414-1.sym
+│   │       │   │   ├── 7414-2.sym
+│   │       │   │   ├── 74145-1.sym
+│   │       │   │   ├── 74147-1.sym
+│   │       │   │   ├── 74148-1.sym
+│   │       │   │   ├── 74150-1.sym
+│   │       │   │   ├── 74151-1.sym
+│   │       │   │   ├── 74151-2.sym
+│   │       │   │   ├── 7415-1.sym
+│   │       │   │   ├── 74152-1.sym
+│   │       │   │   ├── 7415-2.sym
+│   │       │   │   ├── 74153-1.sym
+│   │       │   │   ├── 74153-2.sym
+│   │       │   │   ├── 74154-1.sym
+│   │       │   │   ├── 74154-2.sym
+│   │       │   │   ├── 74157-1.sym
+│   │       │   │   ├── 74158-1.sym
+│   │       │   │   ├── 74159-1.sym
+│   │       │   │   ├── 74160-1.sym
+│   │       │   │   ├── 74161-1.sym
+│   │       │   │   ├── 74161-2.sym
+│   │       │   │   ├── 74162-1.sym
+│   │       │   │   ├── 74163-1.sym
+│   │       │   │   ├── 74164-1.sym
+│   │       │   │   ├── 74164-2.sym
+│   │       │   │   ├── 74165-1.sym
+│   │       │   │   ├── 74166-1.sym
+│   │       │   │   ├── 74168-1.sym
+│   │       │   │   ├── 74169-1.sym
+│   │       │   │   ├── 74170-1.sym
+│   │       │   │   ├── 74173-1.sym
+│   │       │   │   ├── 74175-1.sym
+│   │       │   │   ├── 74181-1.sym
+│   │       │   │   ├── 74182-1.sym
+│   │       │   │   ├── 74189-1.sym
+│   │       │   │   ├── 74189-2.sym
+│   │       │   │   ├── 74190-1.sym
+│   │       │   │   ├── 74191-1.sym
+│   │       │   │   ├── 74191-2.sym
+│   │       │   │   ├── 74192-1.sym
+│   │       │   │   ├── 74193-1.sym
+│   │       │   │   ├── 74194-1.sym
+│   │       │   │   ├── 74195-1.sym
+│   │       │   │   ├── 74196-1.sym
+│   │       │   │   ├── 74197-1.sym
+│   │       │   │   ├── 7420-1.sym
+│   │       │   │   ├── 7420-2.sym
+│   │       │   │   ├── 7421-1.sym
+│   │       │   │   ├── 7421-2.sym
+│   │       │   │   ├── 7422-1.sym
+│   │       │   │   ├── 7422-2.sym
+│   │       │   │   ├── 74238-1.sym
+│   │       │   │   ├── 74240-1.sym
+│   │       │   │   ├── 74243-1.sym
+│   │       │   │   ├── 74244-1.sym
+│   │       │   │   ├── 74244-2.sym
+│   │       │   │   ├── 74245-1.sym
+│   │       │   │   ├── 74257-1.sym
+│   │       │   │   ├── 74259-1.sym
+│   │       │   │   ├── 74265-1.sym
+│   │       │   │   ├── 74265-2.sym
+│   │       │   │   ├── 74266-1.sym
+│   │       │   │   ├── 7427-1.sym
+│   │       │   │   ├── 74273-1.sym
+│   │       │   │   ├── 74280-1.sym
+│   │       │   │   ├── 74283-1.sym
+│   │       │   │   ├── 74299-1.sym
+│   │       │   │   ├── 7430-1.sym
+│   │       │   │   ├── 7430-2.sym
+│   │       │   │   ├── 7431-1.sym
+│   │       │   │   ├── 7432-1.sym
+│   │       │   │   ├── 7432-2.sym
+│   │       │   │   ├── 7432-3.sym
+│   │       │   │   ├── 74367-1.sym
+│   │       │   │   ├── 74373-1.sym
+│   │       │   │   ├── 74374-1.sym
+│   │       │   │   ├── 74377-1.sym
+│   │       │   │   ├── 74379-1.sym
+│   │       │   │   ├── 74393-1.sym
+│   │       │   │   ├── 7442-1.sym
+│   │       │   │   ├── 7445-1.sym
+│   │       │   │   ├── 7446-1.sym
+│   │       │   │   ├── 7447-1.sym
+│   │       │   │   ├── 7448-1.sym
+│   │       │   │   ├── 7451-1.sym
+│   │       │   │   ├── 74520-1.sym
+│   │       │   │   ├── 74520-2.sym
+│   │       │   │   ├── 74520-3.sym
+│   │       │   │   ├── 74541-1.sym
+│   │       │   │   ├── 7454-1.sym
+│   │       │   │   ├── 7455-1.sym
+│   │       │   │   ├── 7456-1.sym
+│   │       │   │   ├── 7457-1.sym
+│   │       │   │   ├── 74573-1.sym
+│   │       │   │   ├── 74574-1.sym
+│   │       │   │   ├── 74595-1.sym
+│   │       │   │   ├── 74673A-1.sym
+│   │       │   │   ├── 74673A-2.sym
+│   │       │   │   ├── 74684-1.sym
+│   │       │   │   ├── 74688-1.sym
+│   │       │   │   ├── 74688-2.sym
+│   │       │   │   ├── 7472-1.sym
+│   │       │   │   ├── 7473-1.sym
+│   │       │   │   ├── 7474-1.sym
+│   │       │   │   ├── 7474-2.sym
+│   │       │   │   ├── 7474-3.sym
+│   │       │   │   ├── 7475-1.sym
+│   │       │   │   ├── 7476-1.sym
+│   │       │   │   ├── 7478-1.sym
+│   │       │   │   ├── 7483-1.sym
+│   │       │   │   ├── 7485-1.sym
+│   │       │   │   ├── 7486-1.sym
+│   │       │   │   ├── 7490-1.sym
+│   │       │   │   ├── 7491-1.sym
+│   │       │   │   ├── 7492-1.sym
+│   │       │   │   ├── 7493-1.sym
+│   │       │   │   ├── 7495-1.sym
+│   │       │   │   ├── 7495-2.sym
+│   │       │   │   ├── 7496-1.sym
+│   │       │   │   ├── 7497-1.sym
+│   │       │   │   ├── 7497-2.sym
+│   │       │   │   ├── 74HC244-1.sym
+│   │       │   │   ├── 74HC244-2.sym
+│   │       │   │   ├── 74HC373-1.sym
+│   │       │   │   ├── 74HC374-1.sym
+│   │       │   │   ├── 74HCT01-1.sym
+│   │       │   │   ├── 74HCT03-1.sym
+│   │       │   │   ├── 74HCT05-1.sym
+│   │       │   │   ├── 74HCT08-1.sym
+│   │       │   │   ├── 74HCT245-1.sym
+│   │       │   │   ├── 74HCT4094-1.sym
+│   │       │   │   ├── 74HCT541-1.sym
+│   │       │   │   ├── 74power-1.sym
+│   │       │   │   ├── 75176-1.sym
+│   │       │   │   ├── 8031.sym
+│   │       │   │   ├── 8052basic-1.sym
+│   │       │   │   ├── 8086-1.sym
+│   │       │   │   ├── 8088-1.sym
+│   │       │   │   ├── 810-1.sym
+│   │       │   │   ├── 8254-1.sym
+│   │       │   │   ├── 8255A-1.sym
+│   │       │   │   ├── 8259A-1.sym
+│   │       │   │   ├── 93Cx6-1.sym
+│   │       │   │   ├── 9602-1.sym
+│   │       │   │   ├── 9602-2.sym
+│   │       │   │   ├── 9V-minus-1.sym
+│   │       │   │   ├── 9V-plus-1.sym
+│   │       │   │   ├── ac-ac.sym
+│   │       │   │   ├── ac-dc.sym
+│   │       │   │   ├── ACE1202-1.sym
+│   │       │   │   ├── ad633JN-1.sym
+│   │       │   │   ├── ad633JN-2.sym
+│   │       │   │   ├── ad633JR-1.sym
+│   │       │   │   ├── ADC0804-1.sym
+│   │       │   │   ├── adc0820-1.sym
+│   │       │   │   ├── ADC0831-1.sym
+│   │       │   │   ├── adc.sym
+│   │       │   │   ├── ADG601-1.sym
+│   │       │   │   ├── ADG602-1.sym
+│   │       │   │   ├── ADG619-1.sym
+│   │       │   │   ├── ADG620-1.sym
+│   │       │   │   ├── adm202-1.sym
+│   │       │   │   ├── adm202-2.sym
+│   │       │   │   ├── adm707.sym
+│   │       │   │   ├── ADT1-1WT-1.sym
+│   │       │   │   ├── ADT1-1WT-2.sym
+│   │       │   │   ├── aerial.sym
+│   │       │   │   ├── af_output_transformer-1.sym
+│   │       │   │   ├── am27S13D-1.sym
+│   │       │   │   ├── am9128-1.sym
+│   │       │   │   ├── amp-bidir.sym
+│   │       │   │   ├── amp-diff.sym
+│   │       │   │   ├── amp-step.sym
+│   │       │   │   ├── amp.sym
+│   │       │   │   ├── amp-trim.sym
+│   │       │   │   ├── amp-var.sym
+│   │       │   │   ├── AN82527.sym
+│   │       │   │   ├── aop-spice-1.sym
+│   │       │   │   ├── aop-std-1.sym
+│   │       │   │   ├── arfx1229-1.sym
+│   │       │   │   ├── aromat-tq4.sym
+│   │       │   │   ├── arrow.sym
+│   │       │   │   ├── asic-cap-1.sym
+│   │       │   │   ├── asic-cap-2.sym
+│   │       │   │   ├── asic-cap-3.sym
+│   │       │   │   ├── asic-diode-1.sym
+│   │       │   │   ├── asic-nhhv-1.sym
+│   │       │   │   ├── asic-nhv-1.sym
+│   │       │   │   ├── asic-nmmv-1.sym
+│   │       │   │   ├── asic-nmos-1.sym
+│   │       │   │   ├── asic-nmv-1.sym
+│   │       │   │   ├── asic-phhv-1.sym
+│   │       │   │   ├── asic-phv-1.sym
+│   │       │   │   ├── asic-pmmv-1.sym
+│   │       │   │   ├── asic-pmos-1.sym
+│   │       │   │   ├── asic-pmv-1.sym
+│   │       │   │   ├── asic-res-1.sym
+│   │       │   │   ├── asic-res-2.sym
+│   │       │   │   ├── asic-res-3.sym
+│   │       │   │   ├── asic-res-4.sym
+│   │       │   │   ├── at-1xx.sym
+│   │       │   │   ├── AT43USB320A.sym
+│   │       │   │   ├── AT45db021bso8w-1.sym
+│   │       │   │   ├── AT89C2051-1.sym
+│   │       │   │   ├── AT89C5131_PLCC-1.sym
+│   │       │   │   ├── AT89C5132_TQFP-1.sym
+│   │       │   │   ├── AT89C51_DIP.sym
+│   │       │   │   ├── AT89C51_PLCC.sym
+│   │       │   │   ├── AT89C51_TQFP.sym
+│   │       │   │   ├── AT89S53-24PI-1.sym
+│   │       │   │   ├── AT89S8252-24PC-1.sym
+│   │       │   │   ├── AT90S1200.sym
+│   │       │   │   ├── AT90S2313.sym
+│   │       │   │   ├── AT90S2323.sym
+│   │       │   │   ├── AT90S2343.sym
+│   │       │   │   ├── AT90S4433_DIP.sym
+│   │       │   │   ├── AT90S4433_TQFP.sym
+│   │       │   │   ├── AT90S8515_DIP.sym
+│   │       │   │   ├── AT90S8515_PLCC.sym
+│   │       │   │   ├── AT90S8515_TQFP.sym
+│   │       │   │   ├── AT90S8535_DIP.sym
+│   │       │   │   ├── AT90S8535J-1.sym
+│   │       │   │   ├── AT90S8535P-1.sym
+│   │       │   │   ├── AT90S8535_PLCC.sym
+│   │       │   │   ├── AT90S8535.sym
+│   │       │   │   ├── AT90S8535_TQFP.sym
+│   │       │   │   ├── ATmega103.sym
+│   │       │   │   ├── ATmega128-1.sym
+│   │       │   │   ├── ATmega128-2.sym
+│   │       │   │   ├── ATmega128-3.sym
+│   │       │   │   ├── ATmega161_DIP.sym
+│   │       │   │   ├── ATmega161_TQFP.sym
+│   │       │   │   ├── ATmega163_DIP.sym
+│   │       │   │   ├── ATmega163_TQFP.sym
+│   │       │   │   ├── ATmega16_DIP-1.sym
+│   │       │   │   ├── ATmega16L-1.sym
+│   │       │   │   ├── ATmega323-1.sym
+│   │       │   │   ├── ATmega32MLF-1.sym
+│   │       │   │   ├── ATmega64-1.sym
+│   │       │   │   ├── ATmega8-1.sym
+│   │       │   │   ├── atten-step.sym
+│   │       │   │   ├── atten.sym
+│   │       │   │   ├── atten-trim.sym
+│   │       │   │   ├── attenuator-1.sym
+│   │       │   │   ├── atten-var.sym
+│   │       │   │   ├── ATtiny11.sym
+│   │       │   │   ├── ATtiny12.sym
+│   │       │   │   ├── ATtiny15L-1.sym
+│   │       │   │   ├── ATtiny28_DIP.sym
+│   │       │   │   ├── ATtiny28_TQFP.sym
+│   │       │   │   ├── aui-1.sym
+│   │       │   │   ├── bandpass-step.sym
+│   │       │   │   ├── bandpass.sym
+│   │       │   │   ├── bandpass-trim.sym
+│   │       │   │   ├── bandpass-var.sym
+│   │       │   │   ├── bandstop-step.sym
+│   │       │   │   ├── bandstop.sym
+│   │       │   │   ├── bandstop-trim.sym
+│   │       │   │   ├── bandstop-var.sym
+│   │       │   │   ├── basicstamp-1.sym
+│   │       │   │   ├── battery-1.sym
+│   │       │   │   ├── battery-2.sym
+│   │       │   │   ├── battery-3.sym
+│   │       │   │   ├── bav70lt1-1.sym
+│   │       │   │   ├── BC182-1.sym
+│   │       │   │   ├── BC307-1.sym
+│   │       │   │   ├── BC547-1.sym
+│   │       │   │   ├── BC547-2.sym
+│   │       │   │   ├── BC547-3.sym
+│   │       │   │   ├── BC557-1.sym
+│   │       │   │   ├── BC557-2.sym
+│   │       │   │   ├── beeper-1.sym
+│   │       │   │   ├── block-convert.sym
+│   │       │   │   ├── block.sym
+│   │       │   │   ├── BNC-1.sym
+│   │       │   │   ├── bridge-1.sym
+│   │       │   │   ├── bridge-2.sym
+│   │       │   │   ├── busripper-1.sym
+│   │       │   │   ├── busripper-2.sym
+│   │       │   │   ├── capacitor-1.sym
+│   │       │   │   ├── capacitor-2.sym
+│   │       │   │   ├── capacitor-3.sym
+│   │       │   │   ├── capacitor-4.sym
+│   │       │   │   ├── capacitor-variable-1.sym
+│   │       │   │   ├── capacitor-variable-2.sym
+│   │       │   │   ├── cascade-amp-1.sym
+│   │       │   │   ├── cascade-defaults-1.sym
+│   │       │   │   ├── cascade-defaults-2.sym
+│   │       │   │   ├── cascade-filter-1.sym
+│   │       │   │   ├── cascade-mixer-1.sym
+│   │       │   │   ├── cascade-source-1.sym
+│   │       │   │   ├── cascade-source-2.sym
+│   │       │   │   ├── cascade-transformer-1.sym
+│   │       │   │   ├── cccs-1.sym
+│   │       │   │   ├── ccvs-1.sym
+│   │       │   │   ├── chassis.sym
+│   │       │   │   ├── circulator.sym
+│   │       │   │   ├── CNY17-1.sym
+│   │       │   │   ├── coil-1.sym
+│   │       │   │   ├── coil-2.sym
+│   │       │   │   ├── combine-2.sym
+│   │       │   │   ├── combine-3.sym
+│   │       │   │   ├── combine-4.sym
+│   │       │   │   ├── common.sym
+│   │       │   │   ├── con2.sym
+│   │       │   │   ├── con-coaxial.sym
+│   │       │   │   ├── connector10-1.sym
+│   │       │   │   ├── connector10-2.sym
+│   │       │   │   ├── connector11-2.sym
+│   │       │   │   ├── connector12-1.sym
+│   │       │   │   ├── connector12-2.sym
+│   │       │   │   ├── connector1-2.sym
+│   │       │   │   ├── connector13-2.sym
+│   │       │   │   ├── connector14-2.sym
+│   │       │   │   ├── connector15-1.sym
+│   │       │   │   ├── connector15-2.sym
+│   │       │   │   ├── connector16-1.sym
+│   │       │   │   ├── connector16-2.sym
+│   │       │   │   ├── connector17-2.sym
+│   │       │   │   ├── connector18-2.sym
+│   │       │   │   ├── connector19-1.sym
+│   │       │   │   ├── connector19-2.sym
+│   │       │   │   ├── connector20-1.sym
+│   │       │   │   ├── connector20-2.sym
+│   │       │   │   ├── connector21-2.sym
+│   │       │   │   ├── connector2-1.sym
+│   │       │   │   ├── connector22-2.sym
+│   │       │   │   ├── connector2-2.sym
+│   │       │   │   ├── connector23-2.sym
+│   │       │   │   ├── connector24-2.sym
+│   │       │   │   ├── connector25-2.sym
+│   │       │   │   ├── connector26-1.sym
+│   │       │   │   ├── connector26-2.sym
+│   │       │   │   ├── connector27-2.sym
+│   │       │   │   ├── connector28-2.sym
+│   │       │   │   ├── connector29-2.sym
+│   │       │   │   ├── connector30-2.sym
+│   │       │   │   ├── connector31-2.sym
+│   │       │   │   ├── connector3-1.sym
+│   │       │   │   ├── connector32-2.sym
+│   │       │   │   ├── connector3-2.sym
+│   │       │   │   ├── connector33-2.sym
+│   │       │   │   ├── connector34-2.sym
+│   │       │   │   ├── connector35-2.sym
+│   │       │   │   ├── connector36-2.sym
+│   │       │   │   ├── connector37-2.sym
+│   │       │   │   ├── connector38-2.sym
+│   │       │   │   ├── connector39-2.sym
+│   │       │   │   ├── connector40-2.sym
+│   │       │   │   ├── connector41-1.sym
+│   │       │   │   ├── connector4-1.sym
+│   │       │   │   ├── connector4-2.sym
+│   │       │   │   ├── connector5-1.sym
+│   │       │   │   ├── connector5-2.sym
+│   │       │   │   ├── connector6-1.sym
+│   │       │   │   ├── connector6-2.sym
+│   │       │   │   ├── connector7-2.sym
+│   │       │   │   ├── connector8-1.sym
+│   │       │   │   ├── connector8-2.sym
+│   │       │   │   ├── connector9-1.sym
+│   │       │   │   ├── connector9-2.sym
+│   │       │   │   ├── convert_script
+│   │       │   │   ├── corrector.sym
+│   │       │   │   ├── coupler-1.sym
+│   │       │   │   ├── coupler-dual.sym
+│   │       │   │   ├── coupler.sym
+│   │       │   │   ├── crystal-1.sym
+│   │       │   │   ├── CS5396-1.sym
+│   │       │   │   ├── current-1.sym
+│   │       │   │   ├── cvstitleblock-1.sym
+│   │       │   │   ├── DAC0808-1.sym
+│   │       │   │   ├── dac08sm-1.sym
+│   │       │   │   ├── dac.sym
+│   │       │   │   ├── darlington_NPN-1.sym
+│   │       │   │   ├── darlington_NPN_PNP-1.sym
+│   │       │   │   ├── DB15-1.sym
+│   │       │   │   ├── DB25-1.sym
+│   │       │   │   ├── DB25-2.sym
+│   │       │   │   ├── DB25-3.sym
+│   │       │   │   ├── DB31-1.sym
+│   │       │   │   ├── DB37-1.sym
+│   │       │   │   ├── DB9-1.sym
+│   │       │   │   ├── DB9-2.sym
+│   │       │   │   ├── DC003C-1.sym
+│   │       │   │   ├── DC004C-1.sym
+│   │       │   │   ├── DC310ES-1.sym
+│   │       │   │   ├── DC319-1.sym
+│   │       │   │   ├── DC331-1.sym
+│   │       │   │   ├── DC8640-1.sym
+│   │       │   │   ├── dc-ac.sym
+│   │       │   │   ├── dc-dc.sym
+│   │       │   │   ├── dc_motor-1.sym
+│   │       │   │   ├── decon-1.sym
+│   │       │   │   ├── decrypt.sym
+│   │       │   │   ├── delay-step.sym
+│   │       │   │   ├── delay.sym
+│   │       │   │   ├── delay-trim.sym
+│   │       │   │   ├── delay-var.sym
+│   │       │   │   ├── demodulator.sym
+│   │       │   │   ├── detector.sym
+│   │       │   │   ├── dgnmos-1.sym
+│   │       │   │   ├── DIN41612C48-1.sym
+│   │       │   │   ├── DIN41612C48-2.sym
+│   │       │   │   ├── DIN41612C56-1.sym
+│   │       │   │   ├── DIN41612C56-2.sym
+│   │       │   │   ├── DIN41612C96-1.sym
+│   │       │   │   ├── DIN41612C96-2.sym
+│   │       │   │   ├── DIN41617C13-1.sym
+│   │       │   │   ├── DIN41617C15-1.sym
+│   │       │   │   ├── DIN41617C31-1.sym
+│   │       │   │   ├── diode-1.sym
+│   │       │   │   ├── diode-2.sym
+│   │       │   │   ├── diode-3.sym
+│   │       │   │   ├── diode-bridge-1.sym
+│   │       │   │   ├── dip24-1.sym
+│   │       │   │   ├── diplexer.sym
+│   │       │   │   ├── divide-by-N.sym
+│   │       │   │   ├── DM9368.sym
+│   │       │   │   ├── down-converter.sym
+│   │       │   │   ├── dpst-noblock.sym
+│   │       │   │   ├── DS1307-1.sym
+│   │       │   │   ├── DS1602-1.sym
+│   │       │   │   ├── DS1620-1.sym
+│   │       │   │   ├── DS2405-1.sym
+│   │       │   │   ├── DS2450-1.sym
+│   │       │   │   ├── DS2480B-1.sym
+│   │       │   │   ├── DS26C31-1.sym
+│   │       │   │   ├── DS26C32-1.sym
+│   │       │   │   ├── DS26C32-2.sym
+│   │       │   │   ├── DS26C61-1.sym
+│   │       │   │   ├── DS26LS31-1.sym
+│   │       │   │   ├── DS2890_TO92-1.sym
+│   │       │   │   ├── DS75176-1.sym
+│   │       │   │   ├── DS80C310-1.sym
+│   │       │   │   ├── DS80C310.sym
+│   │       │   │   ├── DS80C320-1.sym
+│   │       │   │   ├── DS80C320.sym
+│   │       │   │   ├── DS8641_1.sym
+│   │       │   │   ├── DS89C450-1.sym
+│   │       │   │   ├── dual-opamp-1.sym
+│   │       │   │   ├── encrypt.sym
+│   │       │   │   ├── EPC1LC20-1.sym
+│   │       │   │   ├── EPF10K-1.sym
+│   │       │   │   ├── filter-1.sym
+│   │       │   │   ├── FND5148-1.sym
+│   │       │   │   ├── FT245BM-1.sym
+│   │       │   │   ├── fuse-1.sym
+│   │       │   │   ├── fuse-2.sym
+│   │       │   │   ├── generic-power.sym
+│   │       │   │   ├── glow-lamp-1.sym
+│   │       │   │   ├── gnd-1.sym
+│   │       │   │   ├── gnd-2.sym
+│   │       │   │   ├── gnucap-directive-1.sym
+│   │       │   │   ├── gnucap-include-1.sym
+│   │       │   │   ├── gnucap-model-1.sym
+│   │       │   │   ├── gnucap-npn-1.sym
+│   │       │   │   ├── gnucap-options-1.sym
+│   │       │   │   ├── gpib-1.sym
+│   │       │   │   ├── grid-1.sym
+│   │       │   │   ├── ground.sym
+│   │       │   │   ├── HA5221-1.sym
+│   │       │   │   ├── hcnr201-1.sym
+│   │       │   │   ├── hcpl-2430-1.sym
+│   │       │   │   ├── hcpl-2630-1.sym
+│   │       │   │   ├── hcpl-2631-1.sym
+│   │       │   │   ├── HCPL4502-1.sym
+│   │       │   │   ├── hcpl-4534-1.sym
+│   │       │   │   ├── HCPL4701-1.sym
+│   │       │   │   ├── HCTL-2000-1.sym
+│   │       │   │   ├── HCTL-2016-1.sym
+│   │       │   │   ├── header10-1.sym
+│   │       │   │   ├── header10-2.sym
+│   │       │   │   ├── header16-1.sym
+│   │       │   │   ├── header18-2.sym
+│   │       │   │   ├── header20-1.sym
+│   │       │   │   ├── header20-2.sym
+│   │       │   │   ├── header20-3.sym
+│   │       │   │   ├── header22-1.sym
+│   │       │   │   ├── header26-1.sym
+│   │       │   │   ├── header26-2.sym
+│   │       │   │   ├── header3-1.sym
+│   │       │   │   ├── header32-2.sym
+│   │       │   │   ├── header34-1.sym
+│   │       │   │   ├── header40-2.sym
+│   │       │   │   ├── header50-1.sym
+│   │       │   │   ├── header50-2.sym
+│   │       │   │   ├── header50-3.sym
+│   │       │   │   ├── header50r-1.sym
+│   │       │   │   ├── header8-1.sym
+│   │       │   │   ├── header8-2.sym
+│   │       │   │   ├── HFA1100-1.sym
+│   │       │   │   ├── highpass-step.sym
+│   │       │   │   ├── highpass.sym
+│   │       │   │   ├── highpass-trim.sym
+│   │       │   │   ├── highpass-var.sym
+│   │       │   │   ├── HIP4080A-1.sym
+│   │       │   │   ├── HIP4081A-1.sym
+│   │       │   │   ├── HM6264P15-1.sym
+│   │       │   │   ├── HM628511HC-SOJ36-1.sym
+│   │       │   │   ├── hole-1.sym
+│   │       │   │   ├── hsdl3612-1.sym
+│   │       │   │   ├── HSDL7000-1.sym
+│   │       │   │   ├── hybrid.sym
+│   │       │   │   ├── icl7660-1.sym
+│   │       │   │   ├── idc-1.sym
+│   │       │   │   ├── idt7204-1.sym
+│   │       │   │   ├── if_trans_aircore-1.sym
+│   │       │   │   ├── in-1.sym
+│   │       │   │   ├── inamp-1.sym
+│   │       │   │   ├── include-1.sym
+│   │       │   │   ├── inductor-1.sym
+│   │       │   │   ├── inductor-dot-1.sym
+│   │       │   │   ├── input-1.sym
+│   │       │   │   ├── input-2.sym
+│   │       │   │   ├── input-orcad-1.sym
+│   │       │   │   ├── input-output.sym
+│   │       │   │   ├── input.sym
+│   │       │   │   ├── interpage_bidir-1.sym
+│   │       │   │   ├── interpage_from-1.sym
+│   │       │   │   ├── interpage_to-1.sym
+│   │       │   │   ├── io-1.sym
+│   │       │   │   ├── io.sym
+│   │       │   │   ├── ips021-1.sym
+│   │       │   │   ├── ips3310-1.sym
+│   │       │   │   ├── ips521-1.sym
+│   │       │   │   ├── ir2110-1.sym
+│   │       │   │   ├── IRF1010N-1.sym
+│   │       │   │   ├── IRLZ24N-1.sym
+│   │       │   │   ├── ISA-98W-SOCKET-1.sym
+│   │       │   │   ├── isolator.sym
+│   │       │   │   ├── isp2032-1.sym
+│   │       │   │   ├── jj-1.sym
+│   │       │   │   ├── jumper-1.sym
+│   │       │   │   ├── K3020P-1.sym
+│   │       │   │   ├── kmutual-1.sym
+│   │       │   │   ├── l200-1.sym
+│   │       │   │   ├── L293.sym
+│   │       │   │   ├── LCD-1.sym
+│   │       │   │   ├── led-1.sym
+│   │       │   │   ├── led-2.sym
+│   │       │   │   ├── led-3.sym
+│   │       │   │   ├── leddual-1.sym
+│   │       │   │   ├── leddual-2.sym
+│   │       │   │   ├── limiter.sym
+│   │       │   │   ├── lm135-1.sym
+│   │       │   │   ├── lm1877-1.sym
+│   │       │   │   ├── lm2576T-1.sym
+│   │       │   │   ├── lm2822-1.sym
+│   │       │   │   ├── lm2822m-1.sym
+│   │       │   │   ├── lm2902-1.sym
+│   │       │   │   ├── lm2941-1.sym
+│   │       │   │   ├── lm311-1.sym
+│   │       │   │   ├── lm317-1.sym
+│   │       │   │   ├── lm319-1.sym
+│   │       │   │   ├── lm324-1.sym
+│   │       │   │   ├── lm337-1.sym
+│   │       │   │   ├── lm339-1.sym
+│   │       │   │   ├── lm339-2.sym
+│   │       │   │   ├── lm358-1.sym
+│   │       │   │   ├── lm386-1.sym
+│   │       │   │   ├── lm3909-1.sym
+│   │       │   │   ├── lm393-1.sym
+│   │       │   │   ├── lm4871m-1.sym
+│   │       │   │   ├── lm555-1.sym
+│   │       │   │   ├── lm628n-6.sym
+│   │       │   │   ├── lm723-1.sym
+│   │       │   │   ├── lm741-1.sym
+│   │       │   │   ├── lm75-1.sym
+│   │       │   │   ├── lm7805-1.sym
+│   │       │   │   ├── lm7806-1.sym
+│   │       │   │   ├── lm7810-1.sym
+│   │       │   │   ├── lm7812-1.sym
+│   │       │   │   ├── lm7815-1.sym
+│   │       │   │   ├── lm7818-1.sym
+│   │       │   │   ├── lm7824-1.sym
+│   │       │   │   ├── lm7885-1.sym
+│   │       │   │   ├── lm7912-1.sym
+│   │       │   │   ├── logic.sym
+│   │       │   │   ├── loop_antenna-1.sym
+│   │       │   │   ├── loop_antenna-2.sym
+│   │       │   │   ├── lowpass-step.sym
+│   │       │   │   ├── lowpass.sym
+│   │       │   │   ├── lowpass-trim.sym
+│   │       │   │   ├── lowpass-var.sym
+│   │       │   │   ├── lp2954IT-1.sym
+│   │       │   │   ├── LRPS-2-11.sym
+│   │       │   │   ├── LSI11BUS-1.sym
+│   │       │   │   ├── lt1108-1.sym
+│   │       │   │   ├── lt1160-1.sym
+│   │       │   │   ├── lt1162-1.sym
+│   │       │   │   ├── lt1181-1.sym
+│   │       │   │   ├── lt1308-1.sym
+│   │       │   │   ├── lt1374cs8.sym
+│   │       │   │   ├── lt1376-5.sym
+│   │       │   │   ├── lt1761sd-1.sym
+│   │       │   │   ├── lt1782-1.sym
+│   │       │   │   ├── ltc1799-1.sym
+│   │       │   │   ├── ltc2400-1.sym
+│   │       │   │   ├── ltp-757g-1.sym
+│   │       │   │   ├── M41T00-SO8-1.sym
+│   │       │   │   ├── MAC160-1.sym
+│   │       │   │   ├── mains-entry-1.sym
+│   │       │   │   ├── mains-plug-1.sym
+│   │       │   │   ├── mains-plug-2.sym
+│   │       │   │   ├── max038-1.sym
+│   │       │   │   ├── max038-2.sym
+│   │       │   │   ├── max100-1.sym
+│   │       │   │   ├── max1005-1.sym
+│   │       │   │   ├── max1005-2.sym
+│   │       │   │   ├── max1011-1.sym
+│   │       │   │   ├── max1011-2.sym
+│   │       │   │   ├── max101A-1.sym
+│   │       │   │   ├── max1055-1.sym
+│   │       │   │   ├── max1080-1.sym
+│   │       │   │   ├── max1081-1.sym
+│   │       │   │   ├── max1114-1.sym
+│   │       │   │   ├── max1114-2.sym
+│   │       │   │   ├── max1206-1.sym
+│   │       │   │   ├── max1207-1.sym
+│   │       │   │   ├── max1208-1.sym
+│   │       │   │   ├── max1209-1.sym
+│   │       │   │   ├── max1211-1.sym
+│   │       │   │   ├── max122-1.sym
+│   │       │   │   ├── max12527-1.sym
+│   │       │   │   ├── max12528-1.sym
+│   │       │   │   ├── max12529-1.sym
+│   │       │   │   ├── max12553-1.sym
+│   │       │   │   ├── max12554-1.sym
+│   │       │   │   ├── max12555-1.sym
+│   │       │   │   ├── max12557-1.sym
+│   │       │   │   ├── max12558-1.sym
+│   │       │   │   ├── max12559-1.sym
+│   │       │   │   ├── max135-1.sym
+│   │       │   │   ├── max1407-1.sym
+│   │       │   │   ├── max147-1.sym
+│   │       │   │   ├── max1480A-1.sym
+│   │       │   │   ├── max1482-1.sym
+│   │       │   │   ├── max1588-1.sym
+│   │       │   │   ├── max1608-1.sym
+│   │       │   │   ├── max1609-1.sym
+│   │       │   │   ├── max1614-1.sym
+│   │       │   │   ├── max1620-1.sym
+│   │       │   │   ├── max1637-1.sym
+│   │       │   │   ├── max1674-1.sym
+│   │       │   │   ├── max186-1.sym
+│   │       │   │   ├── max186-2.sym
+│   │       │   │   ├── max189-1.sym
+│   │       │   │   ├── max19538-1.sym
+│   │       │   │   ├── max202-1.sym
+│   │       │   │   ├── max214-1.sym
+│   │       │   │   ├── max218-1.sym
+│   │       │   │   ├── max232-1.sym
+│   │       │   │   ├── max232-2.sym
+│   │       │   │   ├── max233-1.sym
+│   │       │   │   ├── max233-2.sym
+│   │       │   │   ├── max237-1.sym
+│   │       │   │   ├── max238-1.sym
+│   │       │   │   ├── max3120-1.sym
+│   │       │   │   ├── max3223e-1.sym
+│   │       │   │   ├── max3226-1.sym
+│   │       │   │   ├── max3491-1.sym
+│   │       │   │   ├── max3674-1.sym
+│   │       │   │   ├── max378-1.sym
+│   │       │   │   ├── max400-1.sym
+│   │       │   │   ├── max4005-1.sym
+│   │       │   │   ├── max4106-1.sym
+│   │       │   │   ├── max4107-1.sym
+│   │       │   │   ├── max436-1.sym
+│   │       │   │   ├── max4420-1.sym
+│   │       │   │   ├── max4429-1.sym
+│   │       │   │   ├── max4636-1.sym
+│   │       │   │   ├── max4662-2.sym
+│   │       │   │   ├── max478-1.sym
+│   │       │   │   ├── max488-1.sym
+│   │       │   │   ├── max489-1.sym
+│   │       │   │   ├── max492-1.sym
+│   │       │   │   ├── max507-1.sym
+│   │       │   │   ├── max531-1.sym
+│   │       │   │   ├── max535-1.sym
+│   │       │   │   ├── max6018-1.sym
+│   │       │   │   ├── max6314-1.sym
+│   │       │   │   ├── max662A-1.sym
+│   │       │   │   ├── max663-1.sym
+│   │       │   │   ├── max664-1.sym
+│   │       │   │   ├── max6674-1.sym
+│   │       │   │   ├── max713-1.sym
+│   │       │   │   ├── max7652-1.sym
+│   │       │   │   ├── max807-1.sym
+│   │       │   │   ├── max865EUA-1.sym
+│   │       │   │   ├── max872-1.sym
+│   │       │   │   ├── max874-1.sym
+│   │       │   │   ├── max982-1.sym
+│   │       │   │   ├── mbr1545ct-1.sym
+│   │       │   │   ├── MC100ELT21-1.sym
+│   │       │   │   ├── MC100ELT23-1.sym
+│   │       │   │   ├── MC100ELT23-2.sym
+│   │       │   │   ├── MC100ELT24-1.sym
+│   │       │   │   ├── MC10E104-1.sym
+│   │       │   │   ├── MC10E104-2.sym
+│   │       │   │   ├── MC10E136-1.sym
+│   │       │   │   ├── MC10E137-1.sym
+│   │       │   │   ├── MC10E137-2.sym
+│   │       │   │   ├── MC12429-1.sym
+│   │       │   │   ├── mc13175-1.sym
+│   │       │   │   ├── mc1496-1.sym
+│   │       │   │   ├── MC34063-1.sym
+│   │       │   │   ├── mc3479-1.sym
+│   │       │   │   ├── mc3487-1.sym
+│   │       │   │   ├── mc68hc05j1a-1.sym
+│   │       │   │   ├── mc68hc705kj1-1.sym
+│   │       │   │   ├── mc68hc811e2fn-1.sym
+│   │       │   │   ├── mc68hc812a4-1.sym
+│   │       │   │   ├── mc68hc908gp32cp-1.sym
+│   │       │   │   ├── mc68hc912b32-1.sym
+│   │       │   │   ├── mct9001-1.sym
+│   │       │   │   ├── MCX-1.sym
+│   │       │   │   ├── microphone-1.sym
+│   │       │   │   ├── mixer-ansi.sym
+│   │       │   │   ├── mixer-din.sym
+│   │       │   │   ├── mixer.sym
+│   │       │   │   ├── modem.sym
+│   │       │   │   ├── modulator.sym
+│   │       │   │   ├── mosfet-with-diode-1.sym
+│   │       │   │   ├── MSP430x11x1.sym
+│   │       │   │   ├── MSP430x11x2.sym
+│   │       │   │   ├── MSP430x12x2.sym
+│   │       │   │   ├── MSP430x12x.sym
+│   │       │   │   ├── MSP430x13-4x.sym
+│   │       │   │   ├── MSP430x15-6x.sym
+│   │       │   │   ├── MSP430x41x.sym
+│   │       │   │   ├── MSP430x43x.sym
+│   │       │   │   ├── MSP430x44x.sym
+│   │       │   │   ├── mt8870-1.sym
+│   │       │   │   ├── mxt429-1.sym
+│   │       │   │   ├── N82S100N-1.sym
+│   │       │   │   ├── N82S23N-1.sym
+│   │       │   │   ├── nc-bottom-1.sym
+│   │       │   │   ├── nc-left-1.sym
+│   │       │   │   ├── nc-right-1.sym
+│   │       │   │   ├── nc-top-1.sym
+│   │       │   │   ├── NE-592-1.sym
+│   │       │   │   ├── nmos-1.sym
+│   │       │   │   ├── nmos-2.sym
+│   │       │   │   ├── nmos-3.sym
+│   │       │   │   ├── npn-1.sym
+│   │       │   │   ├── npn-2.sym
+│   │       │   │   ├── npn-3.sym
+│   │       │   │   ├── npn-IGBT-1.sym
+│   │       │   │   ├── ntc-1.sym
+│   │       │   │   ├── nullor-1.sym
+│   │       │   │   ├── omron_g2r_24_dc5.sym
+│   │       │   │   ├── omron-G5V-1-DCx-1.sym
+│   │       │   │   ├── opamp-1.sym
+│   │       │   │   ├── opamp-2.sym
+│   │       │   │   ├── osc-1.sym
+│   │       │   │   ├── osc-2.sym
+│   │       │   │   ├── osc-3.sym
+│   │       │   │   ├── osc_coil_aircore-1.sym
+│   │       │   │   ├── osc-step.sym
+│   │       │   │   ├── osc.sym
+│   │       │   │   ├── osc-trim.sym
+│   │       │   │   ├── osc-var.sym
+│   │       │   │   ├── out-1.sym
+│   │       │   │   ├── output-1.sym
+│   │       │   │   ├── output-2.sym
+│   │       │   │   ├── output.sym
+│   │       │   │   ├── pa140-1.sym
+│   │       │   │   ├── pa91-1.sym
+│   │       │   │   ├── pad_analog.sym
+│   │       │   │   ├── pad_gnd.sym
+│   │       │   │   ├── pad_in.sym
+│   │       │   │   ├── pad_io.sym
+│   │       │   │   ├── pad_no_esd.sym
+│   │       │   │   ├── pad_out.sym
+│   │       │   │   ├── pad_pull_down.sym
+│   │       │   │   ├── pad_pull_up.sym
+│   │       │   │   ├── pad.sym
+│   │       │   │   ├── pad_vdd.sym
+│   │       │   │   ├── PAL12H6-1.sym
+│   │       │   │   ├── PAL16L8-1.sym
+│   │       │   │   ├── PAL20X10-1.sym
+│   │       │   │   ├── PAL20X4-1.sym
+│   │       │   │   ├── PAL20X8-1.sym
+│   │       │   │   ├── passive-1.sym
+│   │       │   │   ├── pc104A-1.sym
+│   │       │   │   ├── pc104B-1.sym
+│   │       │   │   ├── pc16500d-1.sym
+│   │       │   │   ├── PCA82C250-1.sym
+│   │       │   │   ├── PCF8563-1.sym
+│   │       │   │   ├── PCF8591.sym
+│   │       │   │   ├── PCM2702E-1.sym
+│   │       │   │   ├── phase-detector.sym
+│   │       │   │   ├── photodiode-1.sym
+│   │       │   │   ├── photo-resistor-1.sym
+│   │       │   │   ├── photo-transistor-1.sym
+│   │       │   │   ├── pic12c5xx-1.sym
+│   │       │   │   ├── pic12F675-1.sym
+│   │       │   │   ├── pic12F675-2.sym
+│   │       │   │   ├── pic16c505-1.sym
+│   │       │   │   ├── pic16c5x-1.sym
+│   │       │   │   ├── pic16C74A-1.sym
+│   │       │   │   ├── pic16C84.sym
+│   │       │   │   ├── pic16F628-1.sym
+│   │       │   │   ├── pic16F628-2.sym
+│   │       │   │   ├── pic16F876-1.sym
+│   │       │   │   ├── pic16F877-1.sym
+│   │       │   │   ├── pic16F877A-1.sym
+│   │       │   │   ├── pic18F242-1.sym
+│   │       │   │   ├── pic18F4431-1.sym
+│   │       │   │   ├── pmos-1.sym
+│   │       │   │   ├── pmos-2.sym
+│   │       │   │   ├── pmos-3.sym
+│   │       │   │   ├── pnp-1.sym
+│   │       │   │   ├── pnp-2.sym
+│   │       │   │   ├── pnp-3.sym
+│   │       │   │   ├── port1-1.sym
+│   │       │   │   ├── port2-1.sym
+│   │       │   │   ├── pot-1.sym
+│   │       │   │   ├── pot-2.sym
+│   │       │   │   ├── pot-bourns.sym
+│   │       │   │   ├── process.sym
+│   │       │   │   ├── ps2501-1.sym
+│   │       │   │   ├── pulse-step.sym
+│   │       │   │   ├── pulse.sym
+│   │       │   │   ├── pulse-trim.sym
+│   │       │   │   ├── pulse-var.sym
+│   │       │   │   ├── pushbutton.sym
+│   │       │   │   ├── pwrjack-1.sym
+│   │       │   │   ├── pwrxfmr-1.sym
+│   │       │   │   ├── QT60040-1.sym
+│   │       │   │   ├── quad_opamp-1.sym
+│   │       │   │   ├── relay-1.sym
+│   │       │   │   ├── resistor-1.sym
+│   │       │   │   ├── resistor-2.sym
+│   │       │   │   ├── resistorpack10-1.sym
+│   │       │   │   ├── resistorpack11-1.sym
+│   │       │   │   ├── resistorpack12-1.sym
+│   │       │   │   ├── resistorpack3-1.sym
+│   │       │   │   ├── resistorpack4-1.sym
+│   │       │   │   ├── resistorpack5-1.sym
+│   │       │   │   ├── resistorpack6-1.sym
+│   │       │   │   ├── resistorpack7-1.sym
+│   │       │   │   ├── resistorpack7-2.sym
+│   │       │   │   ├── resistorpack8-1.sym
+│   │       │   │   ├── resistorpack8-2.sym
+│   │       │   │   ├── resistorpack9-1.sym
+│   │       │   │   ├── resistor-variable-1.sym
+│   │       │   │   ├── resistor-variable-2.sym
+│   │       │   │   ├── rf2155-1.sym
+│   │       │   │   ├── rj45-1.sym
+│   │       │   │   ├── rpack-1.sym
+│   │       │   │   ├── rs232-idc10.sym
+│   │       │   │   ├── sa52-11-1.sym
+│   │       │   │   ├── SAB80C537-1.sym
+│   │       │   │   ├── sampler.sym
+│   │       │   │   ├── sc52-11-1.sym
+│   │       │   │   ├── schottky-1.sym
+│   │       │   │   ├── si9200-1.sym
+│   │       │   │   ├── Si9986.sym
+│   │       │   │   ├── SLA7024M.sym
+│   │       │   │   ├── smart-media-1.sym
+│   │       │   │   ├── smda05-1.sym
+│   │       │   │   ├── smith-1.sym
+│   │       │   │   ├── sp3t-noblock.sym
+│   │       │   │   ├── sp3t.sym
+│   │       │   │   ├── sp4t-noblock.sym
+│   │       │   │   ├── sp4t.sym
+│   │       │   │   ├── s-param-1.sym
+│   │       │   │   ├── spdt-noblock.sym
+│   │       │   │   ├── spdt.sym
+│   │       │   │   ├── speaker-1.sym
+│   │       │   │   ├── speaker-2.sym
+│   │       │   │   ├── spice-directive-1.sym
+│   │       │   │   ├── spice-include-1.sym
+│   │       │   │   ├── spice-model-1.sym
+│   │       │   │   ├── spice-npn-1.sym
+│   │       │   │   ├── spice-options-1.sym
+│   │       │   │   ├── spice-pnp-1.sym
+│   │       │   │   ├── spice-subcircuit-IO-1.sym
+│   │       │   │   ├── spice-subcircuit-LL-1.sym
+│   │       │   │   ├── spice-vc-switch-1.sym
+│   │       │   │   ├── split-2.sym
+│   │       │   │   ├── split-3.sym
+│   │       │   │   ├── split-4.sym
+│   │       │   │   ├── splitter-1.sym
+│   │       │   │   ├── spst-noblock.sym
+│   │       │   │   ├── spst.sym
+│   │       │   │   ├── square-up.sym
+│   │       │   │   ├── ssrelay-spdt-lcc110-1.sym
+│   │       │   │   ├── ssrelay-spst-lcb110-1.sym
+│   │       │   │   ├── ST39SF020A-1.sym
+│   │       │   │   ├── ST7538-1.sym
+│   │       │   │   ├── staver24m32-1.sym
+│   │       │   │   ├── switcap-analysis-1.sym
+│   │       │   │   ├── switcap-capacitor-1.sym
+│   │       │   │   ├── switcap-clock-1.sym
+│   │       │   │   ├── switcap-options-1.sym
+│   │       │   │   ├── switcap-switch-1.sym
+│   │       │   │   ├── switcap-timing-1.sym
+│   │       │   │   ├── switcap-title-1.sym
+│   │       │   │   ├── switcap-vcvs-1.sym
+│   │       │   │   ├── switcap-vcvs-2.sym
+│   │       │   │   ├── switcap-vcvs-3.sym
+│   │       │   │   ├── switcap-vsrc-1.sym
+│   │       │   │   ├── switch-5port.sym
+│   │       │   │   ├── switch-dip12.sym
+│   │       │   │   ├── switch-dip4-1.sym
+│   │       │   │   ├── switch-dip4-2.sym
+│   │       │   │   ├── switch-dip5-1.sym
+│   │       │   │   ├── switch-dip5-2.sym
+│   │       │   │   ├── switch-dip6-1.sym
+│   │       │   │   ├── switch-dip6-2.sym
+│   │       │   │   ├── switch-dip8-1.sym
+│   │       │   │   ├── switch-dip8-2.sym
+│   │       │   │   ├── switch-LORLIN-12pos-1com-1.sym
+│   │       │   │   ├── switch-pushbutton-nc-1.sym
+│   │       │   │   ├── switch-pushbutton-nc-2.sym
+│   │       │   │   ├── switch-pushbutton-no-1.sym
+│   │       │   │   ├── switch-pushbutton-spdt-1.sym
+│   │       │   │   ├── switch-spdt-1.sym
+│   │       │   │   ├── switch-spdt-2.sym
+│   │       │   │   ├── switch-spst-1.sym
+│   │       │   │   ├── sx28ac-1.sym
+│   │       │   │   ├── T1-1T-W38-1.sym
+│   │       │   │   ├── T1-1T-X65-1.sym
+│   │       │   │   ├── T2-1T-KK81-1.sym
+│   │       │   │   ├── TC5516AP-1.sym
+│   │       │   │   ├── TDA2822M-1.sym
+│   │       │   │   ├── TEC4x3-1.sym
+│   │       │   │   ├── terminal-1.sym
+│   │       │   │   ├── termination.sym
+│   │       │   │   ├── testpt-1.sym
+│   │       │   │   ├── tfds4500-1.sym
+│   │       │   │   ├── TINIm390-RevD.sym
+│   │       │   │   ├── tiny-tiger-1.sym
+│   │       │   │   ├── title-A0.sym
+│   │       │   │   ├── title-A1.sym
+│   │       │   │   ├── title-A2.sym
+│   │       │   │   ├── title-A3.sym
+│   │       │   │   ├── title-A4.sym
+│   │       │   │   ├── title-A.sym
+│   │       │   │   ├── title-bordered-A0.sym
+│   │       │   │   ├── title-bordered-A1.sym
+│   │       │   │   ├── title-bordered-A2.sym
+│   │       │   │   ├── title-bordered-A3.sym
+│   │       │   │   ├── title-bordered-A4.sym
+│   │       │   │   ├── title-bordered-A.sym
+│   │       │   │   ├── title-bordered-B.sym
+│   │       │   │   ├── title-bordered-C.sym
+│   │       │   │   ├── title-bordered-D.sym
+│   │       │   │   ├── title-bordered-E.sym
+│   │       │   │   ├── title-B.sym
+│   │       │   │   ├── title-C.sym
+│   │       │   │   ├── title-D.sym
+│   │       │   │   ├── title-E.sym
+│   │       │   │   ├── tl062-1.sym
+│   │       │   │   ├── tl072-1.sym
+│   │       │   │   ├── tl082-1.sym
+│   │       │   │   ├── tl16c554afn-1.sym
+│   │       │   │   ├── tline.sym
+│   │       │   │   ├── TOKO4DFA-1.sym
+│   │       │   │   ├── transformer-1.sym
+│   │       │   │   ├── transformer-2.sym
+│   │       │   │   ├── transformer-3.sym
+│   │       │   │   ├── transformer-4.sym
+│   │       │   │   ├── transformer-5.sym
+│   │       │   │   ├── transformer.sym
+│   │       │   │   ├── triac-1.sym
+│   │       │   │   ├── txline-1.sym
+│   │       │   │   ├── txline4-1.sym
+│   │       │   │   ├── txo-1.sym
+│   │       │   │   ├── UAA170-1.sym
+│   │       │   │   ├── ULN2003-1.sym
+│   │       │   │   ├── ULN2801A-1.sym
+│   │       │   │   ├── up-converter.sym
+│   │       │   │   ├── vac-1.sym
+│   │       │   │   ├── varistor-1.sym
+│   │       │   │   ├── vcc-1.sym
+│   │       │   │   ├── vcc-2.sym
+│   │       │   │   ├── vcc-minus-1.sym
+│   │       │   │   ├── vcc-orcad-circle-1.sym
+│   │       │   │   ├── vccs-1.sym
+│   │       │   │   ├── vcvs-1.sym
+│   │       │   │   ├── vdc-1.sym
+│   │       │   │   ├── vdd-1.sym
+│   │       │   │   ├── vee-1.sym
+│   │       │   │   ├── vexp-1.sym
+│   │       │   │   ├── vicor_gen1.sym
+│   │       │   │   ├── vipec-analysis-1.sym
+│   │       │   │   ├── voltage-1.sym
+│   │       │   │   ├── voltage-2.sym
+│   │       │   │   ├── voltage-3.sym
+│   │       │   │   ├── voltmeter-1.sym
+│   │       │   │   ├── volt_reg_adj-1.sym
+│   │       │   │   ├── vpulse-1.sym
+│   │       │   │   ├── vpwl-1.sym
+│   │       │   │   ├── vsin-1.sym
+│   │       │   │   ├── vss-1.sym
+│   │       │   │   ├── wline-1x.sym
+│   │       │   │   ├── XC2S100-5PQ208C.sym
+│   │       │   │   ├── XC2S100-5PQ208I.sym
+│   │       │   │   ├── XC2S100-6PQ208C.sym
+│   │       │   │   ├── XC2S150-5PQ208C.sym
+│   │       │   │   ├── XC2S150-5PQ208I.sym
+│   │       │   │   ├── XC2S150-6PQ208C.sym
+│   │       │   │   ├── XC2S200-5PQ208C.sym
+│   │       │   │   ├── XC2S200-5PQ208I.sym
+│   │       │   │   ├── XC2S200-6PQ208C.sym
+│   │       │   │   ├── XC2S30-5PQ208C.sym
+│   │       │   │   ├── XC2S30-5PQ208I.sym
+│   │       │   │   ├── XC2S30-6PQ208C.sym
+│   │       │   │   ├── XC2S50-5PQ208C.sym
+│   │       │   │   ├── XC2S50-5PQ208I.sym
+│   │       │   │   ├── XC2S50-6PQ208C.sym
+│   │       │   │   ├── XC95108-PC84.sym
+│   │       │   │   ├── xinger-coupler-1.sym
+│   │       │   │   ├── xinger-hybrid-1.sym
+│   │       │   │   ├── xinger-split3-1.sym
+│   │       │   │   ├── xinger-split4-1.sym
+│   │       │   │   ├── xinger-splitter-1.sym
+│   │       │   │   ├── z80pio-1.sym
+│   │       │   │   ├── zener-1.sym
+│   │       │   │   ├── zener-2.sym
+│   │       │   │   ├── zener-3.sym
+│   │       │   │   └── zener-4.sym
+│   │       │   ├── title-A2.sym
+│   │       │   ├── title-A4.sym
+│   │       │   ├── title-B.sym
+│   │       │   ├── transistor.sym
+│   │       │   ├── TwoStageAmp.sch
+│   │       │   ├── vac-1.sym
+│   │       │   ├── vcc-1.sym
+│   │       │   ├── vdc-1.sym
+│   │       │   ├── vsin-1.sym
+│   │       │   └── xschemrc
+│   │       ├── inst_sch_select
+│   │       │   ├── comp3_empty.sch
+│   │       │   ├── comp3_file.cir
+│   │       │   ├── comp3_parax.sch
+│   │       │   ├── comp3_pex2.cir
+│   │       │   ├── comp3_read.cir
+│   │       │   ├── comp3_read.sym
+│   │       │   ├── comp3.sch
+│   │       │   ├── comp3.sym
+│   │       │   ├── comp_65nm_empty.sch
+│   │       │   ├── comp_65nm_file.cir
+│   │       │   ├── comp_65nm_parax.sch
+│   │       │   ├── comp_65nm_read.cir
+│   │       │   ├── comp_65nm_read.sym
+│   │       │   ├── comp_65nm.sch
+│   │       │   ├── comp_65nm.sym
+│   │       │   ├── inst_sch_select.sch
+│   │       │   └── inst_sch_select.sym
+│   │       ├── logic
+│   │       │   ├── bf.sch
+│   │       │   ├── bf.sym
+│   │       │   ├── eo.sch
+│   │       │   ├── eo.sym
+│   │       │   ├── ff.sch
+│   │       │   ├── ff.sym
+│   │       │   ├── iv.sch
+│   │       │   ├── iv.sym
+│   │       │   ├── latch.sch
+│   │       │   ├── latch.sym
+│   │       │   ├── mux21.sch
+│   │       │   ├── mux21.sym
+│   │       │   ├── nd2.sym
+│   │       │   ├── nr2.sym
+│   │       │   ├── ram.sch
+│   │       │   ├── ram.sym
+│   │       │   ├── ram_tb.sch
+│   │       │   ├── stimuli.test_ngspice
+│   │       │   ├── sync_reg.sch
+│   │       │   ├── sync_reg.sym
+│   │       │   ├── testbench.sch
+│   │       │   ├── testbench.sym
+│   │       │   ├── test_mos_verilog.sch
+│   │       │   ├── test_mos_verilog.sym
+│   │       │   ├── test_ngspice.sch
+│   │       │   └── test_ngspice.sym
+│   │       ├── Makefile
+│   │       ├── ngspice
+│   │       │   ├── adc.sch
+│   │       │   ├── adc.sym
+│   │       │   ├── amp_xschem.sch
+│   │       │   ├── and3_ngspice.sch
+│   │       │   ├── and3_ngspice.sym
+│   │       │   ├── and_ngspice.sch
+│   │       │   ├── and_ngspice.sym
+│   │       │   ├── autozero_comp.sch
+│   │       │   ├── autozero_comp.sym
+│   │       │   ├── autozero_comp_xyce.sch
+│   │       │   ├── boost.sch
+│   │       │   ├── buck_boost.sch
+│   │       │   ├── buck.sch
+│   │       │   ├── buf_ngspice.sch
+│   │       │   ├── buf_ngspice.sym
+│   │       │   ├── colpitts_xschem.sch
+│   │       │   ├── comp_65nm.sch
+│   │       │   ├── comp_65nm.sym
+│   │       │   ├── comp_ngspice.sch
+│   │       │   ├── comp_ngspice.sym
+│   │       │   ├── counter_6bit_ngspice.sch
+│   │       │   ├── counter_6bit_ngspice.sym
+│   │       │   ├── delta_sigma.sch
+│   │       │   ├── delta_sigma.sym
+│   │       │   ├── diff_amp.sym
+│   │       │   ├── diode_ngspice.sch
+│   │       │   ├── diode_ngspice.sym
+│   │       │   ├── flip_flop_ngspice.sch
+│   │       │   ├── flip_flop_ngspice.sym
+│   │       │   ├── full_adder_ngspice.sch
+│   │       │   ├── full_adder_ngspice.sym
+│   │       │   ├── half_adder_ngspice.sch
+│   │       │   ├── half_adder_ngspice.sym
+│   │       │   ├── hpf_xschem.sch
+│   │       │   ├── inv-2.sym
+│   │       │   ├── inv_ngspice.sch
+│   │       │   ├── inv_ngspice.sym
+│   │       │   ├── keeper_ngspice.sch
+│   │       │   ├── keeper_ngspice.sym
+│   │       │   ├── led_driver.sch
+│   │       │   ├── lm741.sym
+│   │       │   ├── nand_ngspice.sch
+│   │       │   ├── nand_ngspice.sym
+│   │       │   ├── nmos4-v.sym
+│   │       │   ├── nor_ngspice.sch
+│   │       │   ├── nor_ngspice.sym
+│   │       │   ├── opamp_65nm.sch
+│   │       │   ├── opamp_65nm.sym
+│   │       │   ├── or_ngspice.sch
+│   │       │   ├── or_ngspice.sym
+│   │       │   ├── passgate.sym
+│   │       │   ├── pmos4-v.sym
+│   │       │   ├── pv_ngspice.sch
+│   │       │   ├── pv_ngspice.sym
+│   │       │   ├── solar_panel.sch
+│   │       │   ├── solar_panel.sym
+│   │       │   ├── solar_panel_xyce.sch
+│   │       │   ├── stimuli.autozero_comp
+│   │       │   ├── stimuli.autozero_comp_xyce
+│   │       │   ├── stimuli.boost
+│   │       │   ├── stimuli.buck_boost
+│   │       │   ├── tb_diff_amp.sch
+│   │       │   ├── tb_diff_amp.sym
+│   │       │   ├── xnor_ngspice.sch
+│   │       │   ├── xnor_ngspice.sym
+│   │       │   ├── xor_ngspice.sch
+│   │       │   └── xor_ngspice.sym
+│   │       ├── ngspice_verilog_cosim
+│   │       │   ├── adc.v
+│   │       │   ├── ainv.sch
+│   │       │   ├── ainv.sym
+│   │       │   ├── ccap.sch
+│   │       │   ├── ccap.sym
+│   │       │   ├── sar_adc.sch
+│   │       │   ├── sar_adc.sym
+│   │       │   ├── sar_adc_vlog.sym
+│   │       │   ├── tb_sar_adc.sch
+│   │       │   ├── tb_sar_adc.sym
+│   │       │   ├── tgate.sch
+│   │       │   └── tgate.sym
+│   │       ├── pcb
+│   │       │   ├── 0_pcb_top.sch
+│   │       │   ├── 74ls00-2.sym
+│   │       │   ├── 74ls00.sym
+│   │       │   ├── 7805.sym
+│   │       │   ├── bc817.sym
+│   │       │   ├── hierarchical_tedax.sch
+│   │       │   ├── hierarchical_tedax.sym
+│   │       │   ├── lm358.sym
+│   │       │   ├── pcb_current_protection_embed.sch
+│   │       │   ├── pcb_current_protection.sch
+│   │       │   ├── pcb_current_protection.sym
+│   │       │   ├── pcb_test1_embed.sch
+│   │       │   ├── pcb_test1.sch
+│   │       │   ├── pcb_test1.sym
+│   │       │   ├── pcb_test2.sch
+│   │       │   ├── pcb_voltage_protection_embed.sch
+│   │       │   ├── pcb_voltage_protection.sch
+│   │       │   ├── pcb_voltage_protection.sym
+│   │       │   ├── reg.sch
+│   │       │   ├── si2306.sym
+│   │       │   ├── voltage_protection.sch
+│   │       │   └── voltage_protection.sym
+│   │       ├── rom8k
+│   │       │   ├── bts.sch
+│   │       │   ├── bts.sym
+│   │       │   ├── LD2QHDX4stef.sch
+│   │       │   ├── LD2QHDX4stef.sym
+│   │       │   ├── lvnand2.sch
+│   │       │   ├── lvnand2.sym
+│   │       │   ├── lvnand3.sch
+│   │       │   ├── lvnand3.sym
+│   │       │   ├── lvnor2.sch
+│   │       │   ├── lvnor2.sym
+│   │       │   ├── lvnot.sch
+│   │       │   ├── lvnot.sym
+│   │       │   ├── nlv4t.sym
+│   │       │   ├── nlv.sym
+│   │       │   ├── n.sym
+│   │       │   ├── passhs.sch
+│   │       │   ├── passhs.sym
+│   │       │   ├── plv4t.sym
+│   │       │   ├── plv.sym
+│   │       │   ├── p.sym
+│   │       │   ├── rom2_addlatch.sch
+│   │       │   ├── rom2_addlatch.sym
+│   │       │   ├── rom2_coldec_ref.sch
+│   │       │   ├── rom2_coldec_ref.sym
+│   │       │   ├── rom2_coldec.sch
+│   │       │   ├── rom2_coldec.sym
+│   │       │   ├── rom2_col_prech.sch
+│   │       │   ├── rom2_col_prech.sym
+│   │       │   ├── rom2_ctrl.sch
+│   │       │   ├── rom2_ctrl.sym
+│   │       │   ├── rom2_predec1.sch
+│   │       │   ├── rom2_predec1.sym
+│   │       │   ├── rom2_predec3.sch
+│   │       │   ├── rom2_predec3.sym
+│   │       │   ├── rom2_predec4.sch
+│   │       │   ├── rom2_predec4.sym
+│   │       │   ├── rom2_sacell.sch
+│   │       │   ├── rom2_sacell.sym
+│   │       │   ├── rom2_sa.sch
+│   │       │   ├── rom2_sa.sym
+│   │       │   ├── rom3_array_ref.sch
+│   │       │   ├── rom3_array_ref.sym
+│   │       │   ├── rom3_array.sch
+│   │       │   ├── rom3_array.sym
+│   │       │   ├── rom3_rowdec.sch
+│   │       │   ├── rom3_rowdec.sym
+│   │       │   ├── rom8k.sch
+│   │       │   ├── rom8k.sym
+│   │       │   └── stimuli.rom8k
+│   │       ├── rulz-r8c33
+│   │       │   ├── ft232rl.sym
+│   │       │   ├── ft232rl.symdef
+│   │       │   ├── r8c-33c.sym
+│   │       │   ├── r8c-33c.symdef
+│   │       │   ├── rulz-r8c33.lht
+│   │       │   ├── rulz-r8c33.sch
+│   │       │   └── usb-minib.sym
+│   │       ├── symgen
+│   │       │   ├── mega.symdef
+│   │       │   ├── sample2.symdef
+│   │       │   ├── sample3.symdef
+│   │       │   ├── sample4.symdef
+│   │       │   └── sample.symdef
+│   │       ├── viewdraw_import
+│   │       │   ├── align.1
+│   │       │   ├── align.pdf
+│   │       │   ├── README
+│   │       │   ├── rotation.1
+│   │       │   ├── rotation.pdf
+│   │       │   ├── test
+│   │       │   │   ├── sch
+│   │       │   │   │   ├── bac
+│   │       │   │   │   │   ├── dti_28hc_6p5t_40_ffqx1.1
+│   │       │   │   │   │   ├── dti_28hc_6p5t_40_invx1.1
+│   │       │   │   │   │   ├── dti_28hc_6p5t_40_nand2x1.1
+│   │       │   │   │   │   ├── dti_28hc_6p5t_40_nor2x1.1
+│   │       │   │   │   │   ├── dti_gen_inv.1
+│   │       │   │   │   │   └── dti_gen_tx.1
+│   │       │   │   │   ├── dti_28hc_6p5t_40_ffqx1.1
+│   │       │   │   │   ├── dti_28hc_6p5t_40_invx1.1
+│   │       │   │   │   ├── dti_28hc_6p5t_40_nand2x1.1
+│   │       │   │   │   ├── dti_28hc_6p5t_40_nor2x1.1
+│   │       │   │   │   ├── dti_gen_inv.1
+│   │       │   │   │   └── dti_gen_tx.1
+│   │       │   │   ├── sym
+│   │       │   │   │   ├── bac
+│   │       │   │   │   │   ├── sh_b.1
+│   │       │   │   │   │   ├── sheet_a2.1
+│   │       │   │   │   │   ├── sheet_a4.1
+│   │       │   │   │   │   └── sheet_b.1
+│   │       │   │   │   ├── dti_gen_inv.1
+│   │       │   │   │   ├── dti_gen_tx.1
+│   │       │   │   │   ├── INPUT.1
+│   │       │   │   │   ├── nm.1
+│   │       │   │   │   ├── NMOS.1
+│   │       │   │   │   ├── OUTPUT.1
+│   │       │   │   │   ├── pm.1
+│   │       │   │   │   ├── PMOS.1
+│   │       │   │   │   ├── SH_B.1
+│   │       │   │   │   ├── Sheet_a2.1
+│   │       │   │   │   ├── Sheet_a4.1
+│   │       │   │   │   ├── Sheet_b.1
+│   │       │   │   │   ├── VDD.1
+│   │       │   │   │   └── VSS.1
+│   │       │   │   ├── test.dproj
+│   │       │   │   └── viewdraw.ini
+│   │       │   ├── test2
+│   │       │   │   ├── dti_28hc_6p5t_40_ffqx1.pdf
+│   │       │   │   ├── dti_28hc_6p5t_40_invx1.pdf
+│   │       │   │   ├── dti_28hc_6p5t_40_nand2x1.pdf
+│   │       │   │   ├── dti_28hc_6p5t_40_nor2x1.pdf
+│   │       │   │   ├── dti_gen_inv.pdf
+│   │       │   │   ├── dti_gen_tx.pdf
+│   │       │   │   ├── sch
+│   │       │   │   │   ├── dti_28hc_6p5t_40_ffqx1.1
+│   │       │   │   │   ├── dti_28hc_6p5t_40_invx1.1
+│   │       │   │   │   ├── dti_28hc_6p5t_40_nand2x1.1
+│   │       │   │   │   ├── dti_28hc_6p5t_40_nor2x1.1
+│   │       │   │   │   ├── dti_gen_inv.1
+│   │       │   │   │   └── dti_gen_tx.1
+│   │       │   │   ├── sym
+│   │       │   │   │   ├── dti_gen_inv.1
+│   │       │   │   │   ├── dti_gen_tx.1
+│   │       │   │   │   ├── INPUT.1
+│   │       │   │   │   ├── nm.1
+│   │       │   │   │   ├── NMOS.1
+│   │       │   │   │   ├── OUTPUT.1
+│   │       │   │   │   ├── pm.1
+│   │       │   │   │   ├── PMOS.1
+│   │       │   │   │   ├── SH_B.1
+│   │       │   │   │   ├── Sheet_a2.1
+│   │       │   │   │   ├── Sheet_a4.1
+│   │       │   │   │   ├── Sheet_b.1
+│   │       │   │   │   ├── VDD.1
+│   │       │   │   │   └── VSS.1
+│   │       │   │   ├── test.dproj
+│   │       │   │   └── viewdraw.ini
+│   │       │   ├── test_case
+│   │       │   │   ├── dti_28hc_6p5t_40_nand2x1.1.PNG
+│   │       │   │   ├── input.PNG
+│   │       │   │   ├── Nmos.PNG
+│   │       │   │   ├── output.PNG
+│   │       │   │   ├── Pmos.PNG
+│   │       │   │   ├── Vdd.PNG
+│   │       │   │   └── Vss.PNG
+│   │       │   ├── translate.sh
+│   │       │   ├── ViewDraw-file-format.pdf
+│   │       │   ├── ViewDrawFileFormats_new.pdf
+│   │       │   ├── viewdraw_import.awk
+│   │       │   ├── xschem_lib
+│   │       │   │   ├── align.sch
+│   │       │   │   ├── dti_28hc_6p5t_40_ffqx1.sch
+│   │       │   │   ├── dti_28hc_6p5t_40_invx1.sch
+│   │       │   │   ├── dti_28hc_6p5t_40_nand2x1.sch
+│   │       │   │   ├── dti_28hc_6p5t_40_nor2x1.sch
+│   │       │   │   ├── dti_gen_inv.sch
+│   │       │   │   ├── dti_gen_inv.sym
+│   │       │   │   ├── dti_gen_tx.sch
+│   │       │   │   ├── dti_gen_tx.sym
+│   │       │   │   ├── input.sym
+│   │       │   │   ├── nmos.sym
+│   │       │   │   ├── nm.sym
+│   │       │   │   ├── output.sym
+│   │       │   │   ├── pmos.sym
+│   │       │   │   ├── pm.sym
+│   │       │   │   ├── rotation.sch
+│   │       │   │   ├── sh_b.sym
+│   │       │   │   ├── sheet_a2.sym
+│   │       │   │   ├── sheet_a4.sym
+│   │       │   │   ├── sheet_b.sym
+│   │       │   │   ├── vdd.sym
+│   │       │   │   └── vss.sym
+│   │       │   └── xschemrc
+│   │       ├── xschem_simulator
+│   │       │   ├── and2_1.sym
+│   │       │   ├── and3_1.sym
+│   │       │   ├── and4_1.sym
+│   │       │   ├── dev-1.sym
+│   │       │   ├── dev-2.sym
+│   │       │   ├── dfrbp_1.sym
+│   │       │   ├── dfrtp_1.sym
+│   │       │   ├── diode_3.sym
+│   │       │   ├── dlrtn_1.sym
+│   │       │   ├── dlrtp_1.sym
+│   │       │   ├── einvp_1.sym
+│   │       │   ├── fa_1.sym
+│   │       │   ├── giant_label2.sym
+│   │       │   ├── giant_label.sym
+│   │       │   ├── inv_2.sym
+│   │       │   ├── invert-1.sym
+│   │       │   ├── logic_test.sch
+│   │       │   ├── logic_test.sym
+│   │       │   ├── mux2_1.sym
+│   │       │   ├── nand2_1.sym
+│   │       │   ├── nand3_1.sym
+│   │       │   ├── nand4_1.sym
+│   │       │   ├── nor4_1.sym
+│   │       │   ├── ntrans.sym
+│   │       │   ├── o21ai_1.sym
+│   │       │   ├── or4_1.sym
+│   │       │   ├── ptrans.sym
+│   │       │   ├── segment.sym
+│   │       │   ├── simulate_ff.sch
+│   │       │   ├── simulate_ff.sym
+│   │       │   ├── switch-1.sym
+│   │       │   ├── switch_level_sim.sch
+│   │       │   ├── xnor2_1.sym
+│   │       │   ├── xor2_1.sym
+│   │       │   ├── xor3_1.sym
+│   │       │   └── xor4_1.sym
+│   │       └── xTAG
+│   │           ├── 24cxx.sym
+│   │           ├── 7414.sym
+│   │           ├── cy7c64603-52nc.sym
+│   │           ├── cy7c64603-52nc.symdef
+│   │           ├── max882.sym
+│   │           ├── max882.symdef
+│   │           ├── sn75240pw.sym
+│   │           ├── xTAG-consio.sch
+│   │           ├── xTAG-consio.sym
+│   │           ├── xTAG-jtagio.sch
+│   │           ├── xTAG-jtagio.sym
+│   │           ├── xTAG-psu.sch
+│   │           ├── xTAG-psu.sym
+│   │           ├── xTAG.sch
+│   │           ├── xTAG-ucont.sch
+│   │           └── xTAG-ucont.sym
+│   ├── netlist
+│   ├── README.md
+│   ├── schematics
+│   └── symbols
+├── cat.txt
+├── digital
+│   ├── output
+│   ├── README.md
+│   └── template
+│       ├── build
+│       │   ├── config.mk
+│       │   ├── des_tb
+│       │   │   ├── Makefile
+│       │   │   └── simulations
+│       │   │       ├── counter_tb.vcd
+│       │   │       └── tb_counter.vvp
+│       │   ├── info.yaml
+│       │   ├── lint
+│       │   │   └── Makefile
+│       │   ├── synthesis
+│       │   │   ├── config.json
+│       │   │   ├── Makefile
+│       │   │   ├── netlist
+│       │   │   └── runs
+│       │   │       └── counter_synthesis
+│       │   │           ├── 01-verilator-lint
+│       │   │           │   ├── COMMANDS
+│       │   │           │   ├── config.json
+│       │   │           │   ├── _deps.vlt
+│       │   │           │   ├── runtime.txt
+│       │   │           │   ├── state_in.json
+│       │   │           │   ├── state_out.json
+│       │   │           │   ├── verilator-lint.log
+│       │   │           │   └── verilator-lint.process_stats.json
+│       │   │           ├── 02-checker-linttimingconstructs
+│       │   │           │   ├── config.json
+│       │   │           │   ├── runtime.txt
+│       │   │           │   ├── state_in.json
+│       │   │           │   └── state_out.json
+│       │   │           ├── 03-checker-linterrors
+│       │   │           │   ├── config.json
+│       │   │           │   ├── runtime.txt
+│       │   │           │   ├── state_in.json
+│       │   │           │   └── state_out.json
+│       │   │           ├── 04-checker-lintwarnings
+│       │   │           │   ├── config.json
+│       │   │           │   ├── runtime.txt
+│       │   │           │   ├── state_in.json
+│       │   │           │   └── state_out.json
+│       │   │           ├── 05-yosys-jsonheader
+│       │   │           │   ├── COMMANDS
+│       │   │           │   ├── config.json
+│       │   │           │   ├── counter.h.json
+│       │   │           │   ├── extra.json
+│       │   │           │   ├── runtime.txt
+│       │   │           │   ├── state_in.json
+│       │   │           │   ├── state_out.json
+│       │   │           │   ├── yosys-jsonheader.log
+│       │   │           │   └── yosys-jsonheader.process_stats.json
+│       │   │           ├── 06-yosys-synthesis
+│       │   │           │   ├── AREA_0.abc
+│       │   │           │   ├── COMMANDS
+│       │   │           │   ├── config.json
+│       │   │           │   ├── counter.nl.v
+│       │   │           │   ├── counter.nl.v.json
+│       │   │           │   ├── extra.json
+│       │   │           │   ├── hierarchy.dot
+│       │   │           │   ├── primitive_techmap.dot
+│       │   │           │   ├── reports
+│       │   │           │   │   ├── chk.rpt
+│       │   │           │   │   ├── latch.rpt
+│       │   │           │   │   ├── post_dff.json
+│       │   │           │   │   ├── post_dff.rpt
+│       │   │           │   │   ├── pre_synth_chk.rpt
+│       │   │           │   │   ├── pre_techmap.json
+│       │   │           │   │   ├── pre_techmap.rpt
+│       │   │           │   │   ├── stat.json
+│       │   │           │   │   └── stat.rpt
+│       │   │           │   ├── runtime.txt
+│       │   │           │   ├── state_in.json
+│       │   │           │   ├── state_out.json
+│       │   │           │   ├── synthesis.abc.sdc
+│       │   │           │   ├── yosys-synthesis.log
+│       │   │           │   └── yosys-synthesis.process_stats.json
+│       │   │           ├── error.log
+│       │   │           ├── final
+│       │   │           │   ├── json_h
+│       │   │           │   │   └── counter.h.json
+│       │   │           │   ├── metrics.csv
+│       │   │           │   ├── metrics.json
+│       │   │           │   └── nl
+│       │   │           │       └── counter.nl.v
+│       │   │           ├── flow.log
+│       │   │           ├── resolved.json
+│       │   │           ├── tmp
+│       │   │           │   ├── 32e2945e00744614bd6b5a845b02dd77.bb.v
+│       │   │           │   ├── 32e2945e00744614bd6b5a845b02dd77.bb.v_yosys.log
+│       │   │           │   └── 7608394ef71d43d784ed54eaa50ea55d.lib
+│       │   │           └── warning.log
+│       │   └── verification
+│       │       ├── Makefile
+│       │       └── requirements.txt
+│       ├── README.md
+│       ├── src
+│       │   └── counter.v
+│       └── test
+│           ├── counter_tb.vcd
+│           ├── __pycache__
+│           │   └── test_counter.cpython-312-pytest-8.3.5.pyc
+│           ├── results.xml
+│           ├── sim_build
+│           │   └── rtl
+│           │       ├── cmds.f
+│           │       └── sim.vvp
+│           ├── tb_counter.v
+│           └── test_counter.py
+├── docs
+│   ├── QUICKSTART.md
+│   └── SETUP.md
+├── README.md
+└── shell.nix
+
+68 directories, 2078 files
