@@ -1,0 +1,11 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1751042762" />
+    <testcase name="test_counter_basic" classname="test_counter" file="/home/omare/Documents/UWASIC/Template/digital/test/test_counter.py" lineno="5" time="0.00026345252990722656" sim_time_ns="0.001" ratio_time="3.795750226244344">
+      <failure message="Test failed with RANDOM_SEED=1751042762" />
+    </testcase>
+    <testcase name="test_counter_reset" classname="test_counter" file="/home/omare/Documents/UWASIC/Template/digital/test/test_counter.py" lineno="31" time="7.176399230957031e-05" sim_time_ns="0.001" ratio_time="13.934564784053157">
+      <failure message="Test failed with RANDOM_SEED=1751042762" />
+    </testcase>
+  </testsuite>
+</testsuites>

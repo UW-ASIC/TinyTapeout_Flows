@@ -36,7 +36,7 @@ in pkgs.mkShell {
   name = "template";
   buildInputs = with pkgs; [
     # Builds
-    gnumake git
+    gnumake git python3
 
     # Digital design
     verilog
@@ -60,16 +60,21 @@ in pkgs.mkShell {
     magic-vlsi
     xterm
 
-    # Python
-    python3
+    # OpenLane2 dep
     python3Packages.rich
     python3Packages.click
     python3Packages.tkinter
+    python3Packages.pyyaml
+
+    # Pytest and Cocoatb setup
+    python3Packages.pytest
+    python3Packages.cocotb
     python3Packages.pip # requirements.txt
+
+    # For Data
     python3Packages.numpy
     python3Packages.matplotlib
     python3Packages.scipy
-    python3Packages.pyyaml
 
     # Graphics/GUI support
     xorg.libX11 xorg.libXpm xorg.libXt cairo

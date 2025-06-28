@@ -16,7 +16,6 @@
 # Build artifacts
 *.o
 *.so
-build/
 dist/
 
 # IDE files
@@ -31,7 +30,13 @@ Thumbs.db
 .tools/
 .venv/
 
-# Simulations
-digital/simulations/
-digital/openlane/
-digital/runs/
+# Build Files (Digital)
+digital/test/__pycache__/
+digital/test/sim_build/
+digital/test/results.xml
+digital/test/*.vcd
+
+digital/build/des_tb/simulations/
+
+digital/build/synthesis/netlist/
+digital/build/synthesis/runs/

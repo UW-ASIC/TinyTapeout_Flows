@@ -25,7 +25,7 @@ jobs:
 
       - name: Run tests
         run: |
-          cd digital/test
+          cd digital/build/verification
           make clean
           make
           # make will return success even if the test fails, so check for failure in the results.xml

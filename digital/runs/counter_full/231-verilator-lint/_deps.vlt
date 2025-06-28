@@ -1,5 +1,0 @@
-`verilator_config
-lint_off -rule DECLFILENAME
-lint_off -rule EOFNEWLINE
-lint_off -rule UNDRIVEN -file "/home/omare/Documents/UWASIC/Template/digital/runs/counter_full/tmp/57e1a69da93e4f078b54bf96dc2725ee.bb.v"
-lint_off -rule UNUSEDSIGNAL -file "/home/omare/Documents/UWASIC/Template/digital/runs/counter_full/tmp/57e1a69da93e4f078b54bf96dc2725ee.bb.v"

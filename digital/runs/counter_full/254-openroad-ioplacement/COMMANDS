@@ -1,1 +1,0 @@
-openroad -exit -no_splash -metrics /home/omare/Documents/UWASIC/Template/digital/runs/counter_full/254-openroad-ioplacement/or_metrics_out.json /home/omare/Documents/UWASIC/Template/.venv/lib/python3.12/site-packages/openlane/scripts/openroad/ioplacer.tcl

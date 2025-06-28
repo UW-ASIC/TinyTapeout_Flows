@@ -1,0 +1,9 @@
+{
+    "PDK": "sky130A",
+    "DESIGN_NAME": "counter",
+    "VERILOG_FILES": [
+        "../../src/counter.v"
+    ],
+    "CLOCK_PORT": "clk",
+    "CLOCK_PERIOD": 10.0
+}

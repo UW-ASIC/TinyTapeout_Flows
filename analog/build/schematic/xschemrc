@@ -1,0 +1,22 @@
+set PROJECT_NAME "template"
+set dark_colorscheme 0
+set gaw_viewer "gaw"
+
+set PDK_DIR $env(HOME)/.volare/sky130A
+set STD_CELL_LIBRARY sky130_fd_sc_hd
+
+set netlist_dir [file normalize "[file dirname [info script]]/netlist"]
+file mkdir $netlist_dir
+set XSCHEM_NETLIST_DIR $netlist_dir
+
+set PROJECT_ROOT [file normalize "[file dirname [info script]]/../../schematics"]
+
+set XSCHEM_LIBRARY_PATH {}
+append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/../../schematics
+append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/../../symbols
+append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/../../library/xschem_library
+append XSCHEM_LIBRARY_PATH :$PDK_DIR/libs.tech/xschem_sky130/sky130_fd_pr
+append XSCHEM_LIBRARY_PATH :$PDK_DIR/libs.tech/xschem_sky130/sky130_tests
+append XSCHEM_LIBRARY_PATH :$PDK_DIR/libs.tech/xschem_sky130/sky130_stdcells
+
+set XSCHEM_SHAREDIR {../../schematics}
