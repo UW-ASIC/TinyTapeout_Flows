@@ -1,3 +1,5 @@
+include ../config.mk
+
 # Tool definitions
 XSCHEM = xschem
 NGSPICE = ngspice
@@ -11,14 +13,21 @@ all: setup schematic
 # Setup: move symbol files to correct location
 setup:
 	@echo "Setting up symbol files..."
-	@if [ -f ../../schematics/*.sym ]; then \
-		mv ../../schematics/*.sym ../../symbols/ 2>/dev/null || true; \
-	fi
+	@echo "Ignore errors below this ================"
+	mv ../../schematics/*.sym ../../symbols/ 2>/dev/null || true; \
+	mv ../../schematics/*_tb.sch ../../schematics/testbenches/ 2>/dev/null || true; \
+	mv spice/*_tb.spice spice/testbenches/ 2>/dev/null || true;
+	#cd ../../library && git clone ....
+	@echo "Ignore errors above this ================"
 
 # Open schematic editor
 schematic: setup
 	@echo "Opening xschem..."
-	$(XSCHEM) $(TOP_SCHEMATIC).sch
+	@if [ ! -f "../../schematics/$(TOP_SCHEMATIC).sch" ]; then \
+		echo "Creating empty schematic file: $(TOP_SCHEMATIC).sch"; \
+		touch ../../schematics/$(TOP_SCHEMATIC).sch; \
+	fi
+	$(XSCHEM) ../../schematics/$(TOP_SCHEMATIC).sch
 
 # Run SPICE simulation
 spice: setup

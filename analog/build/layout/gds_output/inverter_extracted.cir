@@ -1,0 +1,8 @@
+* Extracted by KLayout with SKY130 LVS runset on : 30/06/2025 15:08
+
+.SUBCKT inverter VSS|Vin sky130_gnd
+M$1 \$I4 \$I3 \$I5 sky130_gnd sky130_fd_pr__nfet_g5v0d10v5 L=0.5 W=1 AS=0.29
++ AD=0.29 PS=2.58 PD=2.58
+M$2 VSS|Vin VSS|Vin \$I8 \$I6 sky130_fd_pr__pfet_g5v0d10v5 L=0.5 W=1 AS=0.29
++ AD=0.29 PS=2.58 PD=2.58
+.ENDS inverter

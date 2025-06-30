@@ -1,75 +1,101 @@
-## Digital Workflow
-digital/                   # Digital design domain
-├── src/                   # RTL source files
-├── runs/           # Output from testing testbenches
-├── openlane/              # output from OpenLane2
-└── test/                  # Digital testbenches & verification
+# Digital Workflow
 
-### How to use:
-1. Setup
+## Directory Structure
 
 ```
-# 1. Set Project Top Directory
-vim Makefile
-change DESIGN ?= to your top .v or .sv project file
-
-# 2. Set Test testbench file
-vim test/Makefile
-# Change the Following:
-
-# Include the testbench sources:
-VERILOG_SOURCES += $(PWD)/tb_counter.v
-TOPLEVEL = tb_counter
-
-# MODULE is the basename of the Python test file
-MODULE = test_counter
+digital/                          # Digital design domain
+├── <template>/                   # Design template directory
+│   ├── build/                    # Build artifacts
+│   │   ├── des_tb/              # Design testbench
+│   │   │   ├── simulations/     # Simulation results
+│   │   │   └── Makefile         # Testbench makefile
+│   │   ├── lint/                # Linting results
+│   │   │   └── Makefile         # Lint makefile
+│   │   ├── synthesis/           # Synthesis results
+│   │   │   └── Makefile         # Synthesis makefile
+│   │   └── verification/        # Verification results
+│   │       └── Makefile         # Verification makefile
+│   ├── src/                     # Source files (*.v or *.sv)
+│   └── test/                    # Testbenches and .py cocotb files
+├── <template2>/                  # Additional design template
+├── <template3>/                  # Additional design template
+├── ...
+├── <templateN>/                  # Additional design template
+└── output/                       # Final output files (.gds, etc.)
 ```
 
-2. Commands
+## Working on the Flow
 
-Design Flow Commands (use DESIGN=name):
-- lint            - Lint RTL using slang
-- synthesis       - Synthesize RTL to gate-level netlist using OpenLane2
+### Understanding the Analog Connection
+- Reference: [Using Macros in OpenLane2](https://openlane2.readthedocs.io/en/latest/usage/using_macros.html)
 
-Simulation Commands:
-- test-rtl        - Run RTL tests (iverilog)
-- verification    - Run cocotb Python tests
-- test            - Run all tests for DESIGN
+## Usage
 
-Utility Commands:
-- clean           - Clean generated files
+Each template directory contains its own build system with specialized Makefiles for different stages of the digital design flow. All commands should be run from within the specific build subdirectory.
 
-Examples:
-- make lint DESIGN=counter
-- make synthesis DESIGN=counter
-- make verification DESIGN=counter
-- make test DESIGN=counter
+### High-Level Workflow Commands
 
-3. Output from OpenLane2
+#### 1. RTL Simulation (`build/des_tb/`)
+```bash
+cd <template>/build/des_tb/
+make test-rtl    # Run all testbenches with Icarus Verilog
+make clean       # Remove simulation artifacts
+```
 
-the output from OpenLane2 will be found in openlane/runs/<MODULE>_synthesis/final/, then there is going to be a few folder that you may need
-- nl (netlist)
+#### 2. RTL Linting (`build/lint/`)
+```bash
+cd <template>/build/lint/
+make lint        # Static analysis with Slang
+make clean       # Clean lint artifacts
+```
 
-### Working on the flow
+#### 3. Synthesis (`build/synthesis/`)
+```bash
+cd <template>/build/synthesis/
+make synthesis   # Synthesize design with OpenLane2
+make harden      # Full place & route flow (generates GDS)
+make clean       # Remove synthesis artifacts
+```
 
-For the slang linter:
-- https://github.com/MikePopoloski/slang
+#### 4. Verification (`build/verification/`)
+```bash
+cd <template>/build/verification/
+make verification    # Run all CocoTB tests (RTL level)
+make test           # Run single test (specify TOPLEVEL= MODULE=)
+make verification GATES=yes  # Run gate-level verification
+make clean_all      # Clean verification artifacts
+```
 
-For the cocoatb configuration:
-- https://github.com/cocotb/cocotb
+### Complete Design Flow Example
+```bash
+# Navigate to your design template
+cd digital/my_design/
 
-For the openlane configuration, read: 
-- Understanding the Analog Connection {https://openlane2.readthedocs.io/en/latest/usage/using_macros.html}
+# 1. Lint your RTL
+cd build/lint && make lint && cd ../..
 
-- Understanding a Pure Digital -> ASIC project {https://openlane2.readthedocs.io/en/latest/usage/caravel/index.html}
+# 2. Run RTL simulations
+cd build/des_tb && make test-rtl && cd ../..
 
-### Tools List for Nix Package management:
-- OpenLane2
-- Python (Cocoatb & Pytest)
-- Makefile
-- Icarus Verilog
-- Slang
+# 3. Run verification tests
+cd build/verification && make verification && cd ../..
 
-### TODO:
-1. Add support for Slang into synthesizer flow (OpenLane2)
-2. Add github workflows to automate testing (Workflows)
+# 4. Synthesize and generate GDS
+cd build/synthesis && make harden && cd ../..
+
+# 5. Final gate-level verification
+cd build/verification && make verification GATES=yes
+```
+
+### Configuration
+Each template requires a `config.mk` file in the build directory that defines:
+- `DESIGN_TOP`: Top-level module name
+- `RTL_FILES`: List of Verilog/SystemVerilog source files
+- `RTL_FILES_H`: List of header files
+- `TB_FILES`: List of testbench files
+- `COCOTB_TEST_FILES`: List of CocoTB Python test files
+
+### Output Artifacts
+- **Simulation**: VCD waveforms in `des_tb/simulations/`
+- **Synthesis**: Netlists in `synthesis/netlist/`
+- **Final GDS**: Copied to `digital/output/` for integration

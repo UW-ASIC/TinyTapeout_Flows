@@ -1,60 +1,59 @@
-# Variables
+include ../config.mk
+
 KLAYOUT = klayout
 MAGIC = magic
 NETGEN = netgen
 OPENLANE = openlane
 
-# Design-specific variables (set these for your project)
-TOP_CELL ?= your_design_name
-PDK ?= sky130A
-NETLIST_FILE ?= netlist/$(TOP_CELL).spice
-BLACKBOX_PATH ?= ./blackbox_libs
-
-.PHONY: layout integrate_black_box klayout_all_tests klayout_test1 klayout_test2 magic_to_gds clean
+NETLIST_FILE = ../schematic/spice/$(TOP_LAYOUT).spice
 
 # We use magic for layout, but then use klayout for its sim capabilities
+.PHONY: layout klayout_test klayout_lvs klayout_drc clean
 
-# Layout-Level Tasks
 layout:
 	@echo "Opening magic for layout..."
-	@mkdir -p ./magic
-	cd magic && $(MAGIC) -rcfile $(PDK_ROOT)/libs.tech/magic/sky130A.magicrc
+	@if [ ! -f "../../layout/$(TOP_LAYOUT).sch" ]; then \
+		echo "Creating empty layout file: $(TOP_LAYOUT).mag"; \
+		touch ../../layout/$(TOP_LAYOUT).mag; \
+	fi
+	cp $(PDK_ROOT)/$(PDK)/libs.tech/magic/sky130A.magicrc .
+	cd ../../layout && $(MAGIC) -rcfile ../build/layout/sky130A.magicrc $(TOP_LAYOUT).mag
 
-# Convert Magic files to GDS for KLayout testing
+# internal, DO NOT USE
 magic_to_gds:
-	@echo "Converting Magic layout to GDS..."
+	@echo "Converting all Magic layouts to GDS..."
 	@mkdir -p ./gds_output
-	cd magic && $(MAGIC) -dnull -noconsole -T $(PDK) << EOF
-	load $(TOP_CELL)
-	gds write ../gds_output/$(TOP_CELL).gds
-	quit -noprompt
-	EOF
+	@echo "Copying magicrc file..."
+	cp $(PDK_ROOT)/$(PDK)/libs.tech/magic/sky130A.magicrc .
+	@for magfile in ../../layout/*.mag; do \
+		if [ -f "$$magfile" ]; then \
+			basename=$$(basename "$$magfile" .mag); \
+			echo "Converting $$basename.mag..."; \
+			cd ../../layout && echo "load $$basename; gds write ../build/layout/gds_output/$$basename.gds; quit -noprompt" | $(MAGIC) -dnull -noconsole -rcfile ../build/layout/sky130A.magicrc; \
+		fi; \
+	done
+	@echo "Cleaning up temporary files..."
+	@rm -f *.log *.out *.txt magic_*.* .magic_*.* core.* 2>/dev/null || true
+	@rm -f *.ext *.sim *.spice 2>/dev/null || true
+	@rm -f sky130A.magicrc
 
-# Take digital design .gds files and create a layout file as a blackbox that can be used as an include for the other layouts
-integrate_black_box: magic_to_gds
-	@echo "Integrating black box design..."
-	@mkdir -p ./integrated
-	$(KLAYOUT) -b -rd input_gds="./gds_output/$(TOP_CELL).gds" \
-		-rd blackbox_path="$(BLACKBOX_PATH)" \
-		-rd output_gds="./integrated/integrated_design.gds" \
-		-r scripts/integrate_blackboxes.rb
+klayout_test: klayout_drc klayout_lvs
 
-klayout_all_tests: klayout_test1 klayout_test2
-
-klayout_test1: magic_to_gds
+klayout_drc: magic_to_gds
 	@echo "Running KLayout DRC verification..."
 	@mkdir -p ./reports
-	$(KLAYOUT) -b -rd input="./gds_output/$(TOP_CELL).gds" \
-		-rd report="./reports/drc_report.txt" \
-		-r $(PDK_ROOT)/$(PDK)/libs.tech/klayout/drc/$(PDK).drc
+	$(KLAYOUT) -b -rd input="./gds_output/$(TOP_LAYOUT).gds" \
+		-rd report="$(CURDIR)/reports/drc_report.txt" \
+		-r $(PDK_ROOT)/$(PDK)/libs.tech/klayout/drc/$(PDK).lydrc
 
-klayout_test2: magic_to_gds  
+klayout_lvs: magic_to_gds  
 	@echo "Running KLayout LVS verification..."
 	@mkdir -p ./reports
-	$(KLAYOUT) -b -rd input="./gds_output/$(TOP_CELL).gds" \
-		-rd schematic="$(NETLIST_FILE)" \
-		-rd report="./reports/lvs_report.txt" \
-		-r $(PDK_ROOT)/$(PDK)/libs.tech/klayout/lvs/$(PDK).lvs
+	$(KLAYOUT) -b -rd input="./gds_output/$(TOP_LAYOUT).gds" \
+		-rd schematic="$(abspath $(NETLIST_FILE))" \
+		-rd report="$(CURDIR)/reports/lvs_report.txt" \
+		-rd verbose=true \
+		-r $(PDK_ROOT)/$(PDK)/libs.tech/klayout/lvs/sky130.lvs
 
 clean:
 	@echo "Cleaning generated files..."
