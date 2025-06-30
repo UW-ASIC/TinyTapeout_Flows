@@ -16,6 +16,9 @@ The UWASIC template provides a structured approach to ASIC design with three dis
 - [Analog Design Flow](#analog-design-flow)
 - [Caravel Integration](#caravel-integration)
 - [Workflows and CI/CD](#workflows-and-cicd)
+- [TODOs](#TODO)
+
+---
 
 ### Environment Setup
 
@@ -81,6 +84,8 @@ uwasic-template/
 ├── analog/           # Analog design workflow  
 └── caravel/          # Caravel harness integration
 ```
+
+---
 
 ### Digital Design Flow
 
@@ -165,6 +170,8 @@ cd my_project/build
 # Edit config.mk with your design name
 ```
 
+---
+
 ### Analog Design Flow
 
 #### Overview
@@ -240,6 +247,8 @@ make full_verification   # Complete suite
 - `klayout_lvs` - Commercial-grade LVS
 - Requires GDS conversion
 
+---
+
 ### Caravel Integration
 
 #### Overview
@@ -283,6 +292,8 @@ lef:
   file: lef/user_project_wrapper.lef
 ```
 
+---
+
 ### Workflows and CI/CD
 
 #### GitHub Actions Configuration
@@ -313,6 +324,8 @@ lef:
 - **TODO**: 
   - Implement project type detection
   - Call appropriate integration flow
+
+---
 
 ### Usage Examples
 
@@ -362,7 +375,9 @@ cd caravel/
 make integrate TYPE=mixed
 ```
 
-### TODO:
+---
+
+### TODO
 
 #### Team Library Integration (TODO)
 
