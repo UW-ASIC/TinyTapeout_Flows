@@ -1,4 +1,4 @@
-## UWASIC Mixed-Signal Design Template
+## UWASIC (Digital, Analog, Mixed) Design Template
 
 A comprehensive template for mixed-signal ASIC design using open-source tools, featuring automated workflows for digital, analog, and integrated Caravel chip projects.
 
