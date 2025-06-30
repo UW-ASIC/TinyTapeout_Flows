@@ -379,55 +379,7 @@ make integrate TYPE=mixed
 
 ### TODO
 
-#### Team Library Integration (TODO)
-
-```bash
-cd analog/library
-git clone <team-ip-repository>
-# Configure search paths in xschemrc
-```
-
-#### Critical TODOs
-
-1. **Caravel Integration Makefile**
-   ```makefile
-   # Detect project type based on file presence
-   # Call appropriate sub-flows
-   # Copy outputs to caravel structure
-   ```
-
-2. **Mixed-Signal Integration Guide**
-   - SPICE to Xschem symbol conversion
-   - Digital GDS to analog integration
-   - Power/ground net handling
-   - Hierarchical netlist management
-
-3. **CACE Workflow Fixes**
-   - Update GitHub action for new paths
-   - Create template `cace.yaml` files
-   - Document characterization flow
-
-4. **Team Library Setup**
-   - Git submodule configuration
-   - Xschem library paths
-   - Symbol management
-
-#### Enhancement TODOs
-
-5. **Workflow Modularity**
-   - Auto-detect project type
-   - Conditional workflow execution
-   - Progress tracking
-
-6. **Documentation**
-   - Video tutorials
-   - Example projects
-   - Best practices guide
-
-7. **Verification**
-   - Mixed-signal cosimulation
-   - Power integrity checks
-   - Automatic test generation
+Refer to TODO.md
 
 ## Resources
 - [OpenLane2 Documentation](https://openlane2.readthedocs.io/)
