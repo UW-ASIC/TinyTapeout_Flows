@@ -55,6 +55,9 @@ _create_analog_structure:
 		cd $(ANALOG_DIR)/$(MODULE_NAME)/build && \
 		echo "PARENT = $(PARENT)" >> config.mk; \
 	fi
+	@if [ "$(PROJECT_TYPE)" == "mixed"]; then \
+		echo "PARENT = $(PROJECT_NAME)" >> config.mk; \
+	fi
 	@cd $(ANALOG_DIR)/$(MODULE_NAME)/build && \
 		mkdir -p {layout,schematic,validation} && \
 		cp -r ../../../flows/analog/build/layout/* ./layout/ 2>/dev/null || true && \
@@ -113,7 +116,6 @@ CreateProject:
 	fi
 	@if [ "$(PROJECT_TYPE)" = "analog" ] || [ "$(PROJECT_TYPE)" = "mixed" ]; then \
 		$(MAKE) _create_analog_structure MODULE_NAME=$(PROJECT_NAME) PARENT=; \
-
 	fi
 	@if [ "$(PROJECT_TYPE)" = "digital" ] || [ "$(PROJECT_TYPE)" = "mixed" ]; then \
 		$(MAKE) _create_digital_structure MODULE_NAME=$(PROJECT_NAME) PARENT=; \

@@ -5,7 +5,7 @@ project:
   author:       ""
   # Description 1 line
   description: ""
-  # Analog, Verilog, ...
+  # Analog, Verilog, SystemVerilog ...
   language:     "Analog"
   # Clock Freq in hz, 0 if not applicable
   clock_hz:     0

@@ -10,6 +10,8 @@ NETLIST_DIR := netlist
 CLOCK_PERIOD ?= 10.0
 CORE_UTIL ?= 40
 
+ANALOG_OUTPUT_DIR = ../../../../analog/$(DESIGN_TOP)/output
+
 .PHONY: all synthesis harden clean create_config config.json
 
 all: synthesis
