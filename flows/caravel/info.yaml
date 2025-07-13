@@ -1,28 +1,33 @@
-# Tiny Tapeout project information
 project:
-  title:        ""      # Project title
-  author:       ""      # Your name
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  ""      # One line description of what your project does
-  language:     "Analog" # other examples include Verilog, Amaranth, VHDL, etc
-  clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
+  # Project Title
+  title:        ""
+  # Your name
+  author:       ""
+  # Description 1 line
+  description: ""
+  # Analog, Verilog, ...
+  language:     "Analog"
+  # Clock Freq in hz, 0 if not applicable
+  clock_hz:     0
 
-  # How many tiles your design occupies? A single tile is about 167x108 uM.
-  tiles: "1x2"          # Valid values for analog projects: 1x2, 2x2
+  # Tile Configuration, Each title is about 167x108uM
+  # Check in def/ to see what is available
+  tiles: "1x2"
 
-  # How many analog pins does your project use?
-  analog_pins: 2        # Valid values: 0 to 6
-  uses_3v3: false       # Set to true if your project uses 3.3V (VAPWR) in addition to 1.8V (VDPWR)
+  # How many analog pins does your project use? [0-6 pins]
+  analog_pins: 0
 
-  # Your top module name must start with "tt_um_". Make it unique by including your github username:
-  top_module:  "tt_um_example"
+  # Your top module name that is in src/project.v
+  top_module:  "tt_um_$(PROJECT_NAME)"
 
-  # List your project's source files here. Source files must be in ./src and you must list each source file separately, one per line:
+  # Glob all sources_files in src/
   source_files:        
     - "project.v"
+    - Should be a glob
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
+# Has to be done manually
 pinout:
   # Inputs
   ui[0]: ""

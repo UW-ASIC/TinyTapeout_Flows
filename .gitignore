@@ -10,6 +10,3 @@ Thumbs.db
 .venv/
 .tools/
 .tmp/
-
-# Builds
-digital/template/build/synthesis/runs/
