@@ -1,26 +1,63 @@
 ## UWASIC (Digital, Analog, Mixed) Design Template
 
-A comprehensive template for mixed-signal ASIC design using open-source tools, featuring automated workflows for digital, analog, and integrated Caravel chip projects.
+A comprehensive template for mixed-signal ASIC design using open-source tools, featuring automated workflows for digital, analog, and integrated TinyTapeout chip projects.
 
 ### Overview
 
 The UWASIC template provides a structured approach to ASIC design with three distinct workflows:
 - **Digital flow**: RTL-to-GDS using OpenLane2
-- **Analog flow**: Schematic-driven layout using Xschem/Magic
-- **Caravel integration**: Tapeout-ready chip submission to Efabless
+- **Analog flow**: Schematic-driven layout using Xschem/Magic  
+- **Mixed-signal flow**: Combined analog and digital designs
+- **TinyTapeout integration**: Tapeout-ready chip submission to Efabless
 
 ### Table of Contents
+- [Quick Start](#quick-start)
 - [Environment Setup](#environment-setup)
-- [Project Structure](#project-structure)
+- [Project Management](#project-management)
 - [Digital Design Flow](#digital-design-flow)
 - [Analog Design Flow](#analog-design-flow)
-- [Caravel Integration](#caravel-integration)
+- [Mixed-Signal Design Flow](#mixed-signal-design-flow)
+- [TinyTapeout Integration](#tinytapeout-integration)
 - [Workflows and CI/CD](#workflows-and-cicd)
-- [TODOs](#TODO)
+- [Advanced Usage](#advanced-usage)
 
 ---
 
-### Environment Setup
+## Quick Start
+
+### Creating Your First Project
+
+Navigate to the `flows/` directory and choose your project type:
+
+```bash
+cd flows/
+
+# Digital-only project
+make CreateDigitalProject PROJECT=my_counter
+make CreateDigitalCaravel PROJECT=my_chip
+
+# Analog-only project  
+make CreateAnalogProject PROJECT=my_opamp
+make CreateAnalogCaravel PROJECT=my_analog_chip
+
+# Mixed-signal project (digital + analog)
+make CreateDigitalProject PROJECT=my_processor
+make AddAnalogModule PROJECT=my_dac
+make CreateMixedCaravel PROJECT=my_mixed_chip
+```
+
+### Project Management Commands
+
+```bash
+make help                    # Show all available commands
+make status                  # Show current project state
+make tree                    # Show project hierarchy
+make DeleteAll              # Clean up all projects
+```
+
+---
+
+## Environment Setup
 
 #### Installing Nix Package Manager
 
@@ -75,15 +112,104 @@ This provides all necessary tools:
 - **Analog**: Xschem, Magic, ngspice, netgen, KLayout
 - **Verification**: CACE, OpenSTA
 
-#### Project Structure
+## Project Management
+
+### Project States
+
+The template tracks project state automatically:
+- **`none`**: No projects created
+- **`digital`**: Digital-only project  
+- **`analog`**: Analog-only project
+- **`mixed`**: Combined digital + analog project
+
+### Project Structure
+
+After creating projects, your directory structure will be:
 
 ```
 uwasic-template/
 ├── shell.nix         # Nix environment configuration
-├── digital/          # Digital design workflow
-├── analog/           # Analog design workflow  
-└── caravel/          # Caravel harness integration
+├── flows/            # Project management system
+│   ├── Makefile      # Main project commands
+│   └── templates/    # Project templates
+├── digital/          # Digital design projects
+│   └── project_name/
+│       ├── build/    # Build system (synthesis, verification)
+│       ├── src/      # RTL source files
+│       └── test/     # Testbenches and verification
+├── analog/           # Analog design projects  
+│   ├── library/      # Shared analog IP library
+│   └── project_name/
+│       ├── build/    # Build system (layout, validation)
+│       ├── layout/   # Magic layout files
+│       ├── schematics/ # Xschem schematic files
+│       └── symbols/  # Xschem symbol files
+└── caravel/          # TinyTapeout submission package
+    ├── .github/      # Automated workflows
+    ├── src/          # Verilog wrapper and sources
+    ├── analog/       # Copied analog project files
+    ├── docs/         # Documentation
+    └── info.yaml     # TinyTapeout project configuration
 ```
+
+### Available Commands
+
+#### Project Creation
+```bash
+make CreateDigitalProject PROJECT=name    # Create digital project
+make CreateAnalogProject PROJECT=name     # Create analog project
+```
+
+#### Module Addition  
+```bash
+# Add analog module (child of existing analog project)
+make AddAnalogModule PROJECT=child ANALOG_PARENT=parent
+
+# Add additional analog projects (for mixed-signal foundations)
+make CreateAnalogProject PROJECT=second_analog  # When PROJECT_STATE=analog
+
+# Future: Digital module linking (in development)
+# make AddDigitalModule PROJECT=digital_name LINK_ANALOG=analog_project
+```
+
+#### TinyTapeout Integration
+```bash
+make CreateDigitalCaravel PROJECT=name     # Digital TinyTapeout submission
+make CreateAnalogCaravel PROJECT=name      # Analog TinyTapeout submission  
+make CreateMixedCaravel PROJECT=name       # Mixed-signal TinyTapeout submission
+```
+
+#### Utilities
+```bash
+make help             # Show all commands
+make status           # Show current project state
+make tree             # Show project hierarchy
+make DeleteAll        # Remove all projects
+```
+
+### Design Rules
+
+1. **Digital Projects**: 
+   - Only one digital module per digital project (single .gds output)
+   - Use `src/` directory for internal submodules
+   - Digital projects are standalone and do not link to analog
+
+2. **Analog Projects**:
+   - Can have child analog modules with `ANALOG_PARENT` parameter
+   - Serve as base projects for mixed-signal designs
+   - Cannot directly add digital modules
+
+3. **Mixed-Signal Projects**:
+   - Start with analog project(s) as the foundation
+   - Multiple analog projects can be created to serve as the base
+   - All analog projects are included in TinyTapeout submission
+   - Digital module linking system is in development for explicit integration
+
+4. **Project Architecture**:
+   - **Analog Foundation**: Multiple analog projects can coexist and all are included
+   - **Digital Standalone**: Single digital project per repository
+   - **Mixed-Signal**: Analog projects + (future) linked digital modules
+   - **Caravel Integration**: Automatic inclusion of all foundation projects
 
 ---
 
@@ -95,8 +221,7 @@ The digital flow uses OpenLane2 for automated RTL-to-GDS conversion with compreh
 #### Directory Structure
 ```
 digital/
-├── output/           # Shared output directory
-└── template/         # Project template (duplicate for new projects)
+└── <DIGITAL_PROJECT_NAME>/         # Project template (duplicate for new projects)
     ├── build/        # Build system
     │   ├── config.mk # Project configuration
     │   ├── des_tb/   # RTL simulation
@@ -106,21 +231,6 @@ digital/
     ├── src/          # RTL source files (.v, .sv)
     └── test/         # Testbenches and cocotb tests
 ```
-
-#### Configuration (`build/config.mk`)
-```makefile
-# Project Setup
-DESIGN_TOP := counter        # Top module name
-RTL_FILES := $(shell find ../../src -name "*.v" -o -name "*.sv")
-RTL_FILES_H := $(shell find ../../src -name "*.vh" -o -name "*.svh")
-TB_FILES := $(shell find ../../test -name "*_tb.v" -o -name "tb_*.v")
-
-# Verification Setup
-COCOTB_TEST_FILES := $(shell find ../../test -name "test_*.py")
-TOPLEVEL_TB_MODULES := tb_counter    # Testbench modules
-MODULE_TESTS := test_counter         # Python test modules
-```
-
 #### Workflows
 
 ##### 1. RTL Simulation
@@ -162,12 +272,20 @@ make tb_counter   # Run specific test
 - Supports RTL and gate-level simulation
 - SDF annotation for timing
 
-#### Creating a New Digital Sub-Project
+##### e.g.
 ```bash
+# Setup
 cd digital/
-cp -r template my_project
-cd my_project/build
-# Edit config.mk with your design name
+cp -r template my_cpu
+cd my_cpu/build
+
+# Development
+make -C lint lint
+make -C des_tb test-rtl
+make -C verification test
+
+# Implementation
+make -C synthesis harden
 ```
 
 ---
@@ -179,24 +297,19 @@ The analog flow uses Xschem for schematic capture and Magic for layout, with com
 
 #### Directory Structure
 ```
-analog/
-├── build/
-│   ├── config.mk     # Project configuration
-│   ├── layout/       # Layout tools
-│   ├── schematic/    # Schematic tools
-│   └── validation/   # DRC/LVS verification
-├── layout/           # Magic layout files (.mag)
-├── library/          # Team IP library (TODO)
-├── schematics/       # Xschem schematics (.sch)
-│   └── testbenches/  # Testbench schematics
-└── symbols/          # Xschem symbols (.sym)
-```
-
-#### Configuration (`build/config.mk`)
-```makefile
-PROJECT = template
-TOP_SCHEMATIC ?= inverter
-TOP_LAYOUT := $(TOP_SCHEMATIC)
+digital/
+├── library/              # Has all team symbols/schematics that may be useful
+└── <ANALOG_PROJECT_NAME>/
+    ├── build/
+    │   ├── config.mk     # Project configuration
+    │   ├── layout/       # Layout tools
+    │   ├── schematic/    # Schematic tools
+    │   └── validation/   # DRC/LVS verification
+    ├── layout/           # Magic layout files (.mag)
+    ├── library/          # Team IP library (TODO)
+    ├── schematics/       # Xschem schematics (.sch)
+    │   └── testbenches/  # Testbench schematics
+    └── symbols/          # Xschem symbols (.sym)
 ```
 
 #### Workflows
@@ -243,20 +356,125 @@ make full_verification   # Complete suite
 - `magic_lvs` - Layout vs. schematic
 
 **KLayout Verification**:
-- `klayout_drc` - Commercial-grade DRC
-- `klayout_lvs` - Commercial-grade LVS
-- Requires GDS conversion
+- `klayout_drc` - DRC
+- `klayout_lvs` - LVS
+- downside: Requires GDS conversion
+
+##### e.g.
+```bash
+# Setup
+cd analog/build
+vim config.mk  # Set TOP_SCHEMATIC
+
+# Design
+make -C schematic schematic
+make -C schematic spice
+make -C layout layout
+
+# Verification
+make -C validation full_verification
+```
 
 ---
 
-### Caravel Integration
+## Mixed-Signal Design Flow
 
-#### Overview
-Caravel is the test harness SoC required for Efabless tapeout, providing:
-- Management RISC-V processor
-- 38 GPIO pins
-- Power management
-- ~10.5mm² user area
+Mixed-signal projects combine digital and analog designs into a single tapeout-ready submission. The architecture starts with analog projects as the foundation.
+
+### Creating Mixed-Signal Projects
+
+Start with analog projects as the base:
+
+```bash
+# 1. Create base analog project(s) - these serve as the foundation
+make CreateAnalogProject PROJECT=analog_frontend
+make CreateAnalogProject PROJECT=dac_backend
+
+# 2. Check project status and structure
+make status                    # Shows all analog projects
+make tree                      # Visual project hierarchy
+
+# 3. Create TinyTapeout submission (includes all analog projects)
+make CreateMixedCaravel PROJECT=my_mixed_chip
+```
+
+### Verified Mixed-Signal Architecture
+
+✅ **Multiple Analog Projects**: You can create multiple analog projects that serve as the foundation  
+✅ **Analog-First Design**: Mixed-signal projects start with analog components  
+✅ **Status Reporting**: Complete project tracking with `status`, `tree`, and `dependencies` commands  
+✅ **TinyTapeout Integration**: Proper analog pin assignments, power connections, and workflows  
+
+### Project State Tracking
+
+The template automatically tracks project states:
+
+- **`none`**: No projects created
+- **`analog`**: One or more analog projects (foundation for mixed-signal)
+- **`digital`**: Single digital project (standalone)
+- **`mixed`**: Combined analog and digital projects
+
+### Checking Project Status
+
+```bash
+make status                    # Show all projects and their states
+make tree                      # Visual project hierarchy
+make dependencies             # Show what's ready for TinyTapeout integration
+```
+
+### Mixed-Signal Integration
+
+The template automatically:
+- Copies all analog project files to `caravel/analog/`  
+- Generates proper TinyTapeout analog interface with power connections (`VGND`, `VDPWR`, `VAPWR`)
+- Creates 2x2 tile configuration for mixed-signal projects
+- Includes analog characterization workflows (CACE)
+- Provides proper pin assignments for up to 6 analog pins (`ua[5:0]`)
+
+### Future Enhancement: Digital Module Linking
+
+The template is designed to support explicit linking between digital modules and analog projects. This will allow:
+- Digital modules to explicitly link to specific analog projects
+- Only linked digital modules included in final TinyTapeout submission
+- Clear dependency tracking between digital and analog components
+
+---
+
+## TinyTapeout Integration
+
+### Overview
+
+TinyTapeout integration creates submission-ready packages for the Efabless shuttle program. The template automatically generates:
+- Proper pin assignments and power connections
+- GitHub Actions workflows for automated verification
+- Project configuration files (`info.yaml`)
+- Verilog wrappers with TinyTapeout interface
+
+### TinyTapeout Specifications Compliance
+
+The template automatically ensures compliance with [TinyTapeout analog specs](https://tinytapeout.com/specs/analog/):
+
+#### Analog Projects
+- **Pin Assignment**: Uses `ua[5:0]` analog pins (configure count in `info.yaml`)
+- **Power Connections**: Includes `VGND`, `VDPWR`, and `VAPWR` connections
+- **Digital Pin Handling**: All digital outputs properly grounded
+- **Tile Configuration**: Defaults to 1x2 tiles for analog projects
+- **Pin Limits**: Up to 6 analog pins, with cost considerations
+
+#### Digital Projects  
+- **Interface**: Standard TinyTapeout digital interface
+- **Tile Configuration**: 1x1 tiles for digital projects
+- **Testing**: Includes gate-level testing workflows
+
+#### Mixed-Signal Projects
+- **Tile Configuration**: 2x2 tiles for mixed projects
+- **Analog Interface**: Proper `ua[]` pin assignments
+- **Digital Integration**: Multiple digital modules supported
+- **Power Distribution**: Separate analog and digital power domains
+
+#### Examples used in determining template:
+- https://github.com/TinyTapeout/ttsky-verilog-template
+- https://github.com/TinyTapeout/ttsky-analog-template
 
 #### Directory Structure
 ```
@@ -294,92 +512,179 @@ lef:
 
 ---
 
-### Workflows and CI/CD
+## Workflows and CI/CD
 
-#### GitHub Actions Configuration
+The template automatically generates GitHub Actions workflows based on project type, using template files instead of hardcoded echo commands for better maintainability.
 
-##### test.yaml - Digital Verification
-- **Purpose**: Run digital RTL tests
-- **Trigger**: Push or manual
-- **Coverage**: Icarus Verilog + cocotb
-- **TODO**: Restrict to `digital/` directory only
+### Automated Workflow Generation
 
-##### fpga.yaml - FPGA Implementation
-- **Purpose**: Generate TinyTapeout FPGA bitstream
-- **Trigger**: Manual only
-- **Platform**: ICE40UP5K
-- **TODO**: Add digital-only check
+When you create a TinyTapeout project, the appropriate workflows are automatically generated:
 
-##### cace.yaml - Analog Characterization
-- **Purpose**: Run CACE verification
-- **Status**: Currently broken
-- **TODO**: 
-  - Fix paths for new structure
-  - Support analog + mixed-signal
-  - Add example CACE configurations
+```bash
+# Creates analog-specific workflows
+make CreateAnalogCaravel PROJECT=my_chip
 
-##### gds.yaml - Final Integration
-- **Purpose**: Generate tapeout-ready GDS
-- **Trigger**: Push or manual
-- **TODO**: 
-  - Implement project type detection
-  - Call appropriate integration flow
+# Creates digital-specific workflows  
+make CreateDigitalCaravel PROJECT=my_chip
+
+# Creates mixed-signal workflows (includes both)
+make CreateMixedCaravel PROJECT=my_chip
+```
+
+### Workflow Templates
+
+All workflows are generated from templates in `flows/caravel/templates/workflows/`:
+
+#### Universal Workflows (All Project Types)
+- **`gds.yaml`**: GDS generation and precheck using TinyTapeout actions
+- **`docs.yaml`**: Documentation generation workflow
+
+#### Digital/Mixed-Signal Workflows
+- **`test.yaml`**: RTL simulation using Icarus Verilog + cocotb
+- **`fpga.yaml`**: FPGA implementation for ICE40UP5K platform  
+- **`gl_test`**: Gate-level testing (integrated into gds.yaml)
+
+#### Analog/Mixed-Signal Workflows
+- **`cace.yaml`**: Circuit Automatic Characterization Engine for analog verification
+
+### Workflow Features
+
+#### gds.yaml - GDS Generation
+- **Purpose**: Generate tapeout-ready GDS files
+- **Trigger**: Push or manual dispatch
+- **Tools**: TinyTapeout GDS action with Sky130 PDK
+- **Includes**: Precheck, GDS generation, and layout viewer
+- **Conditional**: Adds gate-level testing for digital/mixed projects
+
+#### test.yaml - Digital Verification  
+- **Purpose**: Run digital RTL and gate-level tests
+- **Coverage**: Icarus Verilog simulation + cocotb verification
+- **Artifacts**: VCD waveforms and test results
+- **Requirements**: Automatically installs Python dependencies
+
+#### cace.yaml - Analog Characterization
+- **Purpose**: Automated analog circuit characterization  
+- **Environment**: Uses Nix shell for consistent tool versions
+- **Requirements**: Expects `cace_config.yaml` in analog directory
+- **Artifacts**: CACE results and HTML reports
+
+#### fpga.yaml - FPGA Implementation
+- **Purpose**: Generate FPGA bitstream for prototyping
+- **Platform**: ICE40UP5K via TinyTapeout actions
+- **Trigger**: Push to main branch or manual
+
+### Workflow Customization
+
+To customize workflows:
+1. Modify templates in `flows/caravel/templates/workflows/`
+2. Regenerate workflows: `make SetupWorkflows`
+3. Or manually edit generated files in `caravel/.github/workflows/`
 
 ---
 
-### Usage Examples
+## Advanced Usage
 
-#### Digital Project Workflow
-```bash
-# Setup
-cd digital/
-cp -r template my_cpu
-cd my_cpu/build
+### Template System Architecture
 
-# Development
-make -C lint lint
-make -C des_tb test-rtl
-make -C verification test
+The template uses a sophisticated file-based system instead of hardcoded generation:
 
-# Implementation
-make -C synthesis harden
+```
+flows/
+├── Makefile                    # Main project management
+└── caravel/templates/
+    ├── analog/                 # Analog project templates
+    │   ├── info.yaml.template  # TinyTapeout configuration
+    │   └── project.v.template  # Verilog wrapper
+    ├── digital/                # Digital project templates
+    │   ├── info.yaml.template
+    │   └── project.v.template
+    ├── mixed/                  # Mixed-signal templates
+    │   ├── info.yaml.template
+    │   └── project.v.template
+    └── workflows/              # GitHub Actions templates
+        ├── gds.yaml.template
+        ├── test.yaml.template
+        ├── cace.yaml.template
+        ├── docs.yaml.template
+        ├── fpga.yaml.template
+        └── gl_test_fragment.yaml
 ```
 
-#### Analog Project Workflow
-```bash
-# Setup
-cd analog/build
-vim config.mk  # Set TOP_SCHEMATIC
+### Customizing Templates
 
-# Design
-make -C schematic schematic
-make -C schematic spice
-make -C layout layout
+1. **Modify Templates**: Edit files in `flows/caravel/templates/`
+2. **Placeholder System**: Use `PROJECT_NAME_PLACEHOLDER`, `ANALOG_TOP_PLACEHOLDER`, etc.
+3. **Regenerate**: Run `make DeleteAll` and recreate projects to test changes
 
-# Verification
-make -C validation full_verification
+### Project State Management
+
+The template automatically detects project state:
+
+```makefile
+PROJECT_STATE := $(shell \
+    if [ ! -d "$(ANALOG_DIR)" ] && [ ! -d "$(DIGITAL_DIR)" ] && [ ! -d "$(CARAVEL_DIR)" ]; then \
+        echo "none"; \
+    elif [ -d "$(ANALOG_DIR)" ] && [ -d "$(DIGITAL_DIR)" ] && [ -d "$(CARAVEL_DIR)" ]; then \
+        echo "mixed"; \
+    elif [ -d "$(DIGITAL_DIR)" ] && [ -d "$(CARAVEL_DIR)" ] && [ ! -d "$(ANALOG_DIR)" ]; then \
+        echo "digital"; \
+    elif [ -d "$(ANALOG_DIR)" ] && [ -d "$(CARAVEL_DIR)" ] && [ ! -d "$(DIGITAL_DIR)" ]; then \
+        echo "analog"; \
+    else \
+        echo "unknown"; \
+    fi)
 ```
 
-#### Mixed-Signal Project (TODO)
-```bash
-# Digital portion
-cd digital/my_adc_digital/
-# ... digital flow ...
+### TinyTapeout Integration Details
 
-# Analog portion  
-cd analog/
-# ... analog flow ...
+#### Analog Pin Configuration
 
-# Integration
-cd caravel/
-make integrate TYPE=mixed
+Adjust analog pin count in generated `info.yaml`:
+
+```yaml
+project:
+  analog_pins: 2    # Change this (1-6)
+  tiles: "1x2"      # Adjust tile count as needed
+
+pinout:
+  ua[0]: "Input Signal"     # Label your pins
+  ua[1]: "Output Signal"
+  # ua[2]: ""               # Comment unused pins
 ```
+
+#### Power Connection Examples
+
+The template generates proper power connections:
+
+```verilog
+module tt_um_my_analog_chip (
+    // ... standard pins ...
+    inout  wire [5:0] ua,
+    input  wire       VGND,     // Ground
+    input  wire       VDPWR,    // 1.8V digital  
+    input  wire       VAPWR     // 3.3V analog (optional)
+);
+    // Your analog blocks connect to power pins
+    your_opamp opamp_inst (
+        .vdd(VAPWR),
+        .vss(VGND),
+        .in_p(ua[0]),
+        .in_n(ua[1]),
+        .out(ua[2])
+    );
+endmodule
+```
+
+### Building Custom Flows
+
+To add new project types:
+
+1. **Create Templates**: Add new directory in `flows/caravel/templates/`
+2. **Extend Makefile**: Add new `Create*Project` and `Create*Caravel` targets
+3. **Update State Logic**: Modify `PROJECT_STATE` detection
+4. **Add Workflows**: Create appropriate GitHub Actions templates
 
 ---
-
-### TODO
-
-Refer to TODO.md
 
 ## Resources
 - [OpenLane2 Documentation](https://openlane2.readthedocs.io/)
@@ -387,4 +692,3 @@ Refer to TODO.md
 - [Caravel Harness Documentation](https://caravel-harness.readthedocs.io/)
 - [CACE Documentation](https://cace.readthedocs.io/)
 - [Efabless Platform](https://platform.efabless.com/)
-

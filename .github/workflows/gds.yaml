@@ -1,22 +1,111 @@
-name: gds
-
+name: GDS
 on:
-  push:
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      project_type:
+        description: 'Project type: analog, digital, or mixed'
+        required: true
+        type: string
 
 jobs:
   gds:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Create and publish the GDS artifact
-        uses: TinyTapeout/tt-gds-action/custom_gds@tt05
-        with: 
-          top_module: <mag/top_module.mag> 
-          gds_path: <gds/top_module.gds>
-          lef_path: <lef/top_module.lef>
-          verilog_path: <verilog/top_module.v>
+      # Analog-only flow
+      - name: Read top module name (analog)
+        if: inputs.project_type == 'analog'
+        uses: mikefarah/yq@v4
+        id: top_module_analog
+        with:
+          cmd: echo TOP_MODULE=`yq '.project.top_module' caravel/info.yaml` > $GITHUB_OUTPUT
+      
+      - name: Create and publish the GDS artifact (analog)
+        if: inputs.project_type == 'analog'
+        uses: TinyTapeout/tt-gds-action/custom_gds@ttsky25a
+        with:
+          top_module: ${{ steps.top_module_analog.outputs.TOP_MODULE }}
+          gds_path: caravel/gds/${{ steps.top_module_analog.outputs.TOP_MODULE }}.gds
+          lef_path: caravel/lef/${{ steps.top_module_analog.outputs.TOP_MODULE }}.lef
+          verilog_path: caravel/src/project.v
+
+      # Digital-only flow
+      - name: Build GDS (digital)
+        if: inputs.project_type == 'digital'
+        uses: TinyTapeout/tt-gds-action@ttsky25a
+        with:
+          pdk: sky130
+          tools-ref: ttsky25a
+          working_directory: caravel
+
+      # Mixed project flow - build both analog and digital
+      - name: Read top module name (mixed - analog)
+        if: inputs.project_type == 'mixed'
+        uses: mikefarah/yq@v4
+        id: top_module_mixed
+        with:
+          cmd: echo TOP_MODULE=`yq '.project.top_module' caravel/info.yaml` > $GITHUB_OUTPUT
+      
+      - name: Create analog GDS (mixed)
+        if: inputs.project_type == 'mixed'
+        uses: TinyTapeout/tt-gds-action/custom_gds@ttsky25a
+        with:
+          top_module: ${{ steps.top_module_mixed.outputs.TOP_MODULE }}
+          gds_path: caravel/gds/${{ steps.top_module_mixed.outputs.TOP_MODULE }}.gds
+          lef_path: caravel/lef/${{ steps.top_module_mixed.outputs.TOP_MODULE }}.lef
+          verilog_path: caravel/src/project.v
+          output_suffix: "_analog"
+          working_directory: caravel
+      
+      - name: Build digital GDS (mixed)
+        if: inputs.project_type == 'mixed'
+        uses: TinyTapeout/tt-gds-action@ttsky25a
+        with:
+          pdk: sky130
+          tools-ref: ttsky25a
+          output_suffix: "_digital"
+          working_directory: caravel
+
+  precheck:
+    needs: gds
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Run Tiny Tapeout Precheck
+        uses: TinyTapeout/tt-gds-action/precheck@ttsky25a
+        with:
+          pdk: sky130
+          tools-ref: ttsky25a
+          working_directory: caravel
+
+  gl_test:
+    needs: gds
+    runs-on: ubuntu-24.04
+    # Only run GL test for digital or mixed projects
+    if: inputs.project_type == 'digital' || inputs.project_type == 'mixed'
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: GL test
+        uses: TinyTapeout/tt-gds-action/gl_test@ttsky25a
+        with:
+          pdk: sky130
+          working_directory: caravel
+
+  viewer:
+    needs: gds
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+    steps:
+      - uses: TinyTapeout/tt-gds-action/viewer@ttsky25a
+        with:
+          pdk: sky130
+          working_directory: caravel

@@ -23,4 +23,4 @@ set spice_netlist 1
 ## Library Paths
 append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/../../schematics
 append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/../../symbols
-append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/../../library
+append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/../../../../library

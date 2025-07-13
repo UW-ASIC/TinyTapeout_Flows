@@ -1,0 +1,80 @@
+name: CI
+on:
+  push:
+    paths:
+      - 'caravel/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+jobs:
+  detect_project_type:
+    runs-on: ubuntu-24.04
+    outputs:
+      has_analog: ${{ steps.check.outputs.has_analog }}
+      has_digital: ${{ steps.check.outputs.has_digital }}
+      project_type: ${{ steps.check.outputs.project_type }}
+      has_caravel: ${{ steps.check.outputs.has_caravel }}
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+      
+      - name: Check for caravel directory and detect project structure
+        id: check
+        run: |
+          # First check if caravel/ directory exists
+          if [ ! -d "caravel" ]; then
+            echo "::error::caravel/ directory not found. This workflow requires a caravel/ directory containing your project files."
+            echo "has_caravel=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          
+          echo "has_caravel=true" >> $GITHUB_OUTPUT
+          
+          HAS_ANALOG="false"
+          HAS_DIGITAL="false"
+          
+          if [ -d "analog" ]; then
+            HAS_ANALOG="true"
+          fi
+          
+          if [ -d "digital" ]; then
+            HAS_DIGITAL="true"
+          fi
+          
+          echo "has_analog=${HAS_ANALOG}" >> $GITHUB_OUTPUT
+          echo "has_digital=${HAS_DIGITAL}" >> $GITHUB_OUTPUT
+          
+          if [ "${HAS_ANALOG}" = "true" ] && [ "${HAS_DIGITAL}" = "true" ]; then
+            echo "project_type=mixed" >> $GITHUB_OUTPUT
+          elif [ "${HAS_ANALOG}" = "true" ]; then
+            echo "project_type=analog" >> $GITHUB_OUTPUT
+          elif [ "${HAS_DIGITAL}" = "true" ]; then
+            echo "project_type=digital" >> $GITHUB_OUTPUT
+          else
+            echo "project_type=unknown" >> $GITHUB_OUTPUT
+          fi
+
+  # Always run docs for any project type
+  docs:
+    needs: detect_project_type
+    if: needs.detect_project_type.outputs.project_type != 'unknown'
+    uses: ./.github/workflows/docs.yaml
+
+  # Always run GDS for any project type (handles mixed projects internally)
+  gds:
+    needs: detect_project_type
+    if: needs.detect_project_type.outputs.project_type != 'unknown'
+    uses: ./.github/workflows/gds.yaml
+    with:
+      project_type: ${{ needs.detect_project_type.outputs.project_type }}
+
+  # Only run for digital or mixed projects
+  fpga:
+    needs: detect_project_type
+    if: needs.detect_project_type.outputs.has_digital == 'true'
+    uses: ./.github/workflows/fpga.yaml
+
+  # Only run for digital or mixed projects
+  test:
+    needs: detect_project_type
+    if: needs.detect_project_type.outputs.has_digital == 'true'
+    uses: ./.github/workflows/test.yaml

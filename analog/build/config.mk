@@ -1,3 +1,0 @@
-PROJECT = template
-TOP_SCHEMATIC ?= inverter
-TOP_LAYOUT := $(TOP_SCHEMATIC)

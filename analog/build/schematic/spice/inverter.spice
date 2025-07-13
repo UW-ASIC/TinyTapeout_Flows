@@ -1,7 +1,0 @@
-** sch_path: /home/omare/Documents/UWASIC/Template/analog/schematics/inverter.sch
-.subckt inverter Vout VDD VSS Vin
-*.PININFO Vout:O VDD:B VSS:B Vin:I
-XM2 Vout Vin VDD VDD sky130_fd_pr__pfet_g5v0d10v5 L=0.5 W=1 nf=1 m=1
-XM1 Vout Vin VSS VSS sky130_fd_pr__nfet_g5v0d10v5 L=0.5 W=1 nf=1 m=1
-.ends
-.end

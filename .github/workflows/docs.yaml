@@ -1,0 +1,19 @@
+name: docs
+on:
+  workflow_dispatch:
+  workflow_call:
+jobs:
+  docs:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      # Reads info.yaml, and generates PDF datasheet from your project
+      # Uploads the pdf as an artifact
+      - name: Build docs
+        uses: TinyTapeout/tt-gds-action/docs@ttsky25a
+        with:
+          tools-ref: ttsky25a
+          working_directory: caravel
