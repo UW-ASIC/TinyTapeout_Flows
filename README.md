@@ -120,6 +120,7 @@ After creating projects, your directory structure will be:
 
 ```
 uwasic-template/
+├── .github/      # Automated workflows
 ├── shell.nix         # Nix environment configuration
 ├── flows/            # Project management system
 │   ├── Makefile      # Main project commands
@@ -131,13 +132,11 @@ uwasic-template/
 │       └── test/     # Testbenches and verification
 ├── analog/           # Analog design projects  
 │   ├── library/      # Shared analog IP library
-│   └── project_name/
-│       ├── build/    # Build system (layout, validation)
-│       ├── layout/   # Magic layout files
-│       ├── schematics/ # Xschem schematic files
-│       └── symbols/  # Xschem symbol files
+│   ├── build/        # Build system (layout, validation)
+│   ├── layout/       # Magic layout files
+│   ├── schematics/   # Xschem schematic files
+│   └── symbols/      # Xschem symbol files
 └── caravel/          # TinyTapeout submission package
-    ├── .github/      # Automated workflows
     ├── src/          # Verilog wrapper and sources
     ├── analog/       # Copied analog project files
     ├── docs/         # Documentation
@@ -151,7 +150,6 @@ uwasic-template/
    - Use `src/` directory for internal submodules
 
 2. **Analog Projects**:
-   - Can have child analog modules with `PARENT` parameter
    - Child modules automatically symlink `.gds` files to parent's `layout/dep/` directory
 
 3. **Mixed-Signal Projects**:
@@ -215,17 +213,16 @@ The analog flow uses Xschem for schematic capture and Magic for layout, with com
 #### Directory Structure
 ```
 analog/
-├── library/              # Shared analog IP library
-└── <project_name>/
-    ├── build/
-    │   ├── config.mk     # Project configuration
-    │   ├── layout/       # Layout tools
-    │   ├── schematic/    # Schematic tools
-    │   └── validation/   # DRC/LVS verification
-    ├── layout/           # Magic layout files (.mag)
-    ├── schematics/       # Xschem schematics (.sch)
-    │   └── testbenches/  # Testbench schematics
-    └── symbols/          # Xschem symbols (.sym)
+├── library/          # Shared analog IP library
+├── build/
+│   ├── config.mk     # Project configuration
+│   ├── layout/       # Layout tools
+│   ├── schematic/    # Schematic tools
+│   └── validation/   # DRC/LVS verification
+├── layout/           # Magic layout files (.mag)
+├── schematics/       # Xschem schematics (.sch)
+│   └── testbenches/  # Testbench schematics
+└── symbols/          # Xschem symbols (.sym)
 ```
 
 #### Workflows
@@ -385,10 +382,6 @@ make status
 # Create analog project
 make CreateProject PROJECT_NAME=amplifier PROJECT_TYPE=analog
 
-# Add child modules
-make AddModule MODULE_NAME=opamp MODULE_TYPE=analog PARENT=amplifier
-make AddModule MODULE_NAME=bias_circuit MODULE_TYPE=analog PARENT=amplifier
-
 # Create TinyTapeout integration
 make CreateCaravel PROJECT_NAME=tt_amplifier
 
@@ -402,8 +395,7 @@ make status
 make CreateProject PROJECT_NAME=mixed_adc PROJECT_TYPE=mixed
 
 # Add additional modules
-make AddModule MODULE_NAME=adc_core MODULE_TYPE=analog PARENT=mixed_adc
-make AddModule MODULE_NAME=digital_filter MODULE_TYPE=digital PARENT=mixed_adc
+make AddModule MODULE_NAME=digital_filter PARENT=mixed_adc
 
 # Create TinyTapeout integration
 make CreateCaravel PROJECT_NAME=tt_mixed_adc

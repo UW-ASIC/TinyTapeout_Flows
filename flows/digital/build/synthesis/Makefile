@@ -92,11 +92,6 @@ harden: create_config
 		cp ./runs/$(DESIGN_TOP)_full/final/gds/$(DESIGN_TOP).gds $(ANALOG_OUTPUT_DIR)/ 2>/dev/null || true; \
 		cp ./runs/$(DESIGN_TOP)_full/final/lef/$(DESIGN_TOP).lef $(ANALOG_OUTPUT_DIR)/ 2>/dev/null || true; \
 		printf "$(GREEN)[SUCCESS]$(NC) Digital outputs copied to analog project\n"; \
-	else \
-		mkdir -p ../../../output/; \
-		cp ./runs/$(DESIGN_TOP)_full/final/mag/$(DESIGN_TOP).mag ../../../output/; \
-		cp ./runs/$(DESIGN_TOP)_full/final/spice/$(DESIGN_TOP).spice ../../../output/; \
-		cp ./runs/$(DESIGN_TOP)_full/final/nl/$(DESIGN_TOP).nl.v ../../../output/; \
 	fi
 	rm -rf config.json
 	rm -rf runs/

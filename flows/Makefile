@@ -16,7 +16,7 @@ PROJECT_STATE := $(shell \
 		echo "unknown"; \
 	fi)
 
-.PHONY: CreateProject AddModule CreateCaravel DeleteAll status help _create_analog_structure _create_digital_structure
+.PHONY: CreateProject AddDigitalModule CreateCaravel DeleteAll status help _create_analog_structure _create_digital_structure
 
 help:
 	@echo "Project Management Makefile"
@@ -27,7 +27,7 @@ help:
 	@echo "  CreateProject PROJECT_NAME=name PROJECT_TYPE=<analog,digital,mixed>"
 	@echo ""
 	@echo "Module Addition:"
-	@echo "  AddModule MODULE_NAME=name MODULE_TYPE=<analog,digital> PARENT=<parent_module_name>"
+	@echo "  AddDigitalModule MODULE_NAME=name"
 	@echo ""
 	@echo "TinyTapeout Caravel Integration:"
 	@echo "  CreateCaravel PROJECT_NAME=name"
@@ -44,26 +44,17 @@ _create_analog_structure:
 		mkdir -p library output && \
 		git clone $(ANALOG_LIB_REPO) library/; \
 	fi
-	@cd $(ANALOG_DIR) && mkdir -p $(MODULE_NAME)/{build,layout,schematics,symbols}
-	@cd $(ANALOG_DIR)/$(MODULE_NAME)/build && \
+	@cd $(ANALOG_DIR) && mkdir -p {build,layout,schematics,symbols}
+	@cd $(ANALOG_DIR)/build && \
 		echo "# Analog Project Configuration" > config.mk && \
-		echo "PROJECT = $(MODULE_NAME)" >> config.mk && \
-		echo "TOP_SCHEMATIC = $(MODULE_NAME)" >> config.mk && \
-		echo "TOP_LAYOUT = $(MODULE_NAME)" >> config.mk && \
-		echo "PROJECT_TYPE = analog" >> config.mk
-	@if [ "$(PARENT)" != "" ]; then \
-		cd $(ANALOG_DIR)/$(MODULE_NAME)/build && \
-		echo "PARENT = $(PARENT)" >> config.mk; \
-	fi
-	@if [ "$(PROJECT_TYPE)" == "mixed"]; then \
-		echo "PARENT = $(PROJECT_NAME)" >> config.mk; \
-	fi
-	@cd $(ANALOG_DIR)/$(MODULE_NAME)/build && \
+		echo "PROJECT = $(PROJECT_NAME)" >> config.mk && \
+		echo "TOP_SCHEMATIC = $(PROJECT_NAME)" >> config.mk && \
+		echo "TOP_LAYOUT = $(PROJECT_NAME)" >> config.mk
+	@cd $(ANALOG_DIR)/build && \
 		mkdir -p {layout,schematic,validation} && \
-		cp -r ../../../flows/analog/build/layout/* ./layout/ 2>/dev/null || true && \
-		cp -r ../../../flows/analog/build/schematic/* ./schematic/ 2>/dev/null || true && \
-		cp -r ../../../flows/analog/build/validation/* ./validation/ 2>/dev/null || true
-	@cd $(ANALOG_DIR)/$(MODULE_NAME)/schematics && touch $(MODULE_NAME).sch
+		cp -r ../../flows/analog/build/layout/* ./layout/ 2>/dev/null || true && \
+		cp -r ../../flows/analog/build/schematic/* ./schematic/ 2>/dev/null || true && \
+		cp -r ../../flows/analog/build/validation/* ./validation/ 2>/dev/null || true
 
 # Internal target to create digital structure
 _create_digital_structure:
@@ -80,10 +71,6 @@ _create_digital_structure:
 		echo "TOPLEVEL_TB_MODULES := tb_$(MODULE_NAME)" >> config.mk && \
 		echo "MODULE_TESTS := test_$(MODULE_NAME)" >> config.mk && \
 		echo "PROJECT_TYPE = digital" >> config.mk
-	@if [ "$(PARENT)" != "" ]; then \
-		cd $(DIGITAL_DIR)/$(MODULE_NAME)/build && \
-		echo "PARENT = $(PARENT)" >> config.mk; \
-	fi
 	@cd $(DIGITAL_DIR)/$(MODULE_NAME)/build && \
 		mkdir -p {des_tb,lint,synthesis,verification} && \
 		cp -r ../../../flows/digital/build/des_tb/* ./des_tb/ 2>/dev/null || true && \
@@ -115,42 +102,30 @@ CreateProject:
 		exit 1; \
 	fi
 	@if [ "$(PROJECT_TYPE)" = "analog" ] || [ "$(PROJECT_TYPE)" = "mixed" ]; then \
-		$(MAKE) _create_analog_structure MODULE_NAME=$(PROJECT_NAME) PARENT=; \
+		$(MAKE) _create_analog_structure; \
 	fi
 	@if [ "$(PROJECT_TYPE)" = "digital" ] || [ "$(PROJECT_TYPE)" = "mixed" ]; then \
 		$(MAKE) _create_digital_structure MODULE_NAME=$(PROJECT_NAME) PARENT=; \
 	fi
 	@echo "Project $(PROJECT_NAME) created successfully!"
 
-AddModule:
-	@echo "Adding $(MODULE_TYPE) Module: $(MODULE_NAME)"
+AddDigitalModule:
+	@echo "Adding Digital Module: $(MODULE_NAME)"
 	@if [ "$(MODULE_NAME)" = "" ]; then \
 		echo "Error: MODULE_NAME parameter is required"; \
-		echo "Usage: make AddModule MODULE_NAME=name MODULE_TYPE=<analog,digital> [PARENT=parent]"; \
-		exit 1; \
-	fi
-	@if [ "$(MODULE_TYPE)" = "" ]; then \
-		echo "Error: MODULE_TYPE parameter is required"; \
-		echo "Usage: make AddModule MODULE_NAME=name MODULE_TYPE=<analog,digital> [PARENT=parent]"; \
-		exit 1; \
-	fi
-	@if [ "$(MODULE_TYPE)" != "analog" ] && [ "$(MODULE_TYPE)" != "digital" ]; then \
-		echo "Error: MODULE_TYPE must be analog or digital"; \
+		echo "Usage: make AddModule MODULE_NAME=name MODULE_TYPE=digital [PARENT=parent]"; \
 		exit 1; \
 	fi
 	@if [ "$(PROJECT_STATE)" = "none" ]; then \
 		echo "Error: Project hasn't been created yet, call CreateProject"; \
 		exit 1; \
 	fi
-	@if [ "$(PROJECT_STATE)" = "digital" ] && [ "$(MODULE_TYPE)" = "analog" ]; then \
-		echo "Error: Cannot add analog modules to digital project"; \
+	@if [ "$(PROJECT_STATE)" = "analog" ]; then \
+		echo "Error: Cannot add digital modules to analog project"; \
 		exit 1; \
 	fi
 	@if [ "$(PARENT)" != "" ]; then \
 		PARENT_FOUND=false; \
-		if [ -d "$(ANALOG_DIR)/$(PARENT)" ]; then \
-			PARENT_FOUND=true; \
-		fi; \
 		if [ -d "$(DIGITAL_DIR)/$(PARENT)" ]; then \
 			PARENT_FOUND=true; \
 		fi; \
@@ -159,12 +134,7 @@ AddModule:
 			exit 1; \
 		fi; \
 	fi
-	@if [ "$(MODULE_TYPE)" = "analog" ]; then \
-		$(MAKE) _create_analog_structure MODULE_NAME=$(MODULE_NAME) PARENT=$(PARENT); \
-	fi
-	@if [ "$(MODULE_TYPE)" = "digital" ]; then \
-		$(MAKE) _create_digital_structure MODULE_NAME=$(MODULE_NAME) PARENT=$(PARENT); \
-	fi
+	@$(MAKE) _create_digital_structure MODULE_NAME=$(MODULE_NAME)
 	@echo "Module $(MODULE_NAME) added successfully!"
 
 CreateCaravel:
@@ -215,19 +185,13 @@ status:
 		echo "Modules:"; \
 		echo "=================="; \
 		if [ -d "$(ANALOG_DIR)" ]; then \
-			echo "Analog Modules:"; \
-			for proj in $(ANALOG_DIR)/*/; do \
-				if [ -d "$$proj" ]; then \
-					PROJ_NAME=$$(basename "$$proj"); \
-					echo "  - $$PROJ_NAME (analog)"; \
-					if [ -f "$$proj/build/config.mk" ]; then \
-						PARENT=$$(grep "^PARENT" "$$proj/build/config.mk" | cut -d'=' -f2 | tr -d ' '); \
-						if [ "$$PARENT" != "" ]; then \
-							echo "    Parent: $$PARENT"; \
-						fi; \
-					fi; \
-				fi; \
-			done; \
+			echo "Analog Project:"; \
+			if [ -f "$(ANALOG_DIR)/build/config.mk" ]; then \
+				PROJ_NAME=$$(grep "^PROJECT" "$(ANALOG_DIR)/build/config.mk" | cut -d'=' -f2 | tr -d ' '); \
+				echo "  - $$PROJ_NAME (analog)"; \
+			else \
+				echo "  - analog project (no config found)"; \
+			fi; \
 		fi; \
 		if [ -d "$(DIGITAL_DIR)" ]; then \
 			echo "Digital Modules:"; \

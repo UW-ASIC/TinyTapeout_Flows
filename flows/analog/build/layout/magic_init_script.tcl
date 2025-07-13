@@ -3,7 +3,12 @@
 
 # Change the settings below to match your design:
 # ------------------------------------------------
-set TOP_LEVEL_CELL     ../../layout/tt_um_top_module
+if {[info exists TOP_LEVEL_CELL_NAME]} {
+    set TOP_LEVEL_CELL $TOP_LEVEL_CELL_NAME
+} else {
+    set TOP_LEVEL_CELL tt_um_top_module
+}
+
 set TEMPLATE_FILE      ./def/analog/tt_analog_1x2.def
 set POWER_STRIPE_WIDTH 2um                 ;# The minimum width is 1.2um
 
