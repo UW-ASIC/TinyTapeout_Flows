@@ -19,10 +19,11 @@ let
     configureFlags = [
       "--prefix=${placeholder "out"}"
     ];
+    enableParallelBuilding = true;
+
     buildPhase = ''
       make
     '';
-      
     installPhase = ''
       make install
     '';
@@ -40,7 +41,7 @@ let
       url = "http://opencircuitdesign.com/magic/archive/magic-${version}.tgz";
       sha256 = "sha256-HbkWS2cp1lz2UnAlbYbqYY7/7XrbUuq9axXrs8zt5FY=";
     };
-    nativeBuildInputs = [ pkgs.python3 ];
+    nativeBuildInputs = [ pkgs.python311 ];
     buildInputs = with pkgs; [
       cairo
       xorg.libX11
@@ -61,7 +62,7 @@ let
     postPatch = ''
       patchShebangs scripts/*
     '';
-    env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -O2";
     meta = with pkgs.lib; {
       description = "VLSI layout tool written in Tcl";
       homepage = "http://opencircuitdesign.com/magic/";
@@ -77,7 +78,7 @@ let
       url = "http://opencircuitdesign.com/netgen/archive/netgen-${version}.tgz";
       sha256 = "sha256-y2UBf564WefrDbIxSrFbNc1FxQfDdYzRORrJjRdkKrg=";
     };
-    nativeBuildInputs = [ pkgs.python3 ];
+    nativeBuildInputs = [ pkgs.python311 ];
     buildInputs = with pkgs; [
       tcl
       tk
@@ -88,6 +89,7 @@ let
       "--with-tcl=${pkgs.tcl}"
       "--with-tk=${pkgs.tk}"
     ];
+    NIX_CFLAGS_COMPILE = "-O2";
     postPatch = ''
       find . -name "*.sh" -exec patchShebangs {} \; || true
     '';
@@ -97,45 +99,49 @@ let
       license = licenses.mit;
       maintainers = with maintainers; [ thoughtpolice ];
     };
-
   };
 in pkgs.mkShell {
-  name = "template";
+  name = "eda-environment-v1.0";
   buildInputs = with pkgs; [
     # Builds
-    gnumake git python3
+    gnumake git python311 ccache
 
     # Digital design
     verilog slang verilator yosys gtkwave gaw
-    # Pytest and Cocoatb setup
-    python3Packages.pytest
-    python3Packages.cocotb
-    python3Packages.pip # requirements.txt
+    # Pytest and Cocotb setup
+    python311Packages.pytest
+    python311Packages.cocotb
+    python311Packages.pip # requirements.txt
 
     # OpenRoad + dep
-    openroad ruby stdenv.cc.cc.lib glibc expat zlib
-    python3Packages.rich
-    python3Packages.click
-    python3Packages.tkinter
-    python3Packages.pyyaml
+    openroad ruby stdenv.cc.cc.lib expat zlib
+    python311Packages.rich
+    python311Packages.click
+    python311Packages.tkinter
+    python311Packages.pyyaml
 
     # Analog Design
-    xschem ngspice netgen-old klayout magic-vlsi-old
-    # For Data
-    python3Packages.numpy
-    python3Packages.matplotlib
-    python3Packages.scipy
+    xschem ngspice xyce netgen-old klayout magic-vlsi-old vim
+    # For Data (python)
+    python311Packages.numpy
+    python311Packages.matplotlib
+    python311Packages.scipy
 
     # Graphics/GUI support
     xorg.libX11 xorg.libXpm xorg.libXt cairo xterm
     xorg.fontutil xorg.fontmiscmisc xorg.fontcursormisc dejavu_fonts liberation_ttf
   ];
+
   shellHook = ''
     export PROJECT_ROOT="$(pwd)"
     export TOOLS_DIR="$PROJECT_ROOT/.tools"
     mkdir -p "$TOOLS_DIR/bin"
     export PATH="$TOOLS_DIR/bin:$PATH"
-    export LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.glibc}/lib:${pkgs.expat}/lib:${pkgs.zlib}/lib:$LD_LIBRARY_PATH"
+    export CCACHE_DIR="$TOOLS_DIR/ccache"
+    export CC="ccache gcc"
+    export CXX="ccache g++"
+
+    export NIX_LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.expat}/lib:${pkgs.zlib}/lib"
     export FONTCONFIG_FILE=${pkgs.fontconfig.out}/etc/fonts/fonts.conf
     export FONTCONFIG_PATH=${pkgs.fontconfig.out}/etc/fonts
 
@@ -143,27 +149,30 @@ in pkgs.mkShell {
     export PDK_ROOT="$HOME/.volare"
     export PDK="sky130A"
     export KLAYOUT_PATH="$PDK_ROOT/$PDK/libs.tech/klayout"
-    
-    # XSchem Setup
     export XSCHEM_USER_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem"
     export XSCHEM_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem:${xschem}/share/xschem/xschem_library"
-    
-    # Setup Python virtual environment
+
+    # Setup Python virtual environment with Python 3.8
     export VENV_DIR="$PROJECT_ROOT/.venv"
-    if [ ! -d "$VENV_DIR" ]; then
-        echo "Creating Python virtual environment..."
-        python -m venv "$VENV_DIR"
+    if [ -z "$VIRTUAL_ENV" ] || [ "$VIRTUAL_ENV" != "$VENV_DIR" ]; then
+        if [ ! -d "$VENV_DIR" ]; then
+            echo "Creating Python virtual environment..."
+            python3 -m venv "$VENV_DIR"
+        fi
+        source "$VENV_DIR/bin/activate"
     fi
-    
-    # Activate virtual environment
-    source "$VENV_DIR/bin/activate"
-    pip install --upgrade \
-        volare==0.20.6 \
-        openlane==2.3.10 \
-        cace==2.6.0
-    
-    # Download xschem_sky130 library
-    volare enable --pdk sky130 0fe599b2afb6708d281543108caf8310912f54af
+
+    # Install additional Python packages with pinned versions
+    pip install --upgrade pip==21.3.1 setuptools==60.2.0 wheel==0.37.1
+    pip install --no-build-isolation \
+        volare==0.18.0 \
+        openlane==2.2.5 \
+        cace==2.5.3
+
+    if [ ! -d "$PDK_ROOT/$PDK" ]; then
+        echo "Downloading PDK..."
+        volare enable --pdk sky130 0fe599b2afb6708d281543108caf8310912f54af
+    fi
 
     # Create ngspice init file for faster sky130 simulation
     mkdir -p "$HOME/.xschem/simulations"
@@ -174,8 +183,11 @@ set ng_nomodcheck
 set num_threads=4
 EOF
     fi
-    
+
+    echo "=== EDA Environment v1.0 ==="
+    echo ""
     echo "System tools available:"
+    echo "  - Python: $(python --version)"
     echo "  - xschem: $(xschem --version 2>/dev/null || echo 'custom build')"
     echo "  - yosys: $(yosys -V 2>/dev/null | head -1 || echo 'unknown version')"
     echo "  - ngspice: $(ngspice --version 2>/dev/null | head -1 || echo 'unknown version')"

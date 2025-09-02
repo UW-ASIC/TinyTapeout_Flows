@@ -44,7 +44,7 @@ _create_analog_structure:
 		mkdir -p library output && \
 		git clone $(ANALOG_LIB_REPO) library/; \
 	fi
-	@cd $(ANALOG_DIR) && mkdir -p {build,layout,schematics,symbols}
+	@cd $(ANALOG_DIR) && mkdir -p {build,layout,schematics}
 	@cd $(ANALOG_DIR)/build && \
 		echo "# Analog Project Configuration" > config.mk && \
 		echo "PROJECT = $(PROJECT_NAME)" >> config.mk && \
