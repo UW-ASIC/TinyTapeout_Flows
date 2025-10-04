@@ -5,8 +5,9 @@ A template for mixed-signal ASIC design using open-source tools, featuring autom
 ### Overview
 
 The UWASIC template provides a structured approach to ASIC design with three distinct workflows:
+
 - **Digital flow**: RTL-to-GDS using OpenLane2
-- **Analog flow**: Schematic-driven layout using Xschem/Magic  
+- **Analog flow**: Schematic-driven layout using Xschem/Magic
 - **Mixed-signal flow**: Combined analog and digital designs
 - **TinyTapeout integration**: Tapeout-ready chip submission to Efabless
 
@@ -23,7 +24,7 @@ The UWASIC template provides a structured approach to ASIC design with three dis
 - [TinyTapeout Integration](#tinytapeout-integration)
 - [Workflows and CI/CD](#workflows-and-cicd)
 
-### Quick Start
+### Quick Start [**Do this first after Environment Setup**]
 
 Navigate to the `flows/` directory and choose your project type:
 
@@ -33,7 +34,7 @@ cd flows/
 # Digital-only project
 make CreateProject PROJECT_NAME=my_counter PROJECT_TYPE=digital
 
-# Analog-only project  
+# Analog-only project
 make CreateProject PROJECT_NAME=my_opamp PROJECT_TYPE=analog
 
 # Mixed-signal project (digital + analog)
@@ -41,6 +42,7 @@ make CreateProject PROJECT_NAME=my_processor PROJECT_TYPE=mixed
 ```
 
 ### View Available Commands
+
 ```bash
 make help                    # Show all available commands
 make status                  # Show current project modules and their parents
@@ -56,6 +58,7 @@ make DeleteAll              # Clean up all projects
 The template uses Nix to ensure consistent tool versions across all platforms.
 
 ###### Linux Installation
+
 ```bash
 # Install Nix (single-user)
 sh <(curl -L https://nixos.org/nix/install) --no-daemon
@@ -69,6 +72,7 @@ exec $SHELL
 ```
 
 ###### macOS Installation
+
 ```bash
 # Use Determinate Systems installer (handles macOS security)
 curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
@@ -82,6 +86,7 @@ echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 ```
 
 ###### Windows Installation (via WSL2)
+
 ```powershell
 # In PowerShell as Admin
 wsl --install
@@ -95,22 +100,25 @@ echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 ##### Entering the Nix Environment
 
 From the project root:
+
 ```bash
 nix-shell
 ```
 
 This provides all necessary tools:
+
 - **Digital**: OpenLane2, Yosys, Icarus Verilog, cocotb, slang
 - **Analog**: Xschem, Magic, ngspice, netgen, KLayout
-- **Verification**: CACE, OpenSTA
+- **Verification**: CACHE, OpenSTA
 
 ### Project Management
 
 #### Project States
 
 The template tracks project state automatically:
+
 - **`none`**: No projects created
-- **`digital`**: Digital-only project  
+- **`digital`**: Digital-only project
 - **`analog`**: Analog-only project
 - **`mixed`**: Combined digital + analog project
 
@@ -130,7 +138,7 @@ uwasic-template/
 │       ├── build/    # Build system (synthesis, verification)
 │       ├── src/      # RTL source files
 │       └── test/     # Testbenches and verification
-├── analog/           # Analog design projects  
+├── analog/           # Analog design projects
 │   ├── library/      # Shared analog IP library
 │   ├── build/        # Build system (layout, validation)
 │   ├── layout/       # Magic layout files
@@ -145,7 +153,7 @@ uwasic-template/
 
 #### Design Rules
 
-1. **Digital Projects**: 
+1. **Digital Projects**:
    - Can have child analog modules with `PARENT` parameter
    - Use `src/` directory for internal submodules
 
@@ -159,9 +167,11 @@ uwasic-template/
 ### Digital Workflow
 
 #### Overview
+
 The digital flow uses OpenLane2 for automated RTL-to-GDS conversion with comprehensive verification. However, the final conversion will be done with github workflows after caravel/ is formed and it is pushed.
 
 #### Directory Structure
+
 ```
 digital/
 └── <project_name>/
@@ -177,19 +187,24 @@ digital/
 
 #### Workflows
 
+##### If you haven't created it refer to the Quick-Start
+
 ##### 1. RTL Simulation
+
 ```bash
 cd digital/your_project/build/des_tb
 make test-rtl
 ```
 
 ##### 2. Linting
+
 ```bash
 cd digital/your_project/build/lint
 make lint
 ```
 
 ##### 3. Local Synthesis and Implementation [Delete its output before pushing]
+
 ```bash
 cd digital/your_project/build/synthesis
 make synthesis    # Synthesis only
@@ -197,10 +212,10 @@ make harden      # Full flow to GDS
 ```
 
 ##### 4. Verification
+
 ```bash
 cd digital/your_project/build/verification
 make verification
-```dule
 ```
 
 ---
@@ -208,9 +223,11 @@ make verification
 ### Analog Workflow
 
 #### Overview
+
 The analog flow uses Xschem for schematic capture and Magic for layout, with comprehensive DRC/LVS verification.
 
 #### Directory Structure
+
 ```
 analog/
 ├── library/          # Shared analog IP library
@@ -227,28 +244,34 @@ analog/
 
 #### Workflows
 
+##### If you haven't created it refer to the Quick-Start
+
 ##### 1. Schematic Capture
+
 ```bash
-cd analog/your_project/build/schematic
+cd analog/build/schematic
 make setup        # Organize files
 make schematic    # Open Xschem
 ```
 
 ##### 2. Layout Design
+
 ```bash
-cd analog/your_project/build/layout
+cd analog/build/layout
 make layout       # Open Magic
 ```
 
 ##### 3. SPICE Simulation
+
 ```bash
-cd analog/your_project/build/schematic
+cd analog/build/schematic
 make spice        # Run simulations
 ```
 
 ##### 4. Physical Verification
+
 ```bash
-cd analog/your_project/build/validation
+cd analog/build/validation
 make magic_test          # Magic DRC/LVS
 make klayout_test        # KLayout verification
 make full_verification   # Complete suite
@@ -277,6 +300,7 @@ make CreateCaravel PROJECT_NAME=tt_mixed_adc
 #### Project State Tracking
 
 The template automatically tracks project states and allows:
+
 - Multiple analog modules with parent-child relationships
 - Digital modules that implement TinyTapeout interface
 - Automatic integration of both domains in Caravel generation
@@ -289,19 +313,23 @@ TinyTapeout integration creates submission-ready packages for the Efabless shutt
 
 #### TinyTapeout's info.yaml
 
-#### Digital Projects  
+#### Digital Projects
+
 - **Interface**: Standard TinyTapeout digital interface (8 inputs, 8 outputs, 8 bidirectional)
 - **Tile Configuration**: 1x1 tiles for digital projects
 - **Testing**: Includes gate-level testing workflows
 
 #### Analog Projects
+
 - **Pin Assignment**: Uses `ua[5:0]` analog pins (configure count in `info.yaml`)
 - **Power Connections**: Includes `VGND`, `VDPWR`, and `VAPWR` connections
 - **Tile Configuration**: Defaults to 1x2 tiles for analog projects
 - **Pin Limits**: Up to 6 analog pins
+
 ##### Power Connections
 
 #### Mixed-Signal Projects
+
 - **Tile Configuration**: 2x2 tiles for mixed projects
 - **Analog Interface**: Proper `ua[]` pin assignments
 - **Digital Integration**: Complete TinyTapeout digital interface
@@ -324,12 +352,14 @@ make CreateCaravel PROJECT_NAME=my_chip
 ### Generated Workflows
 
 #### Universal Workflows (All Project Types)
+
 - **`gds.yaml`**: GDS generation and precheck using TinyTapeout actions
 - **`docs.yaml`**: Documentation generation workflow
 
 #### Digital/Mixed-Signal Workflows
+
 - **`test.yaml`**: RTL simulation using Icarus Verilog + cocotb
-- **`fpga.yaml`**: FPGA implementation for ICE40UP5K platform  
+- **`fpga.yaml`**: FPGA implementation for ICE40UP5K platform
 
 #### Workflow Features
 
@@ -344,16 +374,19 @@ make CreateCaravel PROJECT_NAME=my_chip
 #### Debug Commands
 
 Check current project state:
+
 ```bash
 make status
 ```
 
 View all available commands:
+
 ```bash
 make help
 ```
 
 Clean up and restart:
+
 ```bash
 make DeleteAll
 ```
@@ -363,6 +396,7 @@ make DeleteAll
 ### Examples
 
 #### Complete Digital Project Example
+
 ```bash
 # Create digital project
 make CreateProject PROJECT_NAME=counter_demo PROJECT_TYPE=digital
@@ -378,6 +412,7 @@ make status
 ```
 
 #### Complete Analog Project Example
+
 ```bash
 # Create analog project
 make CreateProject PROJECT_NAME=amplifier PROJECT_TYPE=analog
@@ -390,6 +425,7 @@ make status
 ```
 
 #### Complete Mixed-Signal Project Example
+
 ```bash
 # Create mixed-signal project
 make CreateProject PROJECT_NAME=mixed_adc PROJECT_TYPE=mixed

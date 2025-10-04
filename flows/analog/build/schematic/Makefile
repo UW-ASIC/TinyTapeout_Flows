@@ -43,7 +43,6 @@ update-pdk:
 setup: update-pdk
 	@echo "Setting up symbol files..."
 	@echo "Ignore errors below this ================"
-	@mv ../../schematics/*.sym ../../symbols/ 2>/dev/null || true; \
 	mv ../../schematics/*_tb.sch ../../schematics/testbenches/ 2>/dev/null || true; \
 	mv spice/*_tb.spice spice/testbenches/ 2>/dev/null || true;
 	@echo "Ignore errors above this ================"
