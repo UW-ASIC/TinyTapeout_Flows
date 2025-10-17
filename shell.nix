@@ -119,7 +119,7 @@ in
       ccache
 
       # Digital design
-      verilog
+      # verilog # Breaks Mac
       slang
       verilator
       yosys
@@ -127,7 +127,7 @@ in
       gaw
       # Pytest and Cocotb setup
       python312Packages.pytest
-      python312Packages.cocotb
+      # python312Packages.cocotb # Breaks Mac
       python312Packages.pip # requirements.txt
 
       # OpenRoad + dep
@@ -144,7 +144,6 @@ in
       # Analog Design
       xschem
       ngspice
-      xyce
       netgen-old
       klayout
       magic-vlsi-old
