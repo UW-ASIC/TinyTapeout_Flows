@@ -83,6 +83,39 @@ brew install --cask xquartz
 # Enable flakes
 mkdir -p ~/.config/nix
 echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+
+# Install Rosetta 2 for Apple Silicon
+softwareupdate --install-rosetta --agree-to-license
+
+# Build and setup linux-builder
+nix build nixpkgs#darwin.linux-builder
+sudo ./result/bin/create-builder
+
+# Automatically add export to shell config
+export_line='export NIX_CONFIG="system = aarch64-linux"'
+
+case $SHELL in
+    */bash)
+        echo "$export_line" >> ~/.bashrc
+        echo "Added to ~/.bashrc"
+        ;;
+    */zsh)
+        echo "$export_line" >> ~/.zshrc
+        echo "Added to ~/.zshrc"
+        ;;
+    */fish)
+        echo "set -gx NIX_CONFIG \"system = aarch64-linux\"" >> ~/.config/fish/config.fish
+        echo "Added to ~/.config/fish/config.fish"
+        ;;
+    *)
+        echo "Unknown shell: $SHELL"
+        echo "Please manually add to your shell config:"
+        echo 'export NIX_CONFIG="system = aarch64-linux"'
+        ;;
+esac
+
+# Reload shell
+exec $SHELL
 ```
 
 ###### Windows Installation (via WSL2)
