@@ -102,51 +102,57 @@ in
       inkscape
     ];
 
+    env = {
+      NIX_ENFORCE_PURITY = "0";
+
+      # === CCACHE SETUP ===
+      CC = "ccache gcc";
+      CXX = "ccache g++";
+
+      # === RUST SETUP ===
+      RUSTUP_HOME = "$HOME/.rustup";
+      CARGO_HOME = "$HOME/.cargo";
+
+      # === PYTHON/C PATHS ===
+      CPATH = "${pkgs.python312}/include/python3.12";
+      LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib/libclang.so";
+
+      LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
+        pkgs.stdenv.cc.cc.lib
+        pkgs.python312
+        selfBuiltPackages.ngspice-shared
+        pkgs.zlib
+      ];
+
+      PKG_CONFIG_PATH = "${selfBuiltPackages.ngspice-shared}/lib/pkgconfig";
+
+      # === PDK/VOLARE SETUP ===
+      PDK_ROOT = "$HOME/.volare";
+      PDK_VERSION = "fa87f8f4bbcc7255b6f0c0fb506960f531ae2392";
+      PDK = "sky130A";
+      KLAYOUT_PATH = "$PDK_ROOT/$PDK/libs.tech/klayout";
+      XSCHEM_USER_LIBRARY_PATH = "$PDK_ROOT/$PDK/libs.tech/xschem";
+      XSCHEM_LIBRARY_PATH = "$PDK_ROOT/$PDK/libs.tech/xschem:${pkgs.xschem}/share/xschem/xschem_library";
+    };
+
     shellHook = ''
       export PROJECT_ROOT="$(pwd)"
-
-      # Ccache setup
       export CCACHE_DIR="$PROJECT_ROOT/.tools/ccache"
-      export CC="ccache gcc"
-      export CXX="ccache g++"
+      export VENV_DIR="$PROJECT_ROOT/.venv"
 
-      # Set up Rust nightly
-      export RUSTUP_HOME="$HOME/.rustup"
-      export CARGO_HOME="$HOME/.cargo"
+      # === Rust Toolchain Setup ===
       export PATH="$CARGO_HOME/bin:$PATH"
-
-      # Manual path setup for self-built ngspice-shared and python
-      export NIX_ENFORCE_PURITY=0
-      export CPATH="${pkgs.python312}/include/python3.12:$CPATH"
-      export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib/libclang.so"
-      export NIX_LD_LIBRARY_PATH="${pkgs.python312}/lib:${selfBuiltPackages.ngspice-shared}/lib:$NIX_LD_LIBRARY_PATH"
-      export PKG_CONFIG_PATH="${selfBuiltPackages.ngspice-shared}/lib/pkgconfig:$PKG_CONFIG_PATH"
-
-      # PDK setup (essential variables for EDA tools)
-      export PDK_ROOT="$HOME/.volare"
-      export PDK_VERSION="fa87f8f4bbcc7255b6f0c0fb506960f531ae2392"
-      export PDK="sky130A"
-      export KLAYOUT_PATH="$PDK_ROOT/$PDK/libs.tech/klayout"
-      export XSCHEM_USER_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem"
-      export XSCHEM_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem:${pkgs.xschem}/share/xschem/xschem_library"
-
-      # Install Rust nightly if not already installed (Keep this imperative logic)
       if ! rustc --version &>/dev/null; then
         echo "Installing Rust nightly toolchain..."
         rustup install nightly
         rustup default nightly
       fi
 
-      # Setup Python virtual environment with Python 3.12 (Keep this imperative logic)
-      export VENV_DIR="$PROJECT_ROOT/.venv"
-
-      # Simplified check for a valid venv
+      # === PYTHON VENV SETUP ===
       VENV_VALID=false
       if [ -x "$VENV_DIR/bin/python3" ]; then
           VENV_VALID=true
       fi
-
-      # Recreate venv if invalid or doesn't exist
       if [ "$VENV_VALID" = false ]; then
           if [ -d "$VENV_DIR" ]; then
               echo "Existing venv is invalid/broken, removing..."
@@ -156,12 +162,11 @@ in
           python3 -m venv "$VENV_DIR"
       fi
 
-      # Activate and install dependencies
+      # === Python Dependencies Installation ===
       if [ -z "$VIRTUAL_ENV" ] || [ "$VIRTUAL_ENV" != "$VENV_DIR" ]; then
           echo "Activating virtual environment..."
           source "$VENV_DIR/bin/activate"
       fi
-
       if [ -n "$VIRTUAL_ENV" ]; then
           echo "Installing Python packages from requirements.txt..."
           python -m pip install --upgrade pip setuptools wheel maturin
@@ -175,20 +180,17 @@ in
           done
       fi
 
-      # Clean up old PDK versions (Keep this imperative logic)
+      # === PDK SETUP WITH VOLARE ===
       if [ -d "$PDK_ROOT/volare/sky130/versions" ]; then
           echo "Cleaning up old PDK versions (keeping $PDK_VERSION)..."
           cd "$PDK_ROOT/volare/sky130/versions"
-          # Find and remove directories that are NOT the current PDK version
           find . -maxdepth 1 -mindepth 1 -type d ! -name "$PDK_VERSION" -exec echo "  Removing old version: {}" \; -exec rm -rf {} \;
-          # Also clean up the main cache directory in case it's symbolic linked to an old version
           if [ ! -d "$PDK_ROOT/$PDK" ]; then
              echo "  Removing potentially invalid cache link: ~/.volare"
              rm -rf "$HOME/.volare"
           fi
           cd "$PROJECT_ROOT"
       fi
-
       # Enable the PDK with volare
       volare enable --pdk sky130 "$PDK_VERSION"
 
@@ -196,7 +198,6 @@ in
       echo ""
       echo "System tools available:"
       echo "  - Python: $(python --version)"
-      # NOTE: The echo lines below rely on xschem/magic-vlsi being available/defined.
       echo "  - xschem: $(xschem --version 2>/dev/null || echo 'custom build')"
       echo "  - yosys: $(yosys -V 2>/dev/null | head -1 || echo 'unknown version')"
       echo "  - verilator: $(verilator --version 2>/dev/null | head -1 || echo 'unknown version')"
