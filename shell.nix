@@ -118,7 +118,7 @@ in
       python312Packages.wheel
 
       # OpenRoad + dep
-      openroad
+      # openroad
       ruby
       stdenv.cc.cc.lib
       expat
@@ -150,43 +150,45 @@ in
     env = {
       NIX_ENFORCE_PURITY = "0";
 
-      # === CCACHE SETUP ===
-      CC = "ccache gcc";
-      CXX = "ccache g++";
-
-      # === PYTHON/C PATHS ===
-      CPATH = "${pkgs.python312}/include/python3.12";
-      LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib/libclang.so";
-
       LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
         pkgs.stdenv.cc.cc.lib
         pkgs.python312
         selfBuiltPackages.ngspice-shared
         pkgs.zlib
       ];
-
-      PKG_CONFIG_PATH = "${selfBuiltPackages.ngspice-shared}/lib/pkgconfig";
-
-      # === PDK/VOLARE SETUP ===
-      PDK_VERSION = "fa87f8f4bbcc7255b6f0c0fb506960f531ae2392";
-      PDK = "sky130A";
     };
 
     shellHook = ''
-      # === Environment Variables Setup ===
-      export RUSTUP_HOME = "$HOME/.rustup";
-      export CARGO_HOME = "$HOME/.cargo";
-      export PDK_ROOT = "$HOME/.volare";
-      export KLAYOUT_PATH = "$PDK_ROOT/$PDK/libs.tech/klayout";
-      export XSCHEM_USER_LIBRARY_PATH = "$PDK_ROOT/$PDK/libs.tech/xschem";
-      export XSCHEM_LIBRARY_PATH = "$PDK_ROOT/$PDK/libs.tech/xschem:${pkgs.xschem}/share/xschem/xschem_library";
-
       export PROJECT_ROOT="$(pwd)"
+
+      # === Environment Variables Setup ===
+      # Rust
+      export RUSTUP_HOME="$HOME/.rustup"
+      export CARGO_HOME="$HOME/.cargo"
+      export PATH="$CARGO_HOME/bin:$PATH"
+
+      # C/C++
+      export CC="ccache gcc"
+      export CXX="ccache g++"
+      export CPATH="${pkgs.python312}/include/python3.12"
+      export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib/libclang.so"
+      export PKG_CONFIG_PATH="${selfBuiltPackages.ngspice-shared}/lib/pkgconfig"
       export CCACHE_DIR="$PROJECT_ROOT/.tools/ccache"
+
+      # Python
       export VENV_DIR="$PROJECT_ROOT/.venv"
 
+      # === PDK Configuration ===
+      export PDK="sky130A"
+      export PDK_VERSION="fa87f8f4bbcc7255b6f0c0fb506960f531ae2392"
+      export PDK_ROOT="$HOME/.volare"
+
+      # === EDA Tools Configuration ===
+      export KLAYOUT_PATH="$PDK_ROOT/$PDK/libs.tech/klayout"
+      export XSCHEM_USER_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem"
+      export XSCHEM_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem:${selfBuiltPackages.xschem_with_mac_support}/share/xschem/xschem_library"
+
       # === Rust Toolchain Setup ===
-      export PATH="$CARGO_HOME/bin:$PATH"
       if ! rustc --version &>/dev/null; then
         echo "Installing Rust nightly toolchain..."
         rustup install nightly
