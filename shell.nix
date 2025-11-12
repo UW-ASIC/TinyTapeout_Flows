@@ -1,4 +1,18 @@
-{pkgs ? import <nixpkgs> {}}: let
+{
+  pkgs ?
+    import <nixpkgs> {
+      overlays = [
+        (self: super: {
+          or-tools = super.or-tools.overrideAttrs (old: {
+            doCheck = false;
+          });
+          openroad = super.openroad.overrideAttrs (old: {
+            doCheck = false;
+          });
+        })
+      ];
+    },
+}: let
   selfBuiltPackages = {
     ngspice-shared = pkgs.ngspice.override {
       withNgshared = true;
