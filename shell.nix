@@ -131,6 +131,13 @@ in
       ccache
       pkg-config
 
+      # C compilation dependencies
+      gcc
+      glibc.dev
+      libffi.dev
+      clang
+      llvmPackages.libclang
+
       # Digital design
       slang
       verilator
@@ -186,6 +193,12 @@ in
       export CARGO_HOME="$HOME/.cargo"
       export PATH="$CARGO_HOME/bin:$PATH"
 
+      # Environment for bindgen
+      export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib"
+      export BINDGEN_EXTRA_CLANG_ARGS="-I${pkgs.glibc.dev}/include -I${selfBuiltPackages.ngspice-shared}/include"
+      export NIX_ENFORCE_PURITY=0
+      unset NIX_ENFORCE_NO_NATIVE
+
       # Python and C compilation paths
       export CPATH="${pkgs.python312}/include/python3.12:${selfBuiltPackages.ngspice-shared}/include:$CPATH"
       export NIX_LD_LIBRARY_PATH="${pkgs.python312}/lib:${selfBuiltPackages.ngspice-shared}/lib:$NIX_LD_LIBRARY_PATH"
@@ -196,6 +209,7 @@ in
         pkgs.stdenv.cc.cc.lib
         pkgs.expat
         pkgs.zlib
+        pkgs.glibc
       ]}
       export FONTCONFIG_FILE=${pkgs.fontconfig.out}/etc/fonts/fonts.conf
       export FONTCONFIG_PATH=${pkgs.fontconfig.out}/etc/fonts
@@ -250,6 +264,13 @@ in
           python -m pip install --upgrade pip setuptools wheel maturin
           python -m pip install -r "$PROJECT_ROOT/requirements.txt"
       fi
+
+      for pkg in analog/library/dep_library/gmid analog/library/dep_library/UWASIC-ALG; do
+          if [ -d "$PROJECT_ROOT/$pkg" ]; then
+              echo "Installing editable package: $pkg"
+              python -m pip install -e "$PROJECT_ROOT/$pkg"
+          fi
+      done
 
       # Clean up old PDK versions (keep only the current one)
       if [ -d "$PDK_ROOT/volare/sky130/versions" ]; then
