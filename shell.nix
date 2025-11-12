@@ -42,6 +42,51 @@
         maintainers = with maintainers; [thoughtpolice];
       };
     };
+
+    xschem_with_mac_support = pkgs.stdenv.mkDerivation rec {
+      name = "xschem";
+      version = "3.4.7";
+      src = pkgs.fetchFromGitHub {
+        owner = "StefanSchippers";
+        repo = "xschem";
+        rev = "3.4.7";
+        sha256 = "sha256-ye97VJQ+2F2UbFLmGrZ8xSK9xFeF+Yies6fJKurPOD0=";
+      };
+
+      nativeBuildInputs =
+        [
+          pkgs.bison
+          pkgs.flex
+          pkgs.pkg-config
+        ]
+        ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+          pkgs.fixDarwinDylibNames
+        ];
+      buildInputs = with pkgs; [
+        cairo
+        xorg.libX11
+        xorg.libXpm
+        tcl
+        tk
+      ];
+      enableParallelBuilding = true;
+      NIX_CFLAGS_COMPILE = "-O2";
+      hardeningDisable = ["format"];
+      meta = with pkgs.lib; {
+        description = "Schematic capture and netlisting EDA tool";
+        longDescription = ''
+          Xschem is a schematic capture program, it allows creation of
+          hierarchical representation of circuits with a top down approach.
+          By focusing on interfaces, hierarchy and instance properties a
+          complex system can be described in terms of simpler building
+          blocks. A VHDL or Verilog or Spice netlist can be generated from
+          the drawn schematic, allowing the simulation of the circuit.
+        '';
+        homepage = "https://xschem.sourceforge.io/stefan/";
+        license = licenses.gpl2Plus;
+        maintainers = with maintainers; [fbeffa];
+      };
+    };
   };
 in
   pkgs.mkShell {
@@ -80,7 +125,7 @@ in
       zlib
 
       # Analog Design
-      xschem
+      selfBuiltPackages.xschem_with_mac_support
       selfBuiltPackages.ngspice-shared
       ngspice
       selfBuiltPackages.netgen
@@ -109,10 +154,6 @@ in
       CC = "ccache gcc";
       CXX = "ccache g++";
 
-      # === RUST SETUP ===
-      RUSTUP_HOME = "$HOME/.rustup";
-      CARGO_HOME = "$HOME/.cargo";
-
       # === PYTHON/C PATHS ===
       CPATH = "${pkgs.python312}/include/python3.12";
       LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib/libclang.so";
@@ -127,15 +168,19 @@ in
       PKG_CONFIG_PATH = "${selfBuiltPackages.ngspice-shared}/lib/pkgconfig";
 
       # === PDK/VOLARE SETUP ===
-      PDK_ROOT = "$HOME/.volare";
       PDK_VERSION = "fa87f8f4bbcc7255b6f0c0fb506960f531ae2392";
       PDK = "sky130A";
-      KLAYOUT_PATH = "$PDK_ROOT/$PDK/libs.tech/klayout";
-      XSCHEM_USER_LIBRARY_PATH = "$PDK_ROOT/$PDK/libs.tech/xschem";
-      XSCHEM_LIBRARY_PATH = "$PDK_ROOT/$PDK/libs.tech/xschem:${pkgs.xschem}/share/xschem/xschem_library";
     };
 
     shellHook = ''
+      # === Environment Variables Setup ===
+      export RUSTUP_HOME = "$HOME/.rustup";
+      export CARGO_HOME = "$HOME/.cargo";
+      export PDK_ROOT = "$HOME/.volare";
+      export KLAYOUT_PATH = "$PDK_ROOT/$PDK/libs.tech/klayout";
+      export XSCHEM_USER_LIBRARY_PATH = "$PDK_ROOT/$PDK/libs.tech/xschem";
+      export XSCHEM_LIBRARY_PATH = "$PDK_ROOT/$PDK/libs.tech/xschem:${pkgs.xschem}/share/xschem/xschem_library";
+
       export PROJECT_ROOT="$(pwd)"
       export CCACHE_DIR="$PROJECT_ROOT/.tools/ccache"
       export VENV_DIR="$PROJECT_ROOT/.venv"
