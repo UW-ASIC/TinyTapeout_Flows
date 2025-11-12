@@ -113,11 +113,6 @@
         maintainers = with maintainers; [thoughtpolice];
       };
     };
-
-    openroad-notest = pkgs.openroad.overrideAttrs (oldAttrs: {
-      doCheck = false;
-      doInstallCheck = false;
-    });
   };
 in
   pkgs.mkShell {
@@ -150,7 +145,7 @@ in
       python312Packages.wheel
 
       # OpenRoad + dep
-      selfBuiltPackages.openroad-notest
+      openroad
       ruby
       stdenv.cc.cc.lib
       expat
