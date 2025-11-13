@@ -125,6 +125,7 @@ in
       ruby
       stdenv.cc.cc.lib
       expat
+      swig
       zlib
 
       # Analog Design
