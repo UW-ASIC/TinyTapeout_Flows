@@ -9,6 +9,10 @@
     },
 }: let
   selfBuiltPackages = {
+    # zimpl_fixed = pkgs.zimpl.overrideAttrs (oldAttrs: {
+    #   doCheck = !pkgs.stdenv.hostPlatform.isDarwin;
+    # });
+
     ngspice-shared = pkgs.ngspice.override {
       withNgshared = true;
     };
@@ -105,7 +109,6 @@ in
       clang
       llvmPackages.libclang
       libffi.dev
-      swig
 
       # Digital design
       slang
@@ -217,8 +220,8 @@ in
       fi
       if [ -n "$VIRTUAL_ENV" ]; then
           echo "Installing Python packages from requirements.txt..."
-          python -m pip install --upgrade pip setuptools wheel maturin
-          python -m pip install -r "$PROJECT_ROOT/requirements.txt"
+          python -m pip install --upgrade pip setuptools wheel maturin cace
+          python -m pip install --no-build-isolation -r "$PROJECT_ROOT/requirements.txt"
 
           for pkg in analog/library/dep_library/gmid analog/library/dep_library/UWASIC-ALG; do
               if [ -d "$PROJECT_ROOT/$pkg" ]; then
