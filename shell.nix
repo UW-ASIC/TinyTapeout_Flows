@@ -105,6 +105,7 @@ in
       clang
       llvmPackages.libclang
       libffi.dev
+      swig
 
       # Digital design
       slang
