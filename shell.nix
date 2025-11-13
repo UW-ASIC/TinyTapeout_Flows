@@ -9,10 +9,6 @@
     },
 }: let
   selfBuiltPackages = {
-    # zimpl_fixed = pkgs.zimpl.overrideAttrs (oldAttrs: {
-    #   doCheck = !pkgs.stdenv.hostPlatform.isDarwin;
-    # });
-
     ngspice-shared = pkgs.ngspice.override {
       withNgshared = true;
     };
@@ -47,7 +43,7 @@
       };
     };
 
-    xschem_with_mac_support = pkgs.stdenv.mkDerivation rec {
+    xschem = pkgs.stdenv.mkDerivation rec {
       name = "xschem";
       version = "3.4.7";
       src = pkgs.fetchFromGitHub {
@@ -67,11 +63,15 @@
           pkgs.fixDarwinDylibNames
         ];
       buildInputs = with pkgs; [
-        cairo
-        xorg.libX11
-        xorg.libXpm
         tcl
         tk
+        xorg.libX11
+        xorg.libXpm
+        cairo
+        readline
+        flex
+        bison
+        zlib
       ];
       enableParallelBuilding = true;
       NIX_CFLAGS_COMPILE = "-O2";
@@ -101,8 +101,8 @@ in
       cargo
       gnumake
       git
+      python312
       ccache
-      pkg-config
 
       # C compilation dependencies
       gcc
@@ -111,28 +111,27 @@ in
       libffi.dev
 
       # Digital design
+      iverilog
       slang
       verilator
       yosys
       gtkwave
-      python312
       python312Packages.pip
       python312Packages.numpy
       python312Packages.setuptools
       python312Packages.wheel
 
-      # OpenRoad + dep
-      # openroad
+      # Openlane Dependencies
       ruby
       stdenv.cc.cc.lib
       expat
       zlib
 
       # Analog Design
-      selfBuiltPackages.xschem_with_mac_support
+      selfBuiltPackages.xschem
       selfBuiltPackages.ngspice-shared
-      ngspice
       selfBuiltPackages.netgen
+      ngspice
       klayout
       magic-vlsi
       vim
@@ -153,34 +152,20 @@ in
 
     env = {
       NIX_ENFORCE_PURITY = "0";
-
-      LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
-        pkgs.stdenv.cc.cc.lib
-        pkgs.python312
-        selfBuiltPackages.ngspice-shared
-        pkgs.zlib
-      ];
     };
 
     shellHook = ''
       export PROJECT_ROOT="$(pwd)"
 
       # === Environment Variables Setup ===
-      # Rust
-      export RUSTUP_HOME="$HOME/.rustup"
-      export CARGO_HOME="$HOME/.cargo"
-      export PATH="$CARGO_HOME/bin:$PATH"
-
-      # C/C++
       export CC="ccache gcc"
       export CXX="ccache g++"
+      export CCACHE_DIR="$PROJECT_ROOT/.tools/ccache"
+
+      # === Rust-Python Build Configuration ===
       export CPATH="${pkgs.python312}/include/python3.12"
       export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib/libclang.so"
       export PKG_CONFIG_PATH="${selfBuiltPackages.ngspice-shared}/lib/pkgconfig"
-      export CCACHE_DIR="$PROJECT_ROOT/.tools/ccache"
-
-      # Python
-      export VENV_DIR="$PROJECT_ROOT/.venv"
 
       # === PDK Configuration ===
       export PDK="sky130A"
@@ -190,46 +175,35 @@ in
       # === EDA Tools Configuration ===
       export KLAYOUT_PATH="$PDK_ROOT/$PDK/libs.tech/klayout"
       export XSCHEM_USER_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem"
-      export XSCHEM_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem:${selfBuiltPackages.xschem_with_mac_support}/share/xschem/xschem_library"
+      export XSCHEM_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem:${selfBuiltPackages.xschem}/share/xschem/xschem_library"
 
       # === Rust Toolchain Setup ===
+      export RUSTUP_HOME="$HOME/.rustup"
+      export CARGO_HOME="$HOME/.cargo"
+      export PATH="$CARGO_HOME/bin:$PATH"
       if ! rustc --version &>/dev/null; then
         echo "Installing Rust nightly toolchain..."
         rustup install nightly
         rustup default nightly
       fi
 
-      # === PYTHON VENV SETUP ===
-      VENV_VALID=false
-      if [ -x "$VENV_DIR/bin/python3" ]; then
-          VENV_VALID=true
-      fi
-      if [ "$VENV_VALID" = false ]; then
-          if [ -d "$VENV_DIR" ]; then
-              echo "Existing venv is invalid/broken, removing..."
-              rm -rf "$VENV_DIR"
-          fi
-          echo "Creating Python virtual environment..."
-          python3 -m venv "$VENV_DIR"
-      fi
-
       # === Python Dependencies Installation ===
+      export VENV_DIR="$PROJECT_ROOT/.venv"
       if [ -z "$VIRTUAL_ENV" ] || [ "$VIRTUAL_ENV" != "$VENV_DIR" ]; then
-          echo "Activating virtual environment..."
+          if [ ! -d "$VENV_DIR" ]; then
+              echo "Creating Python virtual environment..."
+              python3 -m venv "$VENV_DIR"
+          fi
           source "$VENV_DIR/bin/activate"
       fi
-      if [ -n "$VIRTUAL_ENV" ]; then
-          echo "Installing Python packages from requirements.txt..."
-          python -m pip install --upgrade pip setuptools wheel maturin cace
-          python -m pip install --no-build-isolation -r "$PROJECT_ROOT/requirements.txt"
-
-          for pkg in analog/library/dep_library/gmid analog/library/dep_library/UWASIC-ALG; do
-              if [ -d "$PROJECT_ROOT/$pkg" ]; then
-                  echo "Installing editable package: $pkg"
-                  python -m pip install -e "$PROJECT_ROOT/$pkg"
-              fi
-          done
-      fi
+      pip install --upgrade pip==24.2 setuptools==75.1.0 wheel==0.44.0
+      pip install --no-build-isolation -r "$PROJECT_ROOT/requirements.txt"
+      for pkg in analog/library/dep_library/gmid analog/library/dep_library/UWASIC-ALG; do
+          if [ -d "$PROJECT_ROOT/$pkg" ]; then
+              echo "Installing editable package: $pkg"
+              python -m pip install -e "$PROJECT_ROOT/$pkg"
+          fi
+      done
 
       # === PDK SETUP WITH VOLARE ===
       if [ -d "$PDK_ROOT/volare/sky130/versions" ]; then
