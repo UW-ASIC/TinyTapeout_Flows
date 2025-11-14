@@ -67,28 +67,3 @@ jobs:
       - name: Build and test xschem
         run: |
           nix-shell --run "xschem --version"
-
-  build-nixos:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v30
-        with:
-          install_url: https://releases.nixos.org/nix/nix-${{ env.NIX_VERSION }}/install
-          extra_nix_config: |
-            experimental-features = nix-command flakes
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-
-      - name: Enter dev shell and test xschem
-        run: |
-          nix-shell --run "xschem --version"
-
-      - name: Test netgen
-        run: |
-          nix-shell --run "netgen --version || echo 'netgen available'"
-
-      - name: Test ngspice
-        run: |
-          nix-shell --run "ngspice --version || echo 'ngspice available'"
