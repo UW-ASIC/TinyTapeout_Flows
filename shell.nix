@@ -63,11 +63,11 @@
           pkgs.fixDarwinDylibNames
         ];
       buildInputs = with pkgs; [
-        tcl
-        tk
+        cairo
         xorg.libX11
         xorg.libXpm
-        cairo
+        tcl
+        tk
       ];
       enableParallelBuilding = true;
       NIX_CFLAGS_COMPILE = "-O2";
