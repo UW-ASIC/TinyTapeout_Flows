@@ -55,9 +55,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Nix (Determinate Systems)
+      - name: Install Nix
         run: |
-          curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
+          curl -L https://nixos.org/nix/install | sh -s -- --daemon
+
+      - name: Configure Nix
+        run: |
+          sudo mkdir -p /etc/nix
+          echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.conf
+
+      - name: Restart Nix daemon
+        run: |
+          sudo launchctl kickstart -k system/org.nixos.nix-daemon
 
       - name: Install XQuartz
         run: |
