@@ -68,10 +68,6 @@
         xorg.libX11
         xorg.libXpm
         cairo
-        readline
-        flex
-        bison
-        zlib
       ];
       enableParallelBuilding = true;
       NIX_CFLAGS_COMPILE = "-O2";
