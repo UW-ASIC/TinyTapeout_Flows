@@ -1,0 +1,107 @@
+name: Test flow builds
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        system: [x86_64-linux, aarch64-linux]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        run: |
+          sh <(curl -L https://nixos.org/nix/install) --no-daemon
+
+      - name: Configure Nix
+        run: |
+          mkdir -p ~/.config/nix
+          echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+          echo "extra-platforms = aarch64-linux" >> ~/.config/nix/nix.conf
+          echo "tarball-ttl = 0" >> ~/.config/nix/nix.conf
+
+      - name: Setup QEMU for cross-compilation
+        if: matrix.system == 'aarch64-linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-user-static
+
+      - name: Build xschem for ${{ matrix.system }}
+        run: |
+          . ~/.nix-profile/etc/profile.d/nix.sh
+          nix-build -E '(import ./shell.nix {}).xschem' --system ${{ matrix.system }}
+
+      - name: Test xschem version
+        if: matrix.system == 'x86_64-linux'
+        run: |
+          . ~/.nix-profile/etc/profile.d/nix.sh
+          result/bin/xschem --version
+
+  build-darwin:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-13, macos-latest]  # macos-13 is x86_64, macos-latest is aarch64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix (Determinate Systems)
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
+
+      - name: Configure Nix
+        run: |
+          mkdir -p ~/.config/nix
+          echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+
+      - name: Install XQuartz
+        run: |
+          brew install --cask xquartz
+
+      - name: Setup Rosetta 2 and linux-builder (Apple Silicon only)
+        if: matrix.os == 'macos-latest'
+        run: |
+          sudo softwareupdate --install-rosetta --agree-to-license || true
+          nix build nixpkgs#darwin.linux-builder
+          sudo ./result/bin/create-builder || true
+          echo 'export NIX_CONFIG="system = aarch64-linux"' >> ~/.zshrc
+
+      - name: Build xschem
+        run: |
+          nix-build -E '(import ./shell.nix {}).xschem'
+
+      - name: Test xschem version
+        run: |
+          result/bin/xschem --version
+
+  build-nixos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        run: |
+          sh <(curl -L https://nixos.org/nix/install) --no-daemon
+
+      - name: Configure Nix
+        run: |
+          mkdir -p ~/.config/nix
+          echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+          echo "tarball-ttl = 0" >> ~/.config/nix/nix.conf
+
+      - name: Enter dev shell and test
+        run: |
+          . ~/.nix-profile/etc/profile.d/nix.sh
+          nix-shell --run "xschem --version"
+
+      - name: Build all custom packages
+        run: |
+          . ~/.nix-profile/etc/profile.d/nix.sh
+          nix-build -E '(import ./shell.nix {}).xschem'
+          nix-build -E '(import ./shell.nix {}).netgen'
+          nix-build -E '(import ./shell.nix {}).ngspice-shared'
