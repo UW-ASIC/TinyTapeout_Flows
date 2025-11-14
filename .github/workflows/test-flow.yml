@@ -80,6 +80,7 @@ jobs:
       - name: Build linux-builder (Apple Silicon only)
         if: matrix.os == 'macos-latest'
         run: |
+          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           nix build nixpkgs#darwin.linux-builder
           sudo ./result/bin/create-builder || true
 
