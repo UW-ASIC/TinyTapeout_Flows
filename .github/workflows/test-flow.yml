@@ -1,16 +1,14 @@
-name: Test flow builds
+name: Test xschem builds
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
-  build-linux:
+  build-linux-x86:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        system: [x86_64-linux, aarch64-linux]
     steps:
       - uses: actions/checkout@v4
 
@@ -22,25 +20,32 @@ jobs:
         run: |
           mkdir -p ~/.config/nix
           echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
-          echo "extra-platforms = aarch64-linux" >> ~/.config/nix/nix.conf
           echo "tarball-ttl = 0" >> ~/.config/nix/nix.conf
 
-      - name: Setup QEMU for cross-compilation
-        if: matrix.system == 'aarch64-linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y qemu-user-static
-
-      - name: Build xschem for ${{ matrix.system }}
+      - name: Build and test xschem
         run: |
           . ~/.nix-profile/etc/profile.d/nix.sh
-          nix-build -E '(import ./shell.nix {}).xschem' --system ${{ matrix.system }}
+          nix-shell --run "xschem --version"
 
-      - name: Test xschem version
-        if: matrix.system == 'x86_64-linux'
+  build-linux-arm:
+    runs-on: ubuntu-24.04-arm64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        run: |
+          sh <(curl -L https://nixos.org/nix/install) --no-daemon
+
+      - name: Configure Nix
+        run: |
+          mkdir -p ~/.config/nix
+          echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+          echo "tarball-ttl = 0" >> ~/.config/nix/nix.conf
+
+      - name: Build and test xschem
         run: |
           . ~/.nix-profile/etc/profile.d/nix.sh
-          result/bin/xschem --version
+          nix-shell --run "xschem --version"
 
   build-darwin:
     runs-on: ${{ matrix.os }}
@@ -54,54 +59,26 @@ jobs:
         run: |
           curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
 
-      - name: Configure Nix
-        run: |
-          mkdir -p ~/.config/nix
-          echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
-
       - name: Install XQuartz
         run: |
           brew install --cask xquartz
 
-      - name: Setup Rosetta 2 and linux-builder (Apple Silicon only)
+      - name: Setup Rosetta 2 (Apple Silicon only)
         if: matrix.os == 'macos-latest'
         run: |
           sudo softwareupdate --install-rosetta --agree-to-license || true
+
+      - name: Build linux-builder (Apple Silicon only)
+        if: matrix.os == 'macos-latest'
+        run: |
           nix build nixpkgs#darwin.linux-builder
           sudo ./result/bin/create-builder || true
+
+      - name: Configure shell for aarch64-linux (Apple Silicon only)
+        if: matrix.os == 'macos-latest'
+        run: |
           echo 'export NIX_CONFIG="system = aarch64-linux"' >> ~/.zshrc
 
-      - name: Build xschem
+      - name: Build and test xschem
         run: |
-          nix-build -E '(import ./shell.nix {}).xschem'
-
-      - name: Test xschem version
-        run: |
-          result/bin/xschem --version
-
-  build-nixos:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Nix
-        run: |
-          sh <(curl -L https://nixos.org/nix/install) --no-daemon
-
-      - name: Configure Nix
-        run: |
-          mkdir -p ~/.config/nix
-          echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
-          echo "tarball-ttl = 0" >> ~/.config/nix/nix.conf
-
-      - name: Enter dev shell and test
-        run: |
-          . ~/.nix-profile/etc/profile.d/nix.sh
           nix-shell --run "xschem --version"
-
-      - name: Build all custom packages
-        run: |
-          . ~/.nix-profile/etc/profile.d/nix.sh
-          nix-build -E '(import ./shell.nix {}).xschem'
-          nix-build -E '(import ./shell.nix {}).netgen'
-          nix-build -E '(import ./shell.nix {}).ngspice-shared'
