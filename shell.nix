@@ -1,10 +1,11 @@
 {
   pkgs ?
     import (builtins.fetchTarball {
-      url = "https://github.com/NixOS/nixpkgs/archive/a343533bccc62400e8a9560423486a3b6c11a23b.tar.gz";
-      sha256 = "04h7cq8rp8815xb4zglkah4w6p2r5lqp7xanv89yxzbmnv29np2a";
+      url = "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
+      sha256 = "sha256:04h7cq8rp8815xb4zglkah4w6p2r5lqp7xanv89yxzbmnv29np2a";
     }) {
-      overlays = [];
+      overlays = [
+      ];
     },
 }: let
   selfBuiltPackages = {
