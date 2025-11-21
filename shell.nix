@@ -2,7 +2,7 @@
   pkgs ?
     import (builtins.fetchTarball {
       url = "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
-      sha256 = "sha256:18g0f8cb9m8mxnz9cf48sks0hib79b282iajl2nysyszph993yp0";
+      sha256 = "sha256:0z423v1f4pyllhqz68jichams2vrgnmply12lzkvj6k4hijkvnaa";
     }) {
       overlays = [
       ];
@@ -63,11 +63,15 @@
           pkgs.fixDarwinDylibNames
         ];
       buildInputs = with pkgs; [
-        cairo
-        xorg.libX11
-        xorg.libXpm
         tcl
         tk
+        xorg.libX11
+        xorg.libXpm
+        cairo
+        readline
+        flex
+        bison
+        zlib
       ];
       enableParallelBuilding = true;
       NIX_CFLAGS_COMPILE = "-O2";
@@ -105,6 +109,7 @@ in
       clang
       llvmPackages.libclang
       libffi.dev
+      fftw
 
       # Digital design
       iverilog
@@ -160,9 +165,11 @@ in
       export CCACHE_DIR="$PROJECT_ROOT/.tools/ccache"
 
       # === Rust-Python Build Configuration ===
-      export CPATH="${pkgs.python312}/include/python3.12"
-      export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib/libclang.so"
-      export PKG_CONFIG_PATH="${selfBuiltPackages.ngspice-shared}/lib/pkgconfig"
+      export LIBCLANG_PATH="${pkgs.llvmPackages.libclang.lib}/lib"
+      export BINDGEN_EXTRA_CLANG_ARGS="-I${pkgs.glibc.dev}/include -I${selfBuiltPackages.ngspice-shared}/include"
+      export CPATH="${pkgs.python312}/include/python3.12:${selfBuiltPackages.ngspice-shared}/include:$CPATH"
+      export NIX_LD_LIBRARY_PATH="${pkgs.python312}/lib:${selfBuiltPackages.ngspice-shared}/lib:$NIX_LD_LIBRARY_PATH"
+      export PKG_CONFIG_PATH="${selfBuiltPackages.ngspice-shared}/lib/pkgconfig:$PKG_CONFIG_PATH"
 
       # === PDK Configuration ===
       export PDK="sky130A"
@@ -195,6 +202,7 @@ in
       fi
       pip install --upgrade pip==24.2 setuptools==75.1.0 wheel==0.44.0
       pip install --no-build-isolation -r "$PROJECT_ROOT/requirements.txt"
+      pip install maturin pytest
       for pkg in analog/library/dep_library/gmid analog/library/dep_library/UWASIC-ALG; do
           if [ -d "$PROJECT_ROOT/$pkg" ]; then
               echo "Installing editable package: $pkg"
