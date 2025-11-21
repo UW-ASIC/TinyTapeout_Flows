@@ -74,48 +74,11 @@ exec $SHELL
 ###### macOS Installation
 
 ```bash
-# Use Determinate Systems installer (handles macOS security)
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
-
-# Install XQuartz for GUI tools
-brew install --cask xquartz
-
-# Enable flakes
-mkdir -p ~/.config/nix
-echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
-
-# Install Rosetta 2 for Apple Silicon
-softwareupdate --install-rosetta --agree-to-license
-
-# Build and setup linux-builder
-nix build nixpkgs#darwin.linux-builder
-sudo ./result/bin/create-builder
-
-# Automatically add export to shell config
-export_line='export NIX_CONFIG="system = aarch64-linux"'
-
-case $SHELL in
-    */bash)
-        echo "$export_line" >> ~/.bashrc
-        echo "Added to ~/.bashrc"
-        ;;
-    */zsh)
-        echo "$export_line" >> ~/.zshrc
-        echo "Added to ~/.zshrc"
-        ;;
-    */fish)
-        echo "set -gx NIX_CONFIG \"system = aarch64-linux\"" >> ~/.config/fish/config.fish
-        echo "Added to ~/.config/fish/config.fish"
-        ;;
-    *)
-        echo "Unknown shell: $SHELL"
-        echo "Please manually add to your shell config:"
-        echo 'export NIX_CONFIG="system = aarch64-linux"'
-        ;;
-esac
-
-# Reload shell
-exec $SHELL
+# Due to finicky mac support,
+# all mac users must run a docker wrapper around nix-shell
+# Which makes it slower, but usable!
+chmod +x mac_shell.sh
+./mac_shell.sh
 ```
 
 ###### Windows Installation (via WSL2)
@@ -126,8 +89,13 @@ wsl --install
 
 # Restart, then in WSL2 Ubuntu:
 sh <(curl -L https://nixos.org/nix/install) --no-daemon
+
+# Enable modern Nix features
 mkdir -p ~/.config/nix
 echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+
+# Restart your shell
+exec $SHELL
 ```
 
 ##### Entering the Nix Environment
@@ -135,7 +103,15 @@ echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 From the project root:
 
 ```bash
+# For WSL and Linux users
 nix-shell
+
+# For macos
+./mac_shell.sh # This will always be your entry instead of nix-shell
+
+# NOTE: Whenever you get python installation errors of UWASIC-ALG or gmid, then you need to,
+rm -rf .venv
+# Then re-run the shell
 ```
 
 This provides all necessary tools:
@@ -160,28 +136,30 @@ The template tracks project state automatically:
 After creating projects, your directory structure will be:
 
 ```
+
 uwasic-template/
-├── .github/      # Automated workflows
-├── shell.nix         # Nix environment configuration
-├── flows/            # Project management system
-│   ├── Makefile      # Main project commands
-│   └── templates/    # Project templates
-├── digital/          # Digital design projects
-│   └── project_name/
-│       ├── build/    # Build system (synthesis, verification)
-│       ├── src/      # RTL source files
-│       └── test/     # Testbenches and verification
-├── analog/           # Analog design projects
-│   ├── library/      # Shared analog IP library
-│   ├── build/        # Build system (layout, validation)
-│   ├── layout/       # Magic layout files
-│   ├── schematics/   # Xschem schematic files
-│   └── symbols/      # Xschem symbol files
-└── caravel/          # TinyTapeout submission package
-    ├── src/          # Verilog wrapper and sources
-    ├── analog/       # Copied analog project files
-    ├── docs/         # Documentation
-    └── info.yaml     # TinyTapeout project configuration
+├── .github/ # Automated workflows
+├── shell.nix # Nix environment configuration
+├── flows/ # Project management system
+│ ├── Makefile # Main project commands
+│ └── templates/ # Project templates
+├── digital/ # Digital design projects
+│ └── project_name/
+│ ├── build/ # Build system (synthesis, verification)
+│ ├── src/ # RTL source files
+│ └── test/ # Testbenches and verification
+├── analog/ # Analog design projects
+│ ├── library/ # Shared analog IP library
+│ ├── build/ # Build system (layout, validation)
+│ ├── layout/ # Magic layout files
+│ ├── schematics/ # Xschem schematic files
+│ └── symbols/ # Xschem symbol files
+└── caravel/ # TinyTapeout submission package
+├── src/ # Verilog wrapper and sources
+├── analog/ # Copied analog project files
+├── docs/ # Documentation
+└── info.yaml # TinyTapeout project configuration
+
 ```
 
 #### Design Rules
@@ -206,16 +184,18 @@ The digital flow uses OpenLane2 for automated RTL-to-GDS conversion with compreh
 #### Directory Structure
 
 ```
+
 digital/
 └── <project_name>/
-    ├── build/        # Build system
-    │   ├── config.mk # Project configuration
-    │   ├── des_tb/   # RTL simulation
-    │   ├── lint/     # Static analysis
-    │   ├── synthesis/# Physical synthesis
-    │   └── verification/ # Formal verification
-    ├── src/          # RTL source files (.v, .sv)
-    └── test/         # Testbenches and cocotb tests
+├── build/ # Build system
+│ ├── config.mk # Project configuration
+│ ├── des_tb/ # RTL simulation
+│ ├── lint/ # Static analysis
+│ ├── synthesis/# Physical synthesis
+│ └── verification/ # Formal verification
+├── src/ # RTL source files (.v, .sv)
+└── test/ # Testbenches and cocotb tests
+
 ```
 
 #### Workflows
