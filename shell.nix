@@ -91,6 +91,21 @@
         maintainers = with maintainers; [fbeffa];
       };
     };
+
+    # Wrap KLayout with Python packages it needs
+    klayout-with-python = pkgs.symlinkJoin {
+      name = "klayout-with-python";
+      paths = [pkgs.klayout];
+      buildInputs = [pkgs.makeWrapper];
+      postBuild = ''
+        wrapProgram $out/bin/klayout \
+          --set KLAYOUT_PYTHONPATH "${pkgs.python312.pkgs.makePythonPath [
+          pkgs.python312Packages.pandas
+          pkgs.python312Packages.numpy
+          pkgs.python312Packages.matplotlib
+        ]}"
+      '';
+    };
   };
 in
   pkgs.mkShell {
@@ -133,8 +148,8 @@ in
       selfBuiltPackages.xschem
       selfBuiltPackages.ngspice-shared
       selfBuiltPackages.netgen
+      selfBuiltPackages.klayout-with-python
       ngspice
-      klayout
       magic-vlsi
       vim
 
@@ -177,7 +192,6 @@ in
       export PDK_ROOT="$HOME/.volare"
 
       # === EDA Tools Configuration ===
-      export KLAYOUT_PATH="$PDK_ROOT/$PDK/libs.tech/klayout"
       export XSCHEM_USER_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem"
       export XSCHEM_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem:${selfBuiltPackages.xschem}/share/xschem/xschem_library"
 
@@ -231,7 +245,7 @@ in
       echo "  - xschem: $(xschem --version 2>/dev/null || echo 'custom build')"
       echo "  - yosys: $(yosys -V 2>/dev/null | head -1 || echo 'unknown version')"
       echo "  - verilator: $(verilator --version 2>/dev/null | head -1 || echo 'unknown version')"
-      echo "  - magic: $(magic --version 2>/dev/null || echo 'custom build ${pkgs.magic-vlsi.version}')"
+      echo "  - magic: $(magic -version 2>/dev/null | head -1 || echo 'unknown version')"
       echo "  - PDK: $PDK in $PDK_ROOT"
     '';
   }
