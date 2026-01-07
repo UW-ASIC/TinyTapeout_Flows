@@ -88,7 +88,7 @@ pkgs.mkShell {
 
     # === PDK SETUP WITH VOLARE ===
     pip install --upgrade pip==24.2 setuptools==75.1.0 wheel==0.44.0 >/dev/null 2>&1
-    pip install volare==0.20.6 >/dev/null 2>&1 || true
+    pip install volare==0.20.6  >/dev/null 2>&1 || true
 
     if [ -d "$PDK_ROOT/volare/sky130/versions" ]; then
       echo "Cleaning up old PDK versions (keeping $PDK_VERSION)..."

@@ -59,7 +59,7 @@ elif [ "$OS" = "Linux" ]; then
         fi
     fi
 
-    nix-shell flows/env/shell.nix $TYPE_ARG
+    nix-shell flows/env/shell.nix $TYPE_ARG --extra-experimental-features flakes
 else
     echo "❌ Unsupported OS: $OS"
     exit 1
