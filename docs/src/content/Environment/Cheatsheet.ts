@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Basic Commands",
+  title: "Cheatsheet",
   order: 3
 }
 

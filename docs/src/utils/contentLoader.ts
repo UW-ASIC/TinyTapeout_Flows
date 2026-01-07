@@ -59,8 +59,13 @@ export function loadContent(): Section[] {
     section.pages.sort((a, b) => a.metadata.order - b.metadata.order)
   })
 
-  // Convert to array and sort sections alphabetically
-  return Array.from(sections.values()).sort((a, b) =>
-    a.id.localeCompare(b.id)
-  )
+  // Convert to array and sort sections
+  return Array.from(sections.values()).sort((a, b) => {
+    // Always put Getting-Started first
+    if (a.id === 'Getting-Started') return -1
+    if (b.id === 'Getting-Started') return 1
+
+    // Sort others alphabetically
+    return a.id.localeCompare(b.id)
+  })
 }

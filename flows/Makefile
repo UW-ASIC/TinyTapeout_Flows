@@ -6,15 +6,14 @@ CARAVEL_DIR := ../caravel
 HAS_ANALOG := $(shell [ -d "$(ANALOG_DIR)" ] && echo "1" || echo "0")
 HAS_DIGITAL := $(shell [ -d "$(DIGITAL_DIR)" ] && echo "1" || echo "0")
 HAS_CARAVEL := $(shell [ -d "$(CARAVEL_DIR)" ] && echo "1" || echo "0")
-PROJECT_STATE := $(shell \
-	case "$(HAS_ANALOG)$(HAS_DIGITAL)$(HAS_CARAVEL)" in \
-		"000") echo "none" ;; \
-		"111") echo "mixed" ;; \
-		"010") echo "digital" ;; \
-		"100") echo "analog" ;; \
-		"101") echo "caravel" ;; \
-		*) echo "unknown" ;; \
-	esac)
+STATE_KEY := $(HAS_ANALOG)$(HAS_DIGITAL)$(HAS_CARAVEL)
+PROJECT_STATE := $(strip \
+	$(if $(filter 000,$(STATE_KEY)),none, \
+	$(if $(filter 111,$(STATE_KEY)),mixed, \
+	$(if $(filter 010,$(STATE_KEY)),digital, \
+	$(if $(filter 100,$(STATE_KEY)),analog, \
+	$(if $(filter 101,$(STATE_KEY)),caravel, \
+	unknown))))))
 
 include utility.mk
 
@@ -68,7 +67,7 @@ CreateCaravel:
 	$(call check-param,PROJECT_NAME,make CreateCaravel PROJECT_NAME=myproject)
 	$(if $(filter none,$(PROJECT_STATE)),$(error No project exists. Create a project first))
 	@mkdir -p $(CARAVEL_DIR)
-	@cp -r flows/caravel/* $(CARAVEL_DIR)/ 2>/dev/null || true
+	@cp -r caravel/* $(CARAVEL_DIR)/ 2>/dev/null || true
 	$(if $(filter digital,$(PROJECT_STATE)),@rm -rf $(CARAVEL_DIR)/{def$(COMMA)gds$(COMMA)lef};)
 	$(if $(filter mixed digital,$(PROJECT_STATE)),\
 		@mkdir -p $(CARAVEL_DIR)/{src,test}; \
@@ -114,7 +113,7 @@ _create_analog_structure:
 		mkdir -p $(ANALOG_DIR)/library $(ANALOG_DIR)/output && \
 		git clone $(ANALOG_LIB_REPO) $(ANALOG_DIR)/library/; \
 	fi
-	@sed 's/@PROJECT_NAME@/$(PROJECT_NAME)/g' flows/analog/config.mk.template > $(ANALOG_DIR)/build/config.mk
+	@sed 's/@PROJECT_NAME@/$(PROJECT_NAME)/g' analog/build/config.mk.template > $(ANALOG_DIR)/build/config.mk
 	@cd $(ANALOG_DIR)/build && \
 		mkdir -p {layout,schematic,validation} && \
 		cp -r ../../flows/analog/build/layout/* ./layout/ 2>/dev/null || true && \
@@ -124,7 +123,7 @@ _create_analog_structure:
 # Internal target to create digital structure
 _create_digital_structure:
 	@mkdir -p $(DIGITAL_DIR)/$(MODULE_NAME)/{build,src,test}
-	@sed 's/@MODULE_NAME@/$(MODULE_NAME)/g' flows/digital/config.mk.template > $(DIGITAL_DIR)/$(MODULE_NAME)/build/config.mk
+	@sed 's/@MODULE_NAME@/$(MODULE_NAME)/g' digital/build/config.mk.template > $(DIGITAL_DIR)/$(MODULE_NAME)/build/config.mk
 	@cd $(DIGITAL_DIR)/$(MODULE_NAME)/build && \
 		mkdir -p {des_tb,lint,synthesis,verification} && \
 		cp -r ../../../flows/digital/build/des_tb/* ./des_tb/ 2>/dev/null || true && \

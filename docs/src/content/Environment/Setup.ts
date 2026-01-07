@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Installation",
-  order: 2
+  title: "Setup",
+  order: 1
 }
 
 export const content = `
