@@ -56,11 +56,7 @@ jobs:
           echo "has_caravel=$( [ \"${HAS_CARAVEL}\" = \"1\" ] && echo 'true' || echo 'false' )" >> $GITHUB_OUTPUT
           echo "project_type=${PROJECT_TYPE}" >> $GITHUB_OUTPUT
           
-          # Fail if no caravel directory exists
-          if [ "${HAS_CARAVEL}" = "0" ]; then
-            echo "::error::caravel/ directory not found. This workflow requires a caravel/ directory containing your project files."
-            exit 1
-          fi
+
           
           echo "Detected project type: ${PROJECT_TYPE}"
 
