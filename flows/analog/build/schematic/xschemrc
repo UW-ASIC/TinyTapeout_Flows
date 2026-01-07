@@ -1,4 +1,4 @@
-source $env(HOME)/.volare/volare/sky130/versions/12df12e2e74145e31c5a13de02f9a1e176b56e67/sky130A/libs.tech/xschem/xschemrc
+source $env(HOME)/.volare/volare/sky130/versions/6d4d11780c40b20ee63cc98e645307a9bf2b2ab8/sky130A/libs.tech/xschem/xschemrc
 
 set SKYWATER_MODELS "$env(HOME)/.volare/sky130A/libs.tech/ngspice"
 set SKYWATER_STDCELLS "$env(HOME)/.volare/sky130A/libs.ref/sky130_fd_sc_hd/spice"
@@ -9,18 +9,30 @@ puts "PDK set SKYWATER_STDCELLS to: $SKYWATER_STDCELLS"
 #### PROJECT CONFIGURATION
 set PROJECT_NAME "template"
 set PROJECT_ROOT [file normalize "[file dirname [info script]]/../../schematics"]
+
 set dark_colorscheme 1
 set gaw_viewer "gaw"
+set editor "vim"
 
 #### NETLIST CONFIGURATION
 set netlist_dir [file normalize "[file dirname [info script]]/spice"]
 file mkdir $netlist_dir
 set XSCHEM_NETLIST_DIR $netlist_dir
-
 set netlist_type spice
 set spice_netlist 1
 
-## Library Paths
+set XSCHEM_LIBRARY_PATH {}
 append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/../../schematics
 append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/../../symbols
 append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/../../library
+append XSCHEM_LIBRARY_PATH :${XSCHEM_SHAREDIR}/xschem_library
+append XSCHEM_LIBRARY_PATH :$env(HOME)/.volare/volare/sky130/versions/6d4d11780c40b20ee63cc98e645307a9bf2b2ab8/sky130A/libs.tech/xschem
+
+
+## Directory colors
+array unset dircolor
+set dircolor(schematics$) green
+set dircolor(symbols$) blue
+set dircolor(library$) red
+set dircolor(xschem$) purple
+set dircolor(xschem_library$) brown

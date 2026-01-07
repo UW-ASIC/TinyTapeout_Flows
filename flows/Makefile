@@ -109,7 +109,7 @@ status:
 
 # Internal target to create analog structure
 _create_analog_structure:
-	@mkdir -p $(ANALOG_DIR)/{build,layout,schematics}
+	@mkdir -p $(ANALOG_DIR)/{build,layout,schematics,symbols}
 	@if [ ! -d "$(ANALOG_DIR)/library" ]; then \
 		mkdir -p $(ANALOG_DIR)/library $(ANALOG_DIR)/output && \
 		git clone $(ANALOG_LIB_REPO) $(ANALOG_DIR)/library/; \

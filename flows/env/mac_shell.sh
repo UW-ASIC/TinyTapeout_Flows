@@ -83,7 +83,8 @@ if [ "$SETUP_COMPLETE" = false ]; then
     # 5. Build Docker Image if Missing
     if [[ "$(docker images -q $IMAGE_NAME 2>/dev/null)" == "" ]]; then
         echo "🐳 Building Docker image '$IMAGE_NAME'..."
-        docker build -t $IMAGE_NAME .
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        docker build -t $IMAGE_NAME "$SCRIPT_DIR"
     fi
 
     echo "✅ Setup complete!"

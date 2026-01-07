@@ -9,7 +9,7 @@ if {[info exists TOP_LEVEL_CELL_NAME]} {
     set TOP_LEVEL_CELL tt_um_top_module
 }
 
-set TEMPLATE_FILE      ./def/analog/tt_analog_1x2.def
+set TEMPLATE_FILE      ../../../flows/def/analog/tt_analog_1x2.def
 set POWER_STRIPE_WIDTH 2um                 ;# The minimum width is 1.2um
 
 # Power stripes: NET name, x position. You can add additional power stripes for each net, as needed.

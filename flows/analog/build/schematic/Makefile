@@ -1,5 +1,10 @@
 include ../config.mk
 
+# Enforce Nix Shell
+ifneq ($(NIX_ENFORCE_PURITY),0)
+  $(error This Makefile must be run inside the nix-shell environment. Run ./env.sh first)
+endif
+
 # Tool definitions
 XSCHEM = xschem
 NGSPICE = ngspice
@@ -28,8 +33,7 @@ define update_pdk_version
 	echo "📦 Found PDK version: $$SELECTED_VERSION"; \
 	if [ -f "$(XSCHEMRC_FILE)" ]; then \
 		cp "$(XSCHEMRC_FILE)" "$(XSCHEMRC_FILE).backup" 2>/dev/null || true; \
-		NEW_SOURCE_LINE="source \$$env(HOME)/.volare/volare/sky130/versions/$$SELECTED_VERSION/sky130A/libs.tech/xschem/xschemrc"; \
-		sed -i "1s|^source.*|$$NEW_SOURCE_LINE|" "$(XSCHEMRC_FILE)"; \
+		sed -i 's|sky130/versions/[^/]*/|sky130/versions/'"$$SELECTED_VERSION"'/|g' "$(XSCHEMRC_FILE)"; \
 		echo "✓ Updated xschemrc with version: $$SELECTED_VERSION"; \
 		echo "$$SELECTED_VERSION" > .current_pdk_version; \
 	else \
@@ -43,6 +47,7 @@ update-pdk:
 setup: update-pdk
 	@echo "Setting up symbol files..."
 	@echo "Ignore errors below this ================"
+	@mv ../../schematics/*.sym ../../symbols/ 2>/dev/null || true; \
 	mv ../../schematics/*_tb.sch ../../schematics/testbenches/ 2>/dev/null || true; \
 	mv spice/*_tb.spice spice/testbenches/ 2>/dev/null || true;
 	@echo "Ignore errors above this ================"
@@ -53,7 +58,7 @@ schematic: setup
 		echo "Creating empty schematic file: $(TOP_SCHEMATIC).sch"; \
 		touch ../../schematics/$(TOP_SCHEMATIC).sch; \
 	fi
-	$(XSCHEM) ../../schematics/$(TOP_SCHEMATIC).sch
+	$(XSCHEM) ../../schematics/$(TOP_SCHEMATIC).sch &
 
 spice: setup
 	@echo "Running SPICE simulations..."

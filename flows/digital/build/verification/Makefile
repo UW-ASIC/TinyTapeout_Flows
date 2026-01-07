@@ -1,8 +1,13 @@
 include ../config.mk
 
 # Tools
-SIM ?= icarus
+SIM ?= verilator
 TOPLEVEL_LANG ?= verilog
+
+# Enforce Nix Shell
+ifneq ($(NIX_ENFORCE_PURITY),0)
+  $(error This Makefile must be run inside the nix-shell environment. Run ./env.sh first)
+endif
 
 # ==============================
 # Setup for Multiple Tests
@@ -40,7 +45,7 @@ else # Gate Level
     COMPILE_ARGS += -DFUNCTIONAL
     COMPILE_ARGS += -DUSE_POWER_PINS
     COMPILE_ARGS += -DSIM
-    COMPILE_ARGS += -DUNIT_DELAY=\#1
+    # COMPILE_ARGS += -DUNIT_DELAY=\#1  <-- Verilator does not support delays in the same way, removing for now or needs handling
     VERILOG_SOURCES += $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/primitives.v
     VERILOG_SOURCES += $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v
     VERILOG_SOURCES += $(TEST_DIR)/gate_level_netlist.v

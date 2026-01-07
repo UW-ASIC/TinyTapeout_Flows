@@ -4,61 +4,35 @@ export const metadata = {
 }
 
 export const content = `
-# Installation
+# Installation & Environment
 
-## Linux
+## One Script Setup
 
-\`\`\`bash
-# Install Nix
-sh <(curl -L https://nixos.org/nix/install) --no-daemon
-
-# Enable flakes
-mkdir -p ~/.config/nix
-echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
-
-# Restart shell
-exec $SHELL
-
-# Enter UWASIC environment
-cd uwasic-template
-nix-shell
-\`\`\`
-
-## macOS
+We provide a single script that handles everything: OS detection, Nix installation, and environment loading.
 
 \`\`\`bash
-# Install Nix
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
-
-# Install XQuartz (for GUI tools)
-brew install --cask xquartz
-
-# Enter UWASIC environment
-cd uwasic-template
-nix-shell
+./env.sh
 \`\`\`
 
-## Windows (WSL2)
+This script will:
+1.  **Install Nix** (if missing)
+2.  **Auto-detect** your project type (Analog/Digital/Mixed) based on folders
+3.  **Enter** the configured environment
 
-\`\`\`powershell
-# In PowerShell as Admin
-wsl --install
+## Manual Selection
 
-# Restart, then in WSL2:
-sh <(curl -L https://nixos.org/nix/install) --no-daemon
-mkdir -p ~/.config/nix
-echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+You can force a specific environment mode:
 
-# Enter UWASIC environment
-cd uwasic-template
-nix-shell
+\`\`\`bash
+./env.sh digital  # Loads only digital tools
+./env.sh analog   # Loads only analog tools
 \`\`\`
 
 ## Tools You Get
 
-- Digital: OpenLane2, Yosys, Icarus Verilog, cocotb
-- Analog: Xschem, Magic, ngspice, netgen, KLayout
-- Verification: CACHE, OpenSTA
+- **Digital**: Verilator, Yosys, OpenLane2, Cocotb
+- **Analog**: XSchem, Magic, Ngspice, Netgen, KLayout
+- **Common**: Python 3.12, Rust (Nightly), Make, Git
 
-Everything auto-installed. No manual setup.
+Everything is pinned and reproducible. No manual dependency hell.
 `

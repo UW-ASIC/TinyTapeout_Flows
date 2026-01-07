@@ -22,7 +22,7 @@ cd digital/your_project/build/lint
 make lint
 \`\`\`
 
-Finds coding errors before synthesis.
+Uses **Verilator** to find coding errors before synthesis.
 
 ## Local Synthesis (Optional)
 

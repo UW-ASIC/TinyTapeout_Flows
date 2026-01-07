@@ -1,4 +1,9 @@
 include ../config.mk
+
+# Enforce Nix Shell
+ifneq ($(NIX_ENFORCE_PURITY),0)
+  $(error This Makefile must be run inside the nix-shell environment. Run ./env.sh first)
+endif
 KLAYOUT = klayout
 LAYOUT_DIR := $(shell cd ../../layout && pwd)
 BUILD_DIR := $(shell pwd)
