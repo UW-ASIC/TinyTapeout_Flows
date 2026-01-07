@@ -11,9 +11,11 @@ PDK ?= sky130A
 PDK_ROOT ?= $(HOME)/.volare
 XSCHEM_DIR := xschem
 
-# Power grid configuration
+# CONFIG JSON VARIABLES
 CLOCK_PERIOD ?= 10.0
 CORE_UTIL ?= 40
+# Options: tt_block_1x1_pg, tt_block_2x2_pg, tt_block_4x4_pg, or more. Check flows/def/digital/ for available templates.
+TT_TEMPLATE_GDS ?= tt_block_1x1_pg.def
 
 ANALOG_OUTPUT_DIR = ../../../../analog/$(DESIGN_TOP)/output
 
@@ -60,6 +62,7 @@ config.json:
 	@echo '    "ERROR_ON_MAGIC_DRC": true,' >> config.json
 	@echo '    "ERROR_ON_LVS_ERROR": true,' >> config.json
 	@echo '    "ERROR_ON_PDN_VIOLATIONS": false,' >> config.json
+	@echo '    "FP_DEF_TEMPLATE": "../../../../flows/def/digital/$(TT_TEMPLATE_DEF)",' >> config.json
 	@echo '    "pdk::sky130A": {' >> config.json
 	@echo '        "STD_CELL_LIBRARY": "sky130_fd_sc_hd",' >> config.json
 	@echo '        "MAX_FANOUT_CONSTRAINT": 6,' >> config.json
