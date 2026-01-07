@@ -2,9 +2,10 @@ import React from 'react'
 
 interface MarkdownRendererProps {
   content: string
+  onNavigate?: (path: string) => void
 }
 
-export function MarkdownRenderer({ content }: MarkdownRendererProps) {
+export function MarkdownRenderer({ content, onNavigate }: MarkdownRendererProps) {
   const lines = content.trim().split('\n')
   const elements: React.ReactNode[] = []
   let inCodeBlock = false
@@ -15,8 +16,8 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     let remaining = text
     let key = 0
 
-    // Process bold and inline code
-    const regex = /(`[^`]+`|\*\*[^*]+\*\*)/g
+    // Process bold, inline code, and links
+    const regex = /(`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g
     const matches = remaining.match(regex)
 
     if (!matches) return text
@@ -34,7 +35,26 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
       if (match.startsWith('`')) {
         parts.push(<code key={key++}>{match.slice(1, -1)}</code>)
       } else if (match.startsWith('**')) {
-        parts.push(<strong key={key++}>{match.slice(2, -2)}</strong>)
+        parts.push(<strong key={key++}>{processInlineMarkdown(match.slice(2, -2))}</strong>)
+      } else if (match.startsWith('[')) {
+        const linkMatch = match.match(/\[([^\]]+)\]\(([^)]+)\)/)
+        if (linkMatch) {
+          const [_, linkText, url] = linkMatch
+          parts.push(
+            <a
+              key={key++}
+              href={url}
+              onClick={(e) => {
+                if (url.startsWith('/') && onNavigate) {
+                  e.preventDefault()
+                  onNavigate(url)
+                }
+              }}
+            >
+              {linkText}
+            </a>
+          )
+        }
       }
 
       lastIndex = matchIndex + match.length

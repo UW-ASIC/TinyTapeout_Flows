@@ -20,11 +20,13 @@ function App() {
   }, [sections, currentPath])
 
   const handleNavigate = (path: string) => {
-    setCurrentPath(path)
+    // Normalize path: remove leading slash if present
+    const normalizedPath = path.startsWith('/') ? path.slice(1) : path
+    setCurrentPath(normalizedPath)
 
     // Find the page
     for (const section of sections) {
-      const page = section.pages.find(p => p.path === path)
+      const page = section.pages.find(p => p.path === normalizedPath)
       if (page) {
         setCurrentPage(page)
         break
@@ -43,7 +45,7 @@ function App() {
       <main className="content">
         {currentPage ? (
           <article className="article">
-            <MarkdownRenderer content={currentPage.content} />
+            <MarkdownRenderer content={currentPage.content} onNavigate={handleNavigate} />
           </article>
         ) : (
           <div className="empty-state">
