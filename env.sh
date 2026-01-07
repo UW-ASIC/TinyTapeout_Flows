@@ -21,8 +21,16 @@ elif [ "$OS" = "Linux" ]; then
             . "$HOME/.nix-profile/etc/profile.d/nix.sh"
         fi
     fi
+
+    # Setup Cachix
+    if ! command -v cachix >/dev/null 2>&1; then
+        echo "🔹 Setting up Cachix..."
+        nix-shell -p cachix --run "cachix use uwasic-eda"
+    else
+        echo "✅ Cachix already installed."
+    fi
     echo "🚀 Entering Nix shell..."
-    
+
     # Pass the first argument as the 'type' to shell.nix
     # If no argument is provided, auto-detect based on project structure
     TYPE_ARG=""
@@ -32,10 +40,10 @@ elif [ "$OS" = "Linux" ]; then
         # Auto-detection logic
         HAS_ANALOG=0
         HAS_DIGITAL=0
-        
+
         if [ -d "analog" ]; then HAS_ANALOG=1; fi
         if [ -d "digital" ]; then HAS_DIGITAL=1; fi
-        
+
         if [ "$HAS_ANALOG" -eq 1 ] && [ "$HAS_DIGITAL" -eq 1 ]; then
             echo "🔍 Auto-detected project type: mixed"
             TYPE_ARG="--argstr type mixed"
@@ -50,7 +58,7 @@ elif [ "$OS" = "Linux" ]; then
             TYPE_ARG="--argstr type mixed"
         fi
     fi
-    
+
     nix-shell flows/env/shell.nix $TYPE_ARG
 else
     echo "❌ Unsupported OS: $OS"

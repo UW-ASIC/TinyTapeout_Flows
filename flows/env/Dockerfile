@@ -4,7 +4,10 @@ FROM nixos/nix:latest
 RUN echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
 
 # Install basic utilities
-RUN nix-env -iA nixpkgs.bash
+RUN nix-env -iA nixpkgs.bash nixpkgs.cachix
+
+# Configure Cachix
+RUN cachix use uwasic-eda
 
 # Set up working directory
 WORKDIR /workspace

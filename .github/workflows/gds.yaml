@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       project_type:
-        description: 'Project type: analog, digital, or mixed'
+        description: 'Project type: analog, digital, mixed, or caravel'
         required: true
         type: string
 
@@ -85,7 +85,7 @@ jobs:
   gl_test:
     needs: gds
     runs-on: ubuntu-24.04
-    # Only run GL test for digital or mixed projects
+    # Only run GL test for digital or mixed projects (requires digital module)
     if: inputs.project_type == 'digital' || inputs.project_type == 'mixed'
     steps:
       - name: checkout repo

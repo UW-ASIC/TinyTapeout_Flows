@@ -1,8 +1,8 @@
 include ../config.mk
 
 # Enforce Nix Shell
-ifneq ($(NIX_ENFORCE_PURITY),0)
-  $(error This Makefile must be run inside the nix-shell environment. Run ./env.sh first)
+ifndef IN_NIX_SHELL
+  $(error This Makefile must be run inside the nix-shell environment. Run ./env.sh first to enter the nix-shell)
 endif
 
 KLAYOUT = klayout

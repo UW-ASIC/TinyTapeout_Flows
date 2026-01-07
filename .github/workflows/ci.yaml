@@ -20,61 +20,80 @@ jobs:
       - name: Check for caravel directory and detect project structure
         id: check
         run: |
-          # First check if caravel/ directory exists
-          if [ ! -d "caravel" ]; then
-            echo "::error::caravel/ directory not found. This workflow requires a caravel/ directory containing your project files."
-            echo "has_caravel=false" >> $GITHUB_OUTPUT
-            exit 1
-          fi
+          # Detect project structure using same logic as flows/Makefile
+          # STATE_KEY is HAS_ANALOG+HAS_DIGITAL+HAS_CARAVEL (e.g., "010" = digital only)
           
-          echo "has_caravel=true" >> $GITHUB_OUTPUT
-          
-          HAS_ANALOG="false"
-          HAS_DIGITAL="false"
+          HAS_ANALOG="0"
+          HAS_DIGITAL="0"
+          HAS_CARAVEL="0"
           
           if [ -d "analog" ]; then
-            HAS_ANALOG="true"
+            HAS_ANALOG="1"
           fi
           
           if [ -d "digital" ]; then
-            HAS_DIGITAL="true"
+            HAS_DIGITAL="1"
           fi
           
-          echo "has_analog=${HAS_ANALOG}" >> $GITHUB_OUTPUT
-          echo "has_digital=${HAS_DIGITAL}" >> $GITHUB_OUTPUT
-          
-          if [ "${HAS_ANALOG}" = "true" ] && [ "${HAS_DIGITAL}" = "true" ]; then
-            echo "project_type=mixed" >> $GITHUB_OUTPUT
-          elif [ "${HAS_ANALOG}" = "true" ]; then
-            echo "project_type=analog" >> $GITHUB_OUTPUT
-          elif [ "${HAS_DIGITAL}" = "true" ]; then
-            echo "project_type=digital" >> $GITHUB_OUTPUT
-          else
-            echo "project_type=unknown" >> $GITHUB_OUTPUT
+          if [ -d "caravel" ]; then
+            HAS_CARAVEL="1"
           fi
+          
+          STATE_KEY="${HAS_ANALOG}${HAS_DIGITAL}${HAS_CARAVEL}"
+          
+          # Determine project type based on STATE_KEY (matching flows/Makefile logic)
+          case "${STATE_KEY}" in
+            "000") PROJECT_TYPE="none" ;;
+            "111") PROJECT_TYPE="mixed" ;;
+            "010"|"011") PROJECT_TYPE="digital" ;;
+            "100"|"101") PROJECT_TYPE="analog" ;;
+            "001") PROJECT_TYPE="caravel" ;;
+            *) PROJECT_TYPE="unknown" ;;
+          esac
+          
+          echo "has_analog=$( [ \"${HAS_ANALOG}\" = \"1\" ] && echo 'true' || echo 'false' )" >> $GITHUB_OUTPUT
+          echo "has_digital=$( [ \"${HAS_DIGITAL}\" = \"1\" ] && echo 'true' || echo 'false' )" >> $GITHUB_OUTPUT
+          echo "has_caravel=$( [ \"${HAS_CARAVEL}\" = \"1\" ] && echo 'true' || echo 'false' )" >> $GITHUB_OUTPUT
+          echo "project_type=${PROJECT_TYPE}" >> $GITHUB_OUTPUT
+          
+          # Fail if no caravel directory exists
+          if [ "${HAS_CARAVEL}" = "0" ]; then
+            echo "::error::caravel/ directory not found. This workflow requires a caravel/ directory containing your project files."
+            exit 1
+          fi
+          
+          echo "Detected project type: ${PROJECT_TYPE}"
 
-  # Always run docs for any project type
+  # Run docs for any valid project type (analog, digital, mixed, caravel)
   docs:
     needs: detect_project_type
-    if: needs.detect_project_type.outputs.project_type != 'unknown'
+    if: |
+      needs.detect_project_type.outputs.project_type == 'analog' ||
+      needs.detect_project_type.outputs.project_type == 'digital' ||
+      needs.detect_project_type.outputs.project_type == 'mixed' ||
+      needs.detect_project_type.outputs.project_type == 'caravel'
     uses: ./.github/workflows/docs.yaml
 
-  # Always run GDS for any project type (handles mixed projects internally)
+  # Run GDS for any valid project type (handles mixed projects internally)
   gds:
     needs: detect_project_type
-    if: needs.detect_project_type.outputs.project_type != 'unknown'
+    if: |
+      needs.detect_project_type.outputs.project_type == 'analog' ||
+      needs.detect_project_type.outputs.project_type == 'digital' ||
+      needs.detect_project_type.outputs.project_type == 'mixed' ||
+      needs.detect_project_type.outputs.project_type == 'caravel'
     uses: ./.github/workflows/gds.yaml
     with:
       project_type: ${{ needs.detect_project_type.outputs.project_type }}
 
-  # Only run for digital or mixed projects
+  # Only run for digital or mixed projects (has digital module)
   fpga:
     needs: detect_project_type
-    if: needs.detect_project_type.outputs.has_digital == 'true'
+    if: needs.detect_project_type.outputs.project_type == 'digital' || needs.detect_project_type.outputs.project_type == 'mixed'
     uses: ./.github/workflows/fpga.yaml
 
-  # Only run for digital or mixed projects
+  # Only run for digital or mixed projects (has digital module)
   test:
     needs: detect_project_type
-    if: needs.detect_project_type.outputs.has_digital == 'true'
+    if: needs.detect_project_type.outputs.project_type == 'digital' || needs.detect_project_type.outputs.project_type == 'mixed'
     uses: ./.github/workflows/test.yaml

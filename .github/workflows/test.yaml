@@ -3,41 +3,82 @@ on:
   workflow_dispatch:
   workflow_call:
 jobs:
-  test:
+  # First, discover all digital modules
+  discover-modules:
     runs-on: ubuntu-24.04
+    outputs:
+      modules: ${{ steps.find-modules.outputs.modules }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: Install iverilog
+      
+      - name: Find digital modules
+        id: find-modules
+        run: |
+          # Find all directories in digital/ that have a build/verification/Makefile
+          MODULES=$(find digital -mindepth 1 -maxdepth 1 -type d -exec test -f {}/build/verification/Makefile \; -print | xargs -I{} basename {} | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "Found modules: $MODULES"
+          echo "modules=$MODULES" >> $GITHUB_OUTPUT
+
+  # Run tests for each module in parallel
+  test:
+    needs: discover-modules
+    if: needs.discover-modules.outputs.modules != '[]'
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        module: ${{ fromJson(needs.discover-modules.outputs.modules) }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install Verilator
         shell: bash
-        run: sudo apt-get update && sudo apt-get install -y iverilog
-      # Set Python up and install cocotb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y verilator
+      
       - name: Setup python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      
       - name: Install Python packages
         shell: bash
-        run: pip install -r caravel/test/requirements.txt
-      - name: Run tests
         run: |
-          cd caravel/test
-          make clean
-          make
-          # make will return success even if the test fails, so check for failure in the results.xml
-          ! grep failure results.xml
+          pip install cocotb cocotb-test pytest
+          # Install module-specific requirements if they exist
+          if [ -f "digital/${{ matrix.module }}/test/requirements.txt" ]; then
+            pip install -r "digital/${{ matrix.module }}/test/requirements.txt"
+          fi
+      
+      - name: Run verification for ${{ matrix.module }}
+        run: |
+          cd digital/${{ matrix.module }}/build/verification
+          make verification
+        env:
+          # Bypass nix-shell check for CI
+          IN_NIX_SHELL: "ci"
+          SIM: verilator
+          TOPLEVEL_LANG: verilog
+      
       - name: Test Summary
         uses: test-summary/action@v2.3
         with:
-          paths: "caravel/test/results.xml"
+          paths: "digital/${{ matrix.module }}/test/results.xml"
         if: always()
-      - name: upload vcd
-        if: success() || failure()
+      
+      - name: Upload test artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-vcd
+          name: test-${{ matrix.module }}
           path: |
-            caravel/test/tb.vcd
-            caravel/test/results.xml
+            digital/${{ matrix.module }}/test/*.vcd
+            digital/${{ matrix.module }}/test/results.xml
+            digital/${{ matrix.module }}/test/sim_build/
