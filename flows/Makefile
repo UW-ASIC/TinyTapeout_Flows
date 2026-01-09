@@ -110,7 +110,7 @@ status:
 _create_analog_structure:
 	@mkdir -p $(ANALOG_DIR)/{build,layout,schematics,symbols}
 	@if [ ! -d "$(ANALOG_DIR)/library" ]; then \
-		mkdir -p $(ANALOG_DIR)/library $(ANALOG_DIR)/output && \
+		mkdir -p $(ANALOG_DIR)/library && \
 		git clone $(ANALOG_LIB_REPO) $(ANALOG_DIR)/library/; \
 	fi
 	@sed 's/@PROJECT_NAME@/$(PROJECT_NAME)/g' analog/build/config.mk.template > $(ANALOG_DIR)/build/config.mk
