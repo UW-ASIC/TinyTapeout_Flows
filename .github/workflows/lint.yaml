@@ -1,0 +1,53 @@
+name: lint
+on:
+  push:
+  workflow_dispatch:
+  workflow_call:
+jobs:
+  # First, discover all digital modules
+  discover-modules:
+    runs-on: ubuntu-24.04
+    outputs:
+      modules: ${{ steps.find-modules.outputs.modules }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Find digital modules
+        id: find-modules
+        run: |
+          # Find all directories in digital/ that have a build/lint/Makefile
+          MODULES=$(find digital -mindepth 1 -maxdepth 1 -type d -exec test -f {}/build/lint/Makefile \; -print | xargs -I{} basename {} | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "Found modules: $MODULES"
+          echo "modules=$MODULES" >> $GITHUB_OUTPUT
+
+  # Run lint for each module in parallel
+  lint:
+    needs: discover-modules
+    if: needs.discover-modules.outputs.modules != '[]'
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        module: ${{ fromJson(needs.discover-modules.outputs.modules) }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install Verilator
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y verilator
+      
+      - name: Run lint for ${{ matrix.module }}
+        run: |
+          cd digital/${{ matrix.module }}/build/lint
+          make lint
+        env:
+          # Bypass nix-shell check for CI
+          IN_NIX_SHELL: "ci"
