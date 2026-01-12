@@ -6,7 +6,7 @@ OS="$(uname -s)"
 # macOS
 if [ "$OS" = "Darwin" ]; then
     echo "🍎 macOS detected. Running mac_shell.sh..."
-    ./flows/env/mac_shell.sh
+    ./flows/env/mac_shell.sh "$1"
 # Linux/WSL
 elif [ "$OS" = "Linux" ]; then
     echo "Linux/WSL detected. Running nix-shell..."

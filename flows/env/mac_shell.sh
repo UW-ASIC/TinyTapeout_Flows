@@ -4,6 +4,34 @@ set -e
 IMAGE_NAME="eda-env"
 CONTAINER_NAME="eda-shell"
 
+# --- Type Argument Handling (analog/digital/mixed) ---
+TYPE_ARG=""
+if [ -n "$1" ]; then
+    TYPE_ARG="--argstr type $1"
+    echo "📦 Using environment type: $1"
+else
+    # Auto-detection logic (same as Linux)
+    HAS_ANALOG=0
+    HAS_DIGITAL=0
+
+    if [ -d "analog" ]; then HAS_ANALOG=1; fi
+    if [ -d "digital" ]; then HAS_DIGITAL=1; fi
+
+    if [ "$HAS_ANALOG" -eq 1 ] && [ "$HAS_DIGITAL" -eq 1 ]; then
+        echo "🔍 Auto-detected project type: mixed"
+        TYPE_ARG="--argstr type mixed"
+    elif [ "$HAS_ANALOG" -eq 1 ]; then
+        echo "🔍 Auto-detected project type: analog"
+        TYPE_ARG="--argstr type analog"
+    elif [ "$HAS_DIGITAL" -eq 1 ]; then
+        echo "🔍 Auto-detected project type: digital"
+        TYPE_ARG="--argstr type digital"
+    else
+        echo "🔍 No project structure found. Defaulting to: mixed"
+        TYPE_ARG="--argstr type mixed"
+    fi
+fi
+
 # --- Helper Function ---
 install_with_brew() {
     local pkg="$1"
@@ -108,7 +136,6 @@ docker run -it --rm \
     -e DISPLAY=$IP:0 \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v "$(pwd):/workspace" \
-    -v "$HOME/.cache/nix:/root/.cache/nix" \
     -v "$HOME/.volare:/root/.volare" \
     --name $CONTAINER_NAME \
-    $IMAGE_NAME nix-shell
+    $IMAGE_NAME nix-shell /nix-env/shell.nix $TYPE_ARG --extra-experimental-features flakes
