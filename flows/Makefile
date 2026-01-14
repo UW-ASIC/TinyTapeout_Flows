@@ -70,7 +70,7 @@ CreateCaravel:
 	@cp -r caravel/* $(CARAVEL_DIR)/ 2>/dev/null || true
 	$(if $(filter digital,$(PROJECT_STATE)),@rm -rf $(CARAVEL_DIR)/{def$(COMMA)gds$(COMMA)lef};)
 	$(if $(filter mixed digital,$(PROJECT_STATE)),\
-		@mkdir -p $(CARAVEL_DIR)/{src,test}; \
+		@mkdir -p $(CARAVEL_DIR)/src $(CARAVEL_DIR)/test; \
 		for srcdir in $(DIGITAL_DIR)/*/src; do \
 			[ -d "$$srcdir" ] && cp -r "$$srcdir"/* $(CARAVEL_DIR)/src/ 2>/dev/null || true; \
 		done; \
@@ -78,7 +78,7 @@ CreateCaravel:
 			[ -d "$$testdir" ] && cp -r "$$testdir"/* $(CARAVEL_DIR)/test/ 2>/dev/null || true; \
 		done;)
 	$(if $(filter analog,$(PROJECT_STATE)),\
-		@[ -d "$(ANALOG_DIR)/output" ] && cp -r $(ANALOG_DIR)/output/{def,gds,lef} $(CARAVEL_DIR)/ 2>/dev/null || true;)
+		@[ -d "$(ANALOG_DIR)/output" ] &&cp -r $(ANALOG_DIR)/output/def $(ANALOG_DIR)/output/gds $(ANALOG_DIR)/output/lef $(CARAVEL_DIR)/ 2>/dev/null || true;)
 	@echo "Caravel project created successfully!"
 
 DeleteAll:
@@ -115,17 +115,17 @@ _create_analog_structure:
 	fi
 	@sed 's/@PROJECT_NAME@/$(PROJECT_NAME)/g' analog/build/config.mk.template > $(ANALOG_DIR)/build/config.mk
 	@cd $(ANALOG_DIR)/build && \
-		mkdir -p {layout,schematic,validation} && \
+		mkdir -p layout schematic validation && \
 		cp -r ../../flows/analog/build/layout/* ./layout/ 2>/dev/null || true && \
 		cp -r ../../flows/analog/build/schematic/* ./schematic/ 2>/dev/null || true && \
 		cp -r ../../flows/analog/build/validation/* ./validation/ 2>/dev/null || true
 
 # Internal target to create digital structure
 _create_digital_structure:
-	@mkdir -p $(DIGITAL_DIR)/$(MODULE_NAME)/{build,src,test}
+	@mkdir -p $(DIGITAL_DIR)/$(MODULE_NAME)/build $(DIGITAL_DIR)/$(MODULE_NAME)/src $(DIGITAL_DIR)/$(MODULE_NAME)/test
 	@sed 's/@MODULE_NAME@/$(MODULE_NAME)/g' digital/build/config.mk.template > $(DIGITAL_DIR)/$(MODULE_NAME)/build/config.mk
 	@cd $(DIGITAL_DIR)/$(MODULE_NAME)/build && \
-		mkdir -p {des_tb,lint,synthesis,verification} && \
+		mkdir -p des_tb lint synthesis verification && \
 		cp -r ../../../flows/digital/build/des_tb/* ./des_tb/ 2>/dev/null || true && \
 		cp -r ../../../flows/digital/build/lint/* ./lint/ 2>/dev/null || true && \
 		cp -r ../../../flows/digital/build/synthesis/* ./synthesis/ 2>/dev/null || true && \
