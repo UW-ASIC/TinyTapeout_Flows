@@ -4,34 +4,6 @@ set -e
 IMAGE_NAME="eda-env"
 CONTAINER_NAME="eda-shell"
 
-# --- Type Argument Handling (analog/digital/mixed) ---
-TYPE_ARG=""
-if [ -n "$1" ]; then
-    TYPE_ARG="--argstr type $1"
-    echo "📦 Using environment type: $1"
-else
-    # Auto-detection logic (same as Linux)
-    HAS_ANALOG=0
-    HAS_DIGITAL=0
-
-    if [ -d "analog" ]; then HAS_ANALOG=1; fi
-    if [ -d "digital" ]; then HAS_DIGITAL=1; fi
-
-    if [ "$HAS_ANALOG" -eq 1 ] && [ "$HAS_DIGITAL" -eq 1 ]; then
-        echo "🔍 Auto-detected project type: mixed"
-        TYPE_ARG="--argstr type mixed"
-    elif [ "$HAS_ANALOG" -eq 1 ]; then
-        echo "🔍 Auto-detected project type: analog"
-        TYPE_ARG="--argstr type analog"
-    elif [ "$HAS_DIGITAL" -eq 1 ]; then
-        echo "🔍 Auto-detected project type: digital"
-        TYPE_ARG="--argstr type digital"
-    else
-        echo "🔍 No project structure found. Defaulting to: mixed"
-        TYPE_ARG="--argstr type mixed"
-    fi
-fi
-
 # --- Helper Function ---
 install_with_brew() {
     local pkg="$1"
@@ -42,6 +14,17 @@ install_with_brew() {
         echo "✅ $pkg already installed."
     fi
 }
+# Force amd64 container on macOS (Apple Silicon)
+DOCKER_PLATFORM=""
+DOCKER_SECURITY_OPT=""
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    DOCKER_PLATFORM="--platform=linux/amd64"
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    docker build $DOCKER_PLATFORM -t $IMAGE_NAME "$SCRIPT_DIR"
+    echo "🍎 macOS detected — using linux/amd64 container"
+    DOCKER_SECURITY_OPT="--security-opt seccomp=unconfined"
+
+fi
 
 # --- Fast Path: Check if Already Set Up ---
 SETUP_COMPLETE=false
@@ -132,10 +115,11 @@ xhost +$IP >/dev/null 2>&1 || true
 
 # Enter container
 echo "🚀 Entering EDA environment..."
-docker run -it --rm \
+docker run $DOCKER_PLATFORM $DOCKER_SECURITY_OPT -it --rm \
     -e DISPLAY=$IP:0 \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v "$(pwd):/workspace" \
+    -v "$HOME/.cache/nix:/root/.cache/nix" \
     -v "$HOME/.volare:/root/.volare" \
     --name $CONTAINER_NAME \
-    $IMAGE_NAME nix-shell /nix-env/shell.nix $TYPE_ARG --extra-experimental-features flakes
+    $IMAGE_NAME nix-shell
