@@ -16,6 +16,7 @@ let
     # Builds
     gnumake
     git
+    gh
     python312
     ccache
 
