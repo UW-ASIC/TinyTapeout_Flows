@@ -1,0 +1,69 @@
+{
+  "target": "xschem-sky130",
+  "version": 1,
+  "units": { "scale": 2.0, "y_down": true },
+  "unmapped": { "mode": "skip" },
+  "classes": {
+    "nmos": {
+      "sym": "sky130_fd_pr/{model}.sym",
+      "style": {
+        "note": "pin_xy: centres of the B 5 pin boxes in nfet_01v8.sym, identical across flavours. model/w/l are defaults; the deck's own card wins.",
+        "pin_xy": [[20, -30], [-20, 0], [20, 30]],
+        "attrs": "name={ref} model={model} W={w} L={l}",
+        "model": "nfet_01v8", "w": "1", "l": "0.15",
+        "bulk": { "xy": [20, 0], "net": "0" }
+      }
+    },
+    "nfet": {
+      "sym": "sky130_fd_pr/{model}.sym",
+      "style": {
+        "pin_xy": [[20, -30], [-20, 0], [20, 30]],
+        "attrs": "name={ref} model={model} W={w} L={l}",
+        "model": "nfet_01v8", "w": "1", "l": "0.15",
+        "bulk": { "xy": [20, 0], "net": "0" }
+      }
+    },
+    "pmos": {
+      "sym": "sky130_fd_pr/{model}.sym",
+      "style": {
+        "pin_xy": [[20, 30], [-20, 0], [20, -30]],
+        "attrs": "name={ref} model={model} W={w} L={l}",
+        "model": "pfet_01v8", "w": "1", "l": "0.15",
+        "bulk": { "xy": [20, 0], "net": "vdd" }
+      }
+    },
+    "pfet": {
+      "sym": "sky130_fd_pr/{model}.sym",
+      "style": {
+        "pin_xy": [[20, 30], [-20, 0], [20, -30]],
+        "attrs": "name={ref} model={model} W={w} L={l}",
+        "model": "pfet_01v8", "w": "1", "l": "0.15",
+        "bulk": { "xy": [20, 0], "net": "vdd" }
+      }
+    },
+    "res": {
+      "sym": "sky130_fd_pr/res_generic_m1.sym",
+      "style": {
+        "pin_xy": [[0, -30], [0, 30]],
+        "attrs": "name={name} model=res_generic_m1 W=1 L=1 cktimg_value={value}"
+      }
+    },
+    "cap": {
+      "sym": "sky130_fd_pr/cap_mim_m3_1.sym",
+      "style": {
+        "pin_xy": [[0, -30], [0, 30]],
+        "attrs": "name={name} model=cap_mim_m3_1 W=1 L=1 cktimg_value={value}"
+      }
+    },
+    "vsource": {
+      "sym": "devices/vsource.sym",
+      "style": { "pin_xy": [[0, -30], [0, 30]], "attrs": "name={name} value=\"{value}\"" }
+    },
+    "vdd":    { "sym": "devices/vdd.sym", "style": { "pin_xy": [[0, 0]], "rail": true, "attrs": "name=l_{name} lab={net}" } },
+    "vcc":    { "sym": "devices/vdd.sym", "style": { "pin_xy": [[0, 0]], "rail": true, "attrs": "name=l_{name} lab={net}" } },
+    "gnd":    { "sym": "devices/gnd.sym", "style": { "pin_xy": [[0, 0]], "rail": true, "attrs": "name=l_{name} lab={net}" } },
+    "ground": { "sym": "devices/gnd.sym", "style": { "pin_xy": [[0, 0]], "rail": true, "attrs": "name=l_{name} lab={net}" } },
+    "vss":    { "sym": "devices/gnd.sym", "style": { "pin_xy": [[0, 0]], "rail": true, "attrs": "name=l_{name} lab={net}" } },
+    "vee":    { "sym": "devices/gnd.sym", "style": { "pin_xy": [[0, 0]], "rail": true, "attrs": "name=l_{name} lab={net}" } }
+  }
+}

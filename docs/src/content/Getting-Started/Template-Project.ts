@@ -18,7 +18,7 @@ This repository is designed to be a **"Battery Included"** template for ASIC des
 \`\`\`text
 TinyTapeout_Flows/
 ├── docs/           # This documentation website
-├── flows/          # The main workspace
+├── .flows/          # The main workspace
 │   ├── analog/     # Analog workspace (schematics, layouts)
 │   ├── digital/    # Digital workspace (verilog, tests)
 │   ├── caravel/    # TinyTapeout submission files

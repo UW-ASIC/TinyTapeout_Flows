@@ -14,7 +14,7 @@ XSCHEM_DIR := xschem
 # CONFIG JSON VARIABLES
 CLOCK_PERIOD ?= 10.0
 CORE_UTIL ?= 40
-# Options: tt_block_1x1_pg, tt_block_2x2_pg, tt_block_4x4_pg, or more. Check flows/def/digital/ for available templates.
+# Options: tt_block_1x1_pg, tt_block_2x2_pg, tt_block_4x4_pg, or more. Check .flows/def/digital/ for available templates.
 TT_TEMPLATE_GDS ?= tt_block_1x1_pg.def
 
 ANALOG_OUTPUT_DIR = ../../../../analog/$(DESIGN_TOP)/output
@@ -62,7 +62,7 @@ config.json:
 	@echo '    "ERROR_ON_MAGIC_DRC": true,' >> config.json
 	@echo '    "ERROR_ON_LVS_ERROR": true,' >> config.json
 	@echo '    "ERROR_ON_PDN_VIOLATIONS": false,' >> config.json
-	@echo '    "FP_DEF_TEMPLATE": "../../../../flows/def/digital/$(TT_TEMPLATE_DEF)",' >> config.json
+	@echo '    "FP_DEF_TEMPLATE": "../../../../.flows/def/digital/$(TT_TEMPLATE_DEF)",' >> config.json
 	@echo '    "pdk::sky130A": {' >> config.json
 	@echo '        "STD_CELL_LIBRARY": "sky130_fd_sc_hd",' >> config.json
 	@echo '        "MAX_FANOUT_CONSTRAINT": 6,' >> config.json
@@ -141,7 +141,7 @@ xschem-yosys: harden
 		printf "$(RED)[ERROR]$(NC) Netlist not found. Run 'make harden' or 'make synthesis' first.\n"; \
 		exit 1; \
 	fi; \
-	cp ../../../../tools/verilog_to_xschem.py ./; \
+	cp ../../../../.flows/tools/verilog_to_xschem.py ./; \
 	printf "$(BLUE)[XSCHEM]$(NC) Using netlist: $$SYNTH_NETLIST\n"; \
 	python3 verilog_to_xschem.py \
 		--netlist $$SYNTH_NETLIST \
@@ -162,7 +162,7 @@ xschem-verilator: verilator_generate
 		exit 1; \
 	fi; \
 	MAIN_RTL=$$(echo $(RTL_FILES) | awk '{print $$1}'); \
-	cp ../../../../tools/verilog_to_xschem.py ./; \
+	cp ../../../../.flows/tools/verilog_to_xschem.py ./; \
 	printf "$(BLUE)[XSCHEM]$(NC) Using RTL: $$MAIN_RTL\n"; \
 	python3 verilog_to_xschem.py \
 		--rtl $$MAIN_RTL \
@@ -180,7 +180,7 @@ xschem-verilator-tb: verilator_generate_tb
 		printf "$(RED)[ERROR]$(NC) No testbench files found in TB_TOP variable.\n"; \
 		exit 1; \
 	fi; \
-	cp ../../../../tools/verilog_to_xschem.py ./; \
+	cp ../../../../.flows/tools/verilog_to_xschem.py ./; \
 	printf "$(BLUE)[XSCHEM]$(NC) Using Testbench: $(TB_TOP)\n"; \
 	python3 verilog_to_xschem.py \
 		--rtl $(TB_TOP) \

@@ -16,7 +16,7 @@ make AddDigitalModule MODULE_NAME=my_counter
 \`\`\`
 
 ## 2. Structure
-Your module lives in \`flows/digital/my_counter/\`:
+Your module lives in \`.flows/digital/my_counter/\`:
 
 *   \`src/\`: **Verilog Source**. Put your \`.v\` files here.
 *   \`test/\`: **Verification**. Cocotb Python tests and Verilog testbenches.
@@ -26,7 +26,7 @@ Your module lives in \`flows/digital/my_counter/\`:
 Run your tests using Verilator and Cocotb.
 
 \`\`\`bash
-cd flows/digital/my_counter/build/verification
+cd .flows/digital/my_counter/build/verification
 make verification
 \`\`\`
 

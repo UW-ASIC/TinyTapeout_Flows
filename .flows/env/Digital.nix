@@ -1,7 +1,4 @@
-{ pkgs, uwasic-eda }:
-let
-  edaPackages = uwasic-eda.packages.${pkgs.system};
-in
+{ pkgs }:
 {
   packages = with pkgs; [
     # Simulation & Verification

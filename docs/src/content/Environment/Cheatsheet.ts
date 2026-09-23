@@ -6,12 +6,12 @@ export const metadata = {
 export const content = `
 # Basic Commands
 
-All commands run from \`flows/\` directory.
+All commands run from \`.flows/\` directory.
 
 ## Create Projects
 
 \`\`\`bash
-cd flows/
+cd .flows/
 
 # Digital project
 make CreateProject PROJECT_NAME=my_chip PROJECT_TYPE=digital

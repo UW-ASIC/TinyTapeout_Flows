@@ -6,7 +6,7 @@ OS="$(uname -s)"
 # macOS
 if [ "$OS" = "Darwin" ]; then
     echo "🍎 macOS detected. Running mac_shell.sh..."
-    ./flows/env/mac_shell.sh "$1"
+    ./.flows/env/mac_shell.sh "$1"
 # Linux/WSL
 elif [ "$OS" = "Linux" ]; then
     echo "Linux/WSL detected. Running nix-shell..."
@@ -22,13 +22,15 @@ elif [ "$OS" = "Linux" ]; then
         fi
     fi
 
-    # Setup Cachix
+    # Binary cache for cktimg, spicerack and netgen. Without it these are a Zig build, a
+    # Rust build and an LVS tool nixpkgs does not ship — all compiled locally.
     if ! command -v cachix >/dev/null 2>&1; then
         echo "🔹 Setting up Cachix..."
-        nix-shell -p cachix --run "cachix use uwasic-eda"
+        nix-shell -p cachix --run "cachix use omarsiwy"
     else
-        echo "✅ Cachix already installed."
+        cachix use omarsiwy >/dev/null 2>&1 || true
     fi
+
     echo "🚀 Entering Nix shell..."
 
     # Pass the first argument as the 'type' to shell.nix
@@ -59,7 +61,7 @@ elif [ "$OS" = "Linux" ]; then
         fi
     fi
 
-    nix-shell flows/env/shell.nix $TYPE_ARG --extra-experimental-features flakes
+    nix-shell .flows/env/shell.nix $TYPE_ARG --extra-experimental-features flakes
 else
     echo "❌ Unsupported OS: $OS"
     exit 1

@@ -9,7 +9,7 @@ export const content = `
 ## Generate Caravel Package
 
 \`\`\`bash
-cd flows/
+cd .flows/
 make CreateCaravel PROJECT_NAME=tt_my_chip
 \`\`\`
 

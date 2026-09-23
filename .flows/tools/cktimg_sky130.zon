@@ -1,0 +1,14 @@
+// cktImg config for sky130 decks going to xschem.
+//
+// .pdk: without it cktImg resolves neither `XM1 ... sky130_fd_pr__nfet_01v8` nor
+// `M1 ... nfet_01v8`, and drops every transistor. `scan` then finds the `nfet`/`pfet`
+// class token inside the master name.
+//
+// .symbol_geometry = .err: xschem connects by geometry (a wire touching a pin *is* a
+// connection), which is the host cktImg's LINT.md says this setting is for. At the
+// default .warn, margin-band feedback devices that share a centre are left on the
+// same point instead of being spread apart.
+.{
+    .pdk = .{ .leaf = .{ "sky130_fd_pr__*", "nfet_*", "pfet_*" }, .scan = true },
+    .rules = .{ .symbol_geometry = .err },
+}

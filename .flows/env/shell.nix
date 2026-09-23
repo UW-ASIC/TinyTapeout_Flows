@@ -5,9 +5,13 @@
       { },
 }:
 let
-  uwasic-eda = builtins.getFlake "github:UW-ASIC/NixPackages";
-  analog = import ./Analog.nix { inherit pkgs uwasic-eda; };
-  digital = import ./Digital.nix { inherit pkgs uwasic-eda; };
+  # Everything the template needs that nixpkgs does not carry, prebuilt and cached:
+  # cktimg and spicerack (built there because nothing else caches them) plus VLSI netgen
+  # (re-exported from nix-eda — `pkgs.netgen` is an unrelated 3D mesh generator).
+  # Run `cachix use omarsiwy` first, or these compile locally.
+  eda = builtins.getFlake "github:OmarSiwy/EDA-Packaged";
+  analog = import ./Analog.nix { inherit pkgs eda; };
+  digital = import ./Digital.nix { inherit pkgs; };
 
   useAnalog = type == "analog" || type == "mixed";
   useDigital = type == "digital" || type == "mixed";
@@ -118,6 +122,8 @@ pkgs.mkShell {
     if [ "${type}" = "analog" ] || [ "${type}" = "mixed" ]; then
       echo "  - xschem: $(xschem --version 2>/dev/null | head -n 1 || echo 'custom build')"
       echo "  - magic: $(magic --version 2>/dev/null || echo 'from nixpkgs')"
+      echo "  - cktimg-json: $(command -v cktimg-json >/dev/null && echo ok || echo 'not found')"
+      echo "  - spicerack: $(python -c 'import spicerack' 2>/dev/null && echo ok || echo 'not found')"
     fi
 
     if [ "${type}" = "digital" ] || [ "${type}" = "mixed" ]; then
@@ -129,6 +135,5 @@ pkgs.mkShell {
 
     echo "  - PDK: $PDK in $PDK_ROOT"
     echo ""
-    echo "📦 Using cached packages from: github:UWASIC/uwasic-eda-packages"
   '';
 }

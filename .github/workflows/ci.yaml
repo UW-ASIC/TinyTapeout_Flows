@@ -20,7 +20,7 @@ jobs:
       - name: Check for caravel directory and detect project structure
         id: check
         run: |
-          # Detect project structure using same logic as flows/Makefile
+          # Detect project structure using same logic as .flows/Makefile
           # STATE_KEY is HAS_ANALOG+HAS_DIGITAL+HAS_CARAVEL (e.g., "010" = digital only)
           
           HAS_ANALOG="0"
@@ -41,7 +41,7 @@ jobs:
           
           STATE_KEY="${HAS_ANALOG}${HAS_DIGITAL}${HAS_CARAVEL}"
           
-          # Determine project type based on STATE_KEY (matching flows/Makefile logic)
+          # Determine project type based on STATE_KEY (matching .flows/Makefile logic)
           case "${STATE_KEY}" in
             "000") PROJECT_TYPE="none" ;;
             "111") PROJECT_TYPE="mixed" ;;

@@ -1,12 +1,26 @@
 # Status reporting functions
+# Mirrors _status_digital: analog is many blocks now, not one flat project.
+# library/ is skipped — it is the shared AnalogLibrary clone, not a block.
 _status_analog:
 	@if [ "$(HAS_ANALOG)" = "1" ]; then \
-		echo "Analog Project:"; \
-		if [ -f "$(ANALOG_DIR)/build/config.mk" ]; then \
-			PROJ_NAME=$$(grep "^PROJECT" "$(ANALOG_DIR)/build/config.mk" | cut -d'=' -f2 | tr -d ' '); \
-			echo "  - $$PROJ_NAME (analog)"; \
-		else \
-			echo "  - analog project (no config found)"; \
+		echo "Analog Blocks:"; \
+		found=0; \
+		for blk in $(ANALOG_DIR)/*/; do \
+			[ -d "$$blk" ] || continue; \
+			NAME=$$(basename "$$blk"); \
+			[ "$$NAME" = "library" ] && continue; \
+			found=1; \
+			echo "  - $$NAME (analog)"; \
+			if [ -f "$$blk/build/config.mk" ]; then \
+				DEPS=$$(grep "^DEPENDS" "$$blk/build/config.mk" | cut -d'=' -f2 | tr -s ' '); \
+				[ -n "$$(echo $$DEPS)" ] && echo "    Depends on:$$DEPS"; \
+			fi; \
+			if ls "$$blk"va/*.va >/dev/null 2>&1; then \
+				echo "    Verilog-A: $$(ls "$$blk"va/*.va | wc -l) model(s)"; \
+			fi; \
+		done; \
+		if [ $$found -eq 0 ]; then \
+			echo "  (none yet - make AddAnalogBlock BLOCK_NAME=name)"; \
 		fi; \
 	fi
 
@@ -27,13 +41,15 @@ _status_digital:
 		done; \
 	fi
 
+# One shell block, not three recipe lines: `exit 0` only ends the line it is in, so the
+# old version printed "does not exist" and then "exists" on the very next line.
 _status_caravel:
 	@if [ "$(HAS_CARAVEL)" = "0" ]; then \
 		echo "Caravel directory does not exist"; \
-		exit 0; \
+	else \
+		echo "Caravel directory exists"; \
+		$(MAKE) -s _check_caravel_$(PROJECT_STATE); \
 	fi
-	@echo "Caravel directory exists"
-	@$(MAKE) -s _check_caravel_$(PROJECT_STATE)
 
 _check_caravel_digital:
 	@if [ -d "$(CARAVEL_DIR)/src" ] && [ -d "$(CARAVEL_DIR)/test" ]; then \

@@ -24,7 +24,7 @@ make CreateProject PROJECT_NAME=my_amp PROJECT_TYPE=analog
 Draw your circuit in XSchem.
 
 \`\`\`bash
-cd flows/analog/build/schematic
+cd .flows/analog/build/schematic
 make schematic
 \`\`\`
 
@@ -34,7 +34,7 @@ make schematic
 Draw your layout in KLayout.
 
 \`\`\`bash
-cd flows/analog/build/layout
+cd .flows/analog/build/layout
 make layout
 \`\`\`
 
@@ -45,7 +45,7 @@ make layout
 Run DRC and LVS to ensure your layout matches your schematic and rules.
 
 \`\`\`bash
-cd flows/analog/build/validation
+cd .flows/analog/build/validation
 make drc
 make lvs
 \`\`\`

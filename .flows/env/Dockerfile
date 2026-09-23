@@ -10,8 +10,8 @@ ENV NIX_CONFIG="filter-syscalls = false"
 # Install basic utilities
 RUN nix-env -iA nixpkgs.bash nixpkgs.cachix
 
-# Configure Cachix
-RUN cachix use uwasic-eda
+# Binary cache for cktimg, spicerack and netgen — without it the image build compiles them.
+RUN cachix use omarsiwy
 
 WORKDIR /workspace
 COPY shell.nix Analog.nix Digital.nix /workspace/

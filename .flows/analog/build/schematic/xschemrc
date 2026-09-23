@@ -1,0 +1,79 @@
+#### PDK LOCATION
+# `volare enable` maintains $PDK_ROOT/$PDK as a symlink to whichever version is active,
+# so that path is always current. Pinning the version hash here instead is what made
+# `make schematic` fail: Tcl `source` on a path that does not exist takes xschem down
+# with a core dump, and since the recipe backgrounds xschem with `&`, the crash was
+# invisible and make still reported success. The `update-pdk` target existed only to sed
+# this line back into agreement with reality; nothing to sed, nothing to drift.
+set PDK_ROOT [expr {[info exists env(PDK_ROOT)] ? $env(PDK_ROOT) : "$env(HOME)/.volare"}]
+set PDK [expr {[info exists env(PDK)] ? $env(PDK) : "sky130A"}]
+set PDK_PATH "$PDK_ROOT/$PDK"
+
+if {![file isdirectory $PDK_PATH]} {
+    puts stderr "ERROR: no PDK at $PDK_PATH"
+    puts stderr "Run 'volare enable --pdk sky130 <version>', or re-enter the nix shell."
+    exit 1
+}
+
+source $PDK_PATH/libs.tech/xschem/xschemrc
+
+set SKYWATER_MODELS "$PDK_PATH/libs.tech/ngspice"
+set SKYWATER_STDCELLS "$PDK_PATH/libs.ref/sky130_fd_sc_hd/spice"
+
+puts "PDK set SKYWATER_MODELS to: $SKYWATER_MODELS"
+puts "PDK set SKYWATER_STDCELLS to: $SKYWATER_STDCELLS"
+
+#### PROJECT CONFIGURATION
+set PROJECT_NAME "template"
+set PROJECT_ROOT [file normalize "[file dirname [info script]]/../../schematics"]
+
+set dark_colorscheme 1
+set gaw_viewer "gaw"
+set editor "vim"
+
+#### NETLIST CONFIGURATION
+set netlist_dir [file normalize "[file dirname [info script]]/spice"]
+file mkdir $netlist_dir
+set XSCHEM_NETLIST_DIR $netlist_dir
+set netlist_type spice
+set spice_netlist 1
+
+set XSCHEM_LIBRARY_PATH {}
+append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/../../schematics
+append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/../../symbols
+append XSCHEM_LIBRARY_PATH :[file dirname [info script]]/../../../library
+
+#### DEPENDENCY BLOCKS
+# A top-level block places its sub-blocks' symbols, so those directories have to be on
+# the library path too. Read from DEPENDS in ../config.mk rather than globbing every
+# sibling: two blocks may each define a symbol of the same name, and a glob would
+# silently resolve to whichever directory happened to come first.
+set _cfg "[file dirname [info script]]/../config.mk"
+if {[file exists $_cfg]} {
+    set _fh [open $_cfg r]
+    set _cfg_text [read $_fh]
+    close $_fh
+    foreach _line [split $_cfg_text "\n"] {
+        if {[regexp {^\s*DEPENDS\s*=\s*(.*)$} $_line -> _v]} {
+            foreach _dep [split [string trim $_v]] {
+                if {$_dep eq ""} continue
+                set _root "[file dirname [info script]]/../../../$_dep"
+                append XSCHEM_LIBRARY_PATH :$_root/symbols
+                append XSCHEM_LIBRARY_PATH :$_root/schematics
+                puts "block dependency on library path: $_dep"
+            }
+        }
+    }
+}
+
+append XSCHEM_LIBRARY_PATH :${XSCHEM_SHAREDIR}/xschem_library
+append XSCHEM_LIBRARY_PATH :$PDK_PATH/libs.tech/xschem
+
+
+## Directory colors
+array unset dircolor
+set dircolor(schematics$) green
+set dircolor(symbols$) blue
+set dircolor(library$) red
+set dircolor(xschem$) purple
+set dircolor(xschem_library$) brown

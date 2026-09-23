@@ -17,7 +17,7 @@ PROJECT_STATE := $(strip \
 
 include utility.mk
 
-.PHONY: CreateProject AddDigitalModule CreateCaravel DeleteAll status help _create_analog_structure _create_digital_structure
+.PHONY: CreateProject AddAnalogBlock AddDigitalModule CreateCaravel DeleteAll status help _create_analog_block _create_digital_structure
 
 help:
 	@echo "Project Management Makefile"
@@ -28,6 +28,7 @@ help:
 	@echo "  CreateProject PROJECT_NAME=name PROJECT_TYPE=<analog,digital,mixed>"
 	@echo ""
 	@echo "Module Addition:"
+	@echo "  AddAnalogBlock BLOCK_NAME=name [DEPENDS=\"blk1 blk2\"]"
 	@echo "  AddDigitalModule MODULE_NAME=name"
 	@echo ""
 	@echo "TinyTapeout Caravel Integration:"
@@ -49,9 +50,21 @@ CreateProject:
 	$(call check-param,PROJECT_TYPE,make CreateProject PROJECT_NAME=myproject PROJECT_TYPE=<analog|digital|mixed>)
 	$(call check-state,none)
 	$(call check-type)
-	$(if $(filter analog mixed,$(PROJECT_TYPE)),$(MAKE) _create_analog_structure;)
+	$(if $(filter analog mixed,$(PROJECT_TYPE)),$(MAKE) _create_analog_block BLOCK_NAME=$(PROJECT_NAME);)
 	$(if $(filter digital mixed,$(PROJECT_TYPE)),$(MAKE) _create_digital_structure MODULE_NAME=$(PROJECT_NAME);)
 	@echo "Project $(PROJECT_NAME) created successfully!"
+
+AddAnalogBlock:
+	@echo "Adding Analog Block: $(BLOCK_NAME)"
+	$(call check-param,BLOCK_NAME,make AddAnalogBlock BLOCK_NAME=name [DEPENDS="a b"])
+	$(if $(filter none,$(PROJECT_STATE)),$(error No project exists. Run CreateProject first))
+	$(if $(filter digital,$(PROJECT_STATE)),$(error Cannot add analog blocks to a digital-only project))
+	$(if $(wildcard $(ANALOG_DIR)/$(BLOCK_NAME)),$(error Block $(BLOCK_NAME) already exists))
+	@for d in $(DEPENDS); do \
+		[ -d "$(ANALOG_DIR)/$$d" ] || { echo "Dependency block '$$d' does not exist"; exit 1; }; \
+	done
+	@$(MAKE) _create_analog_block BLOCK_NAME=$(BLOCK_NAME) DEPENDS="$(DEPENDS)"
+	@echo "Block $(BLOCK_NAME) added successfully!"
 
 AddDigitalModule:
 	@echo "Adding Digital Module: $(MODULE_NAME)"
@@ -77,8 +90,15 @@ CreateCaravel:
 		for testdir in $(DIGITAL_DIR)/*/test; do \
 			[ -d "$$testdir" ] && cp -r "$$testdir"/* $(CARAVEL_DIR)/test/ 2>/dev/null || true; \
 		done;)
-	$(if $(filter analog,$(PROJECT_STATE)),\
-		@[ -d "$(ANALOG_DIR)/output" ] &&cp -r $(ANALOG_DIR)/output/def $(ANALOG_DIR)/output/gds $(ANALOG_DIR)/output/lef $(CARAVEL_DIR)/ 2>/dev/null || true;)
+	$(if $(filter analog mixed,$(PROJECT_STATE)),\
+		@for blk in $(ANALOG_DIR)/*/; do \
+			[ "$$(basename $$blk)" = "library" ] && continue; \
+			[ -d "$$blk/output" ] || continue; \
+			for kind in def gds lef; do \
+				[ -d "$$blk/output/$$kind" ] && mkdir -p $(CARAVEL_DIR)/$$kind && \
+					cp -r "$$blk/output/$$kind"/* $(CARAVEL_DIR)/$$kind/ 2>/dev/null || true; \
+			done; \
+		done;)
 	@echo "Caravel project created successfully!"
 
 DeleteAll:
@@ -106,19 +126,33 @@ status:
 # Helper Functions
 # =======================================================================
 
-# Internal target to create analog structure
-_create_analog_structure:
-	@mkdir -p $(ANALOG_DIR)/build $(ANALOG_DIR)/layout $(ANALOG_DIR)/schematics $(ANALOG_DIR)/symbols
+# Internal target to create one analog block.
+#
+# Blocks live at analog/<BLOCK_NAME>/, the same depth digital modules live at, so the two
+# trees agree and a relative path means the same thing in both. Only library/ stays up at
+# analog/: it is one clone shared by every block, and a copy per block is how copies drift.
+_create_analog_block:
+	@mkdir -p $(ANALOG_DIR)/$(BLOCK_NAME)/build \
+		$(ANALOG_DIR)/$(BLOCK_NAME)/layout \
+		$(ANALOG_DIR)/$(BLOCK_NAME)/schematics \
+		$(ANALOG_DIR)/$(BLOCK_NAME)/symbols \
+		$(ANALOG_DIR)/$(BLOCK_NAME)/netlist \
+		$(ANALOG_DIR)/$(BLOCK_NAME)/va \
+		$(ANALOG_DIR)/$(BLOCK_NAME)/test \
+		$(ANALOG_DIR)/$(BLOCK_NAME)/output
 	@if [ ! -d "$(ANALOG_DIR)/library" ]; then \
 		mkdir -p $(ANALOG_DIR)/library && \
 		git clone $(ANALOG_LIB_REPO) $(ANALOG_DIR)/library/; \
 	fi
-	@sed 's/@PROJECT_NAME@/$(PROJECT_NAME)/g' analog/build/config.mk.template > $(ANALOG_DIR)/build/config.mk
-	@cd $(ANALOG_DIR)/build && \
-		mkdir -p layout schematic validation && \
-		cp -r ../../flows/analog/build/layout/* ./layout/ 2>/dev/null || true && \
-		cp -r ../../flows/analog/build/schematic/* ./schematic/ 2>/dev/null || true && \
-		cp -r ../../flows/analog/build/validation/* ./validation/ 2>/dev/null || true
+	@sed -e 's/@BLOCK_NAME@/$(BLOCK_NAME)/g' -e 's/@BLOCK_DEPENDS@/$(DEPENDS)/g' \
+		analog/build/config.mk.template > $(ANALOG_DIR)/$(BLOCK_NAME)/build/config.mk
+	@cd $(ANALOG_DIR)/$(BLOCK_NAME)/build && \
+		mkdir -p layout schematic validation sim va && \
+		cp -r ../../../.flows/analog/build/layout/* ./layout/ 2>/dev/null || true && \
+		cp -r ../../../.flows/analog/build/schematic/* ./schematic/ 2>/dev/null || true && \
+		cp -r ../../../.flows/analog/build/validation/* ./validation/ 2>/dev/null || true && \
+		cp -r ../../../.flows/analog/build/sim/* ./sim/ 2>/dev/null || true && \
+		cp -r ../../../.flows/analog/build/va/* ./va/ 2>/dev/null || true
 
 # Internal target to create digital structure
 _create_digital_structure:
@@ -126,10 +160,10 @@ _create_digital_structure:
 	@sed 's/@MODULE_NAME@/$(MODULE_NAME)/g' digital/build/config.mk.template > $(DIGITAL_DIR)/$(MODULE_NAME)/build/config.mk
 	@cd $(DIGITAL_DIR)/$(MODULE_NAME)/build && \
 		mkdir -p des_tb lint synthesis verification && \
-		cp -r ../../../flows/digital/build/des_tb/* ./des_tb/ 2>/dev/null || true && \
-		cp -r ../../../flows/digital/build/lint/* ./lint/ 2>/dev/null || true && \
-		cp -r ../../../flows/digital/build/synthesis/* ./synthesis/ 2>/dev/null || true && \
-		cp -r ../../../flows/digital/build/verification/* ./verification/ 2>/dev/null || true
+		cp -r ../../../.flows/digital/build/des_tb/* ./des_tb/ 2>/dev/null || true && \
+		cp -r ../../../.flows/digital/build/lint/* ./lint/ 2>/dev/null || true && \
+		cp -r ../../../.flows/digital/build/synthesis/* ./synthesis/ 2>/dev/null || true && \
+		cp -r ../../../.flows/digital/build/verification/* ./verification/ 2>/dev/null || true
 	@printf '%s\n' \
 		'`default_nettype none' \
 		'module $(MODULE_NAME)(' \
