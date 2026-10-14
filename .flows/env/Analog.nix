@@ -9,12 +9,27 @@ let
   # The shared-library build of ngspice. The Rust analog crates link against it, which
   # plain `ngspice` (a binary only) cannot satisfy.
   ngspiceShared = pkgs.libngspice;
+
+  # Hands KLayout a pandas for its interpreter since SKY130 PDK's KLayout macros import
+  # pandas but KLayout runs its own embedded Python different from the shell's. KLayout
+  # ignores PYTHONPATH; KLAYOUT_PYTHONPATH is the variable it reads.
+  klayoutPython = pkgs.python3.withPackages (ps: [ ps.pandas ]);
+  klayout = pkgs.symlinkJoin {
+    name = "klayout-with-pandas";
+    paths = [ pkgs.klayout ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/klayout \
+        --prefix KLAYOUT_PYTHONPATH : ${klayoutPython}/${pkgs.python3.sitePackages}
+    '';
+  };
 in
 {
   packages = [
     # EDA tools, straight from nixpkgs.
     pkgs.xschem
-    pkgs.klayout
+    # Wrapped version of pkgs.klayout defined above
+    klayout
     # The VLSI LVS tool. NOT `pkgs.netgen`, which is a 3D tetrahedral mesh generator from
     # ngsolve.org that shares nothing with this but a name — nixpkgs has no VLSI netgen
     # under any attribute, which is why it comes through the EDA-Packaged pin.
