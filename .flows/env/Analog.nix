@@ -75,7 +75,7 @@ in
     export PYTHONPATH="${spicerackPkg}/${pkgs.python312.sitePackages}:$PYTHONPATH"
 
     pip install maturin pytest
-    for pkg in analog/library/dep_library/gmid analog/library/dep_library/UWASIC-ALG; do
+    for pkg in analog/library/dep_library/UWASIC-ALG; do
         if [ -d "$PROJECT_ROOT/$pkg" ]; then
             echo "Installing editable package: $pkg"
             python -m pip install -e "$PROJECT_ROOT/$pkg"
