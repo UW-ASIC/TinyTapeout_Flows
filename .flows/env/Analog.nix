@@ -64,6 +64,12 @@ in
     export NIX_LD_LIBRARY_PATH="${ngspiceShared}/lib:$NIX_LD_LIBRARY_PATH"
     export PKG_CONFIG_PATH="${ngspiceShared}/lib/pkgconfig:$PKG_CONFIG_PATH"
     export KLAYOUT_PATH="$PDK_ROOT/$PDK/libs.tech/klayout"
+    # Register SKY130 as a KLayout technology (layer colors + tech file)
+    if [ -d "$PDK_ROOT/$PDK/libs.tech/klayout/tech" ]; then
+      mkdir -p "$HOME/.klayout/tech/sky130"
+      ln -sf "$PDK_ROOT/$PDK/libs.tech/klayout/tech/$PDK.lyp" "$HOME/.klayout/tech/sky130/sky130.lyp"
+      ln -sf "$PDK_ROOT/$PDK/libs.tech/klayout/tech/$PDK.lyt" "$HOME/.klayout/tech/sky130/sky130.lyt"
+    fi
     export XSCHEM_USER_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem"
     export XSCHEM_LIBRARY_PATH="$PDK_ROOT/$PDK/libs.tech/xschem:${pkgs.xschem}/share/xschem/xschem_library"
 
